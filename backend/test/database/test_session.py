@@ -6,7 +6,7 @@ from alembic import command
 from alembic.config import Config
 
 # What the hell.
-ALEMBIC_INI_PATH = os.path.join(os.path.abspath(__file__), "..", "..", "..", "..", "..", "alembic.ini")
+ALEMBIC_INI_PATH = os.path.join(os.path.abspath(__file__), "..", "..", "..", "..", "alembic.ini")
 
 @pytest.fixture
 def db() -> Session:
