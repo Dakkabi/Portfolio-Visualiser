@@ -15,11 +15,13 @@ def db() -> Session:
     alembic_cfg = Config(ALEMBIC_INI_PATH)
     command.upgrade(alembic_cfg, "head")
 
-    db_session.begin() # Everything after here will be rolled back
+    # TODO: Find a less destructive way to implement this
+    # Perhaps a separate Test Server?
+    Base.metadata.drop_all(bind=db_session.bind)
+    Base.metadata.create_all(bind=db_session.bind)
 
     yield db_session
 
-    db_session.rollback()
     db_session.close()
 
 def test_db(db):
