@@ -2,5 +2,4 @@ sqlalchemy
 psycopg2
 psycopg2-binary==2.9.10
 pydantic
-pydantic_core
 pydantic_settings
