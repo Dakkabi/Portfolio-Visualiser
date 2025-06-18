@@ -1,8 +1,8 @@
 import pytest
 from sqlalchemy.orm.session import Session
-from database.crud.user import *
+from database.crud.user_crud import *
 from database.session import get_db
-from schemas.user import UserCreate
+from schemas.user_schema import UserCreate
 
 
 @pytest.fixture

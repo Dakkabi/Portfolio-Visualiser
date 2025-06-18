@@ -1,7 +1,7 @@
 from core.security import hash_password
 from sqlalchemy.orm.session import Session
-from database.models.user import User
-from schemas.user import UserCreate
+from database.models.user_model import User
+from schemas.user_schema import UserCreate
 
 def get_user(db: Session, user_id: int) -> type[User] | None:
     return db.query(User).filter(User.id == user_id).first()
