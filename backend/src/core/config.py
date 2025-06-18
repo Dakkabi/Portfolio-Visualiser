@@ -1,7 +1,6 @@
 from pydantic import computed_field
-from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
+from dotenv import load_dotenv
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -19,14 +18,11 @@ class Settings(BaseSettings):
 
     @computed_field
     @property
-    def SQLALCHEMY_DATABASE_URI(self) -> MultiHostUrl:
-        return MultiHostUrl.build(
-            scheme="postgresql+psycopg2",
-            username=self.POSTGRESQL_USERNAME,
-            password=self.POSTGRESQL_PASSWORD,
-            host=self.POSTGRESQL_SERVER,
-            port=self.POSTGRESQL_PORT,
-            path=self.POSTGRESQL_DATABASE
+    def SQLALCHEMY_DATABASE_URI(self) -> str:
+        return (
+            f"postgresql+psycopg2://{self.POSTGRESQL_USERNAME}:{self.POSTGRESQL_PASSWORD}"
+            f"@{self.POSTGRESQL_SERVER}:{self.POSTGRESQL_PORT}/{self.POSTGRESQL_DATABASE}"
         )
 
+load_dotenv()
 settings = Settings()
