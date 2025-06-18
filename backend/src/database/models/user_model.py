@@ -1,4 +1,4 @@
-from database.session import Base
+from backend.src.database.session import Base
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
