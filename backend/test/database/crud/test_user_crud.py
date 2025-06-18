@@ -1,8 +1,17 @@
 import pytest
 from sqlalchemy.orm.session import Session
 from backend.src.database.crud.user_crud import *
-from backend.src.database.session import get_db
-from backend.src.schemas.user_schema import UserCreate
 from backend.test.database.test_session import db
 
+def test_create_user_and_get_user(db: Session):
+    user = UserCreate(
+        email="test@test.com",
+        password="unhashed"
+    )
 
+    new_user = create_user(db, user)
+
+    assert get_user(db, new_user.id) == new_user
+    assert get_user_by_email(db, new_user.email) == new_user
+
+    assert new_user.password != user.password
