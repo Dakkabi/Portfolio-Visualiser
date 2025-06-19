@@ -10,7 +10,7 @@ from backend.src.core.security import verify_password
 from backend.src.database.crud.user_crud import get_user_by_email
 from backend.src.database.models.user_model import User
 from backend.src.database.session import get_db
-from backend.src.schemas.token_schema import TokenData
+from backend.src.schemas.auth.token_schema import TokenData
 
 ALGORITHM = "HS256"
 JWT_SECRET_KEY = settings.JWT_SECRET_KEY
