@@ -3,6 +3,9 @@ from sqlalchemy.orm.session import Session
 from backend.src.database.models.user_model import User
 from backend.src.schemas.model.user_schema import UserCreate
 
+def get_users(db: Session):
+    return db.query(User).all()
+
 def get_user(db: Session, user_id: int) -> type[User] | None:
     return db.query(User).filter(User.id == user_id).first()
 
