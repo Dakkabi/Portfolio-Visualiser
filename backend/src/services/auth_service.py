@@ -1,11 +1,10 @@
 from datetime import timedelta, timezone, datetime
 import jwt
-from fastapi import HTTPException, status
-from fastapi.params import Depends
+from fastapi import HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
 from jwt import InvalidTokenError
 from sqlalchemy.orm import Session
-from typing import Annotated, Any, Coroutine
+from typing import Annotated
 from backend.src.core.config import settings
 from backend.src.core.security import verify_password
 from backend.src.database.crud.user_crud import get_user_by_email
