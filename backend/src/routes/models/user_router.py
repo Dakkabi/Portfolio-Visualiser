@@ -13,7 +13,7 @@ user_router = APIRouter(
 )
 
 @user_router.get("/", response_model=List[UserSchema])
-def get_all_users(db: Session = Depends(get_db())):
+def get_all_users(db: Session = Depends(get_db)):
     return get_users(db)
 
 @user_router.get("/{user_id}", response_model=UserSchema)
