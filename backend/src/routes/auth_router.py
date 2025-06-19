@@ -7,12 +7,12 @@ from backend.src.database.session import get_db
 from backend.src.schemas.token_schema import Token
 from backend.src.services.auth_service import authenticate_user, create_access_token
 
-router = APIRouter(
+auth_router = APIRouter(
     prefix="/auth",
     tags=["auth"]
 )
 
-@router.post('/login')
+@auth_router.post('/login')
 async def login_for_access_token(
         form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
         db: Session = Depends(get_db)
