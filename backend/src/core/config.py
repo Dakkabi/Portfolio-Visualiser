@@ -24,5 +24,7 @@ class Settings(BaseSettings):
             f"@{self.POSTGRESQL_SERVER}:{self.POSTGRESQL_PORT}/{self.POSTGRESQL_DATABASE}"
         )
 
+    JWT_SECRET_KEY: str
+
 load_dotenv()
 settings = Settings()

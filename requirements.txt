@@ -1,9 +1,13 @@
 alembic
 bcrypt
-sqlalchemy
+fastapi
 psycopg2
 psycopg2-binary==2.9.10
 pydantic
 pydantic_settings
 pytest
 pytest-cov
+python-multipart
+pyjwt
+sqlalchemy
+uvicorn
