@@ -7,5 +7,6 @@ pydantic
 pydantic_settings
 pytest
 pytest-cov
+pyjwt
 sqlalchemy
 uvicorn
