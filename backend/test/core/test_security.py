@@ -1,4 +1,4 @@
-from backend.src.core.security import hash_password, verify_password
+from backend.src.services.auth.security_service import hash_password, verify_password
 
 def test_hash_and_verify():
     password1 = "unittesting"

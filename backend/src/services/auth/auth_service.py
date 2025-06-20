@@ -6,7 +6,7 @@ from jwt import InvalidTokenError
 from sqlalchemy.orm import Session
 from typing import Annotated
 from backend.src.core.config import settings
-from backend.src.core.security import verify_password
+from backend.src.services.auth.security_service import verify_password
 from backend.src.database.crud.user_crud import get_user_by_email
 from backend.src.database.models.user_model import User
 from backend.src.database.session import get_db
