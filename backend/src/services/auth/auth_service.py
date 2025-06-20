@@ -6,7 +6,7 @@ from jwt import InvalidTokenError
 from sqlalchemy.orm import Session
 from typing import Annotated
 from backend.src.core.config import settings
-from backend.src.core.security import verify_password
+from backend.src.services.auth.security_service import verify_password
 from backend.src.database.crud.user_crud import get_user_by_email
 from backend.src.database.models.user_model import User
 from backend.src.database.session import get_db
@@ -53,6 +53,19 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, JWT_SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
+def decode_access_token(token: str) -> dict:
+    """
+    Decode a JWT token.
+
+    There should be zero reason to use this function over get_current_method(...)
+    apart from debugging purposes.
+
+    :param token: The JWT token.
+    :return: The dict retrieved by decoding the JWT token.
+    """
+    return jwt.decode(token, JWT_SECRET_KEY, algorithms=ALGORITHM)
+
 
 async def get_current_user(
         token: Annotated[str, Depends(oauth2_scheme)],

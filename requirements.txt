@@ -6,8 +6,10 @@ psycopg2-binary==2.9.10
 pydantic
 pydantic_settings
 pytest
+pytest-asyncio
 pytest-cov
 python-multipart
 pyjwt
+httpx
 sqlalchemy
 uvicorn

@@ -13,8 +13,8 @@ user_router = APIRouter(
     tags=["users"]
 )
 
-@user_router.get("/whoami", response_model=UserSchema)
-def user_whoami(current_user: User = Depends(get_current_active_user)):
+@user_router.get("/me", response_model=UserSchema)
+def me(current_user: User = Depends(get_current_active_user)):
     return current_user
 
 @user_router.get("/", response_model=List[UserSchema])
