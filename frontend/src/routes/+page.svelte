@@ -1,3 +1,16 @@
+<script>
+    let email = '';
+    let password = '';
+
+    function createUser(email, password) {
+        
+    }
+
+    function loginUser(email, password) {
+
+    }
+</script>
+
 <div class="hero min-h-screen">
     <div class="hero-content flex-col lg:flex-row-reverse">
         <div class="text-center lg:text-left">
@@ -24,7 +37,7 @@
                                 <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                             </g>
                         </svg>
-                        <input type="email" required/>
+                        <input bind:value={email} type="email" required/>
                     </label>
 
                     <p>Password</p>
@@ -41,11 +54,11 @@
                                 <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
                             </g>
                         </svg>
-                        <input type="password" required/>
+                        <input bind:value={password} type="password" required/>
                     </label>
-                    <button class="btn btn-neutral mt-4">Login</button>
+                    <button on:click={() => loginUser(email, password)} class="btn btn-neutral mt-4">Login</button>
                     <div class="divider"></div>
-                    <button class="btn">Create an Account</button>
+                    <button on:click={() => createUser(email, password)} class="btn">Create an Account</button>
                     <a class="btn mt-4 btn-ghost link-hover" href="/demos/dashboard">See a Demo?</a>
                 </fieldset>
             </div>
