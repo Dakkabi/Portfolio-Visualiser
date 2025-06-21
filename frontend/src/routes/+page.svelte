@@ -1,9 +1,11 @@
 <script>
+    import axios from "axios";
+
     let email = '';
     let password = '';
 
     function createUser(email, password) {
-        
+
     }
 
     function loginUser(email, password) {
