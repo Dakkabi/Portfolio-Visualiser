@@ -1,3 +1,61 @@
+<script>
+    import axios from "axios";
+    import { goto } from '$app/navigation'
+
+    let email = '';
+    let password = '';
+
+    let createUserResponse = '';
+    let loginUserResponse = '';
+
+    function createUser(email, password) {
+        axios.post(
+            '/api/users/',
+            {
+                email: email,
+                password: password
+            }
+        )
+            .then(() => {
+                createUserResponse = 'Successfully created an account, login using the same credentials!'
+            })
+            .catch(error => {
+                console.error(error);
+                createUserResponse = 'There was an issue creating your account.'
+            })
+    }
+
+     function loginUser(email, password) {
+        // OAuth2 requires a url-encoded form, and will deny JSON
+        const formData = new URLSearchParams();
+        formData.append('grant_type', 'password');
+        formData.append('username', email);
+        formData.append('password', password)
+
+         axios.post(
+             'api/auth/login',
+             formData,
+             {
+                 headers: {
+                     'Content-Type': 'application/x-www-form-urlencoded'
+                 }
+             }
+         )
+             .then(
+                 response => {
+                    const token = response.data.access_token;
+                    loginUserResponse = 'Successful login, you will be redirected shortly.';
+
+                    goto('/dashboard');
+                 }
+             )
+             .catch(error => {
+                 console.log(error);
+                 loginUserResponse = 'There was an issue trying to login.'
+             })
+    }
+</script>
+
 <div class="hero min-h-screen">
     <div class="hero-content flex-col lg:flex-row-reverse">
         <div class="text-center lg:text-left">
@@ -24,7 +82,7 @@
                                 <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                             </g>
                         </svg>
-                        <input type="email" required/>
+                        <input bind:value={email} type="email" required/>
                     </label>
 
                     <p>Password</p>
@@ -41,11 +99,15 @@
                                 <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
                             </g>
                         </svg>
-                        <input type="password" required/>
+                        <input bind:value={password} type="password" required/>
                     </label>
-                    <button class="btn btn-neutral mt-4">Login</button>
+                    <button on:click={() => loginUser(email, password)} class="btn btn-neutral mt-4">Login</button>
+                    <p>{loginUserResponse}</p>
+
                     <div class="divider"></div>
-                    <button class="btn">Create an Account</button>
+
+                    <button on:click={() => createUser(email, password)} class="btn">Create an Account</button>
+                    <p>{createUserResponse}</p>
                     <a class="btn mt-4 btn-ghost link-hover" href="/demos/dashboard">See a Demo?</a>
                 </fieldset>
             </div>
