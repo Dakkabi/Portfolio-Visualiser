@@ -1,11 +1,26 @@
 <script>
     import axios from "axios";
-
+    import {error} from "@sveltejs/kit";
     let email = '';
     let password = '';
 
-    function createUser(email, password) {
+    let createUserResponse = '';
+    let loginUserResponse = '';
 
+    function createUser(email, password) {
+        axios.post(
+            '/api/users/',
+            {
+                "email": email,
+                "password": password
+            }
+        )
+            .then(
+                response => console.log(response.data)
+            )
+            .catch(
+                error => console.error(error)
+            )
     }
 
     function loginUser(email, password) {
@@ -59,8 +74,12 @@
                         <input bind:value={password} type="password" required/>
                     </label>
                     <button on:click={() => loginUser(email, password)} class="btn btn-neutral mt-4">Login</button>
+                    <p>{loginUserResponse}</p>
+
                     <div class="divider"></div>
+
                     <button on:click={() => createUser(email, password)} class="btn">Create an Account</button>
+                    <p class="">{createUserResponse}</p>
                     <a class="btn mt-4 btn-ghost link-hover" href="/demos/dashboard">See a Demo?</a>
                 </fieldset>
             </div>
