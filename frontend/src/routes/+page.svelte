@@ -1,6 +1,7 @@
 <script>
     import axios from "axios";
-    import {error} from "@sveltejs/kit";
+    import { goto } from '$app/navigation'
+
     let email = '';
     let password = '';
 
@@ -11,20 +12,47 @@
         axios.post(
             '/api/users/',
             {
-                "email": email,
-                "password": password
+                email: email,
+                password: password
             }
         )
-            .then(
-                response => console.log(response.data)
-            )
-            .catch(
-                error => console.error(error)
-            )
+            .then(() => {
+                createUserResponse = 'Successfully created an account, login using the same credentials!'
+            })
+            .catch(error => {
+                console.error(error);
+                createUserResponse = 'There was an issue creating your account.'
+            })
     }
 
-    function loginUser(email, password) {
+     function loginUser(email, password) {
+        // OAuth2 requires a url-encoded form, and will deny JSON
+        const formData = new URLSearchParams();
+        formData.append('grant_type', 'password');
+        formData.append('username', email);
+        formData.append('password', password)
 
+         axios.post(
+             'api/auth/login',
+             formData,
+             {
+                 headers: {
+                     'Content-Type': 'application/x-www-form-urlencoded'
+                 }
+             }
+         )
+             .then(
+                 response => {
+                    const token = response.data.access_token;
+                    loginUserResponse = 'Successful login, you will be redirected shortly.';
+
+                    goto('/dashboard');
+                 }
+             )
+             .catch(error => {
+                 console.log(error);
+                 loginUserResponse = 'There was an issue trying to login.'
+             })
     }
 </script>
 
@@ -79,7 +107,7 @@
                     <div class="divider"></div>
 
                     <button on:click={() => createUser(email, password)} class="btn">Create an Account</button>
-                    <p class="">{createUserResponse}</p>
+                    <p>{createUserResponse}</p>
                     <a class="btn mt-4 btn-ghost link-hover" href="/demos/dashboard">See a Demo?</a>
                 </fieldset>
             </div>
