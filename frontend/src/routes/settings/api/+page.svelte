@@ -8,6 +8,18 @@
         <div class="text-center">
             <!-- Page Content -->
             <h1 class="text-5xl font-bold mt-2">API Keys</h1>
+
+            <div class="divider text-xl mt-4">Stock Brokers</div>
+            <ul class="menu menu-vertical">
+                <li class="card bg-base-100 image-full w-72 shadow-sm">
+                    <button on:click={() => {}}>
+                        <img
+                            src="/trading_212_logo.png"
+                            alt="Trading212"
+                        />
+                    </button>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="drawer-side">
