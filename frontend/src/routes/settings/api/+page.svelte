@@ -19,6 +19,14 @@
                         />
                     </label>
                 </li>
+                <li class="card bg-base-100 image-full w-72 shadow-sm">
+                    <label for="kraken_exchange_modal">
+                        <img
+                            src="/brokers/kraken/kraken_logo.png"
+                            alt="Kraken Crypto Exchange"
+                        />
+                    </label>
+                </li>
             </ul>
         </div>
     </div>
@@ -65,7 +73,18 @@
             1. Make an API Key. <br>
             2. Put it here.
         </p>
-
     </div>
     <label class="modal-backdrop" for="trading212_modal">Close</label>
+</div>
+
+<input type="checkbox" id="kraken_exchange_modal" class="modal-toggle">
+<div class="modal" role="dialog">
+    <div class="modal-box bg-base-200">
+        <h1 class="text-center font-bold text-2xl">Kraken Crypto Exchange</h1>
+        <p>
+            1. Make an API Key. <br>
+            2. Put it here.
+        </p>
+    </div>
+    <label class="modal-backdrop" for="kraken_exchange_modal">Close</label>
 </div>
