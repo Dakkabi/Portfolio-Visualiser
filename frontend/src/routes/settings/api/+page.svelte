@@ -12,12 +12,12 @@
             <div class="divider text-xl mt-4">Stock Brokers</div>
             <ul class="menu menu-vertical">
                 <li class="card bg-base-100 image-full w-72 shadow-sm">
-                    <button on:click={() => {}}>
+                    <label for="trading212_modal">
                         <img
-                            src="/trading_212_logo.png"
+                            src="/brokers/trading212/trading_212_logo.png"
                             alt="Trading212"
                         />
-                    </button>
+                    </label>
                 </li>
             </ul>
         </div>
@@ -55,4 +55,17 @@
             </a></li>
         </ul>
     </div>
+</div>
+
+<input type="checkbox" id="trading212_modal" class="modal-toggle">
+<div class="modal" role="dialog">
+    <div class="modal-box bg-base-200">
+        <h1 class="text-center font-bold text-2xl">Trading212</h1>
+        <p>
+            1. Make an API Key. <br>
+            2. Put it here.
+        </p>
+
+    </div>
+    <label class="modal-backdrop" for="trading212_modal">Close</label>
 </div>
