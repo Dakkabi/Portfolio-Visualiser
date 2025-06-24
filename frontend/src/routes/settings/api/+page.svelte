@@ -10,7 +10,7 @@
             <h1 class="text-5xl font-bold mt-2">API Keys</h1>
 
             <div class="divider text-xl mt-4">Stock Brokers</div>
-            <ul class="menu menu-vertical">
+            <ul class="menu menu-horizontal">
                 <li class="card bg-base-100 image-full w-72 shadow-sm">
                     <label for="trading212_modal">
                         <img
