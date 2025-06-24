@@ -9,6 +9,7 @@
             <!-- Page Content -->
             <h1 class="text-5xl font-bold mt-2">API Keys</h1>
 
+            <!-- Stock -->
             <div class="divider text-xl mt-4">Stock Brokers</div>
             <ul class="menu menu-horizontal">
                 <li class="card bg-base-100 image-full w-72 shadow-sm">
@@ -19,6 +20,10 @@
                         />
                     </label>
                 </li>
+            </ul>
+            <!-- Crypto -->
+            <div class="divider text-xl mt-4">Crypto Exchanges</div>
+            <ul class="menu menu-horizontal">
                 <li class="card bg-base-100 image-full w-72 shadow-sm">
                     <label for="kraken_exchange_modal">
                         <img
