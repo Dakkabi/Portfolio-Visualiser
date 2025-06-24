@@ -84,6 +84,14 @@
             1. Make an API Key. <br>
             2. Put it here.
         </p>
+        <div class="join">
+            <div>
+                <label class="input join-item">
+                    <input type="text" placeholder="Your API Key here." required>
+                </label>
+            </div>
+            <button class="btn btn-neutral join-item">Verify API Key</button>
+        </div>
     </div>
     <label class="modal-backdrop" for="trading212_modal">Close</label>
 </div>
