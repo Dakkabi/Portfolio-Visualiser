@@ -1,6 +1,7 @@
 from sqlalchemy import Integer, String
-from sqlalchemy.orm import Mapped, MappedColumn
+from sqlalchemy.orm import Mapped, MappedColumn, relationship
 
+from backend.src.database.models.api_key_model import ApiKey
 from backend.src.database.session import Base
 
 class Broker(Base):
@@ -8,3 +9,5 @@ class Broker(Base):
 
     id: Mapped[int] = MappedColumn(Integer, primary_key=True)
     name: Mapped[String] = MappedColumn(String(64), unique=True)
+
+    api_keys: Mapped[list["ApiKey"]] = relationship("ApiKey", back_populates="broker")
