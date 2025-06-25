@@ -6,6 +6,7 @@ from sqlalchemy import pool
 from backend.src.core.config import settings
 from backend.src.database.session import Base
 from backend.src.database.models.user_model import User
+from backend.src.database.models.api_key_model import ApiKey
 
 from alembic import context
 
