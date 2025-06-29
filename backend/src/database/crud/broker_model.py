@@ -15,7 +15,6 @@ def add_broker(db : Session, broker: BrokerCreate):
     db.refresh(db_broker)
     return db_broker
 
-@NotImplementedError
 def add_broker_from_file(db : Session, file_path : str = None):
     if file_path is None:
         file_path = "backend/src/core/supported_brokers.txt"
