@@ -1,3 +1,5 @@
+import os
+
 from sqlalchemy.orm import Session
 
 from backend.src.database.models.broker_model import Broker
@@ -17,7 +19,7 @@ def add_broker(db : Session, broker: BrokerCreate):
 
 def add_broker_from_file(db : Session, file_path : str = None):
     if file_path is None:
-        file_path = "backend/src/core/supported_brokers.txt"
+        file_path = os.path.join("core", "supported_brokers.txt")
 
     with open(file_path, "r") as file:
         broker_names = file.readlines()
