@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, String
+from sqlalchemy import String
 from sqlalchemy.orm import Mapped, MappedColumn, relationship
 
 from backend.src.database.models.api_key_model import ApiKey
