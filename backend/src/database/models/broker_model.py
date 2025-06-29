@@ -5,7 +5,7 @@ from backend.src.database.models.api_key_model import ApiKey
 from backend.src.database.session import Base
 
 class Broker(Base):
-    __tablename__ = 'broker'
+    __tablename__ = 'brokers'
 
     name: Mapped[str] = MappedColumn(String(64), unique=True, primary_key=True)
 
