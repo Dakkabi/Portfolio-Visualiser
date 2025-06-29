@@ -14,3 +14,18 @@ def add_broker(db : Session, broker: BrokerCreate):
     db.commit()
     db.refresh(db_broker)
     return db_broker
+
+@NotImplementedError
+def add_broker_from_file(db : Session, file_path : str = None):
+    if file_path is None:
+        file_path = "backend/src/core/supported_brokers.txt"
+
+    with open(file_path, "r") as file:
+        broker_names = file.readlines()
+
+    # Remove '/n' chars
+    broker_names = [name.strip() for name in broker_names]
+
+    for name in broker_names:
+        if get_broker(db, name) is None:
+            db_broker = add_broker(db, BrokerCreate(name=name))
