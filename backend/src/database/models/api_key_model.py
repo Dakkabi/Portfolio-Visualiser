@@ -2,6 +2,7 @@ from sqlalchemy import Integer, String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from backend.src.database.session import Base
+from backend.src.database.models.user_model import User
 
 
 class ApiKey(Base):
