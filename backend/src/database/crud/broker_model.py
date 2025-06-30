@@ -22,7 +22,8 @@ def add_broker(db : Session, broker: BrokerCreate):
 
 def add_broker_from_file(db : Session, file_path : str = None):
     if file_path is None:
-        file_path = os.path.join("core", "supported_brokers.txt")
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(base_dir, "..", "..", "core", "supported_brokers.txt")
 
     with open(file_path, "r") as file:
         broker_names = file.readlines()
