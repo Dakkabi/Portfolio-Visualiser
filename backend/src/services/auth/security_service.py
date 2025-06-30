@@ -11,25 +11,29 @@ def hash_password(password : str) -> str:
 def verify_password(plain_password : str, hashed_password : str) -> bool:
     return checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
 
-def generate_salt() -> bytes:
-    """
-    Create a random salt.
-
-    :return: Random salt.
-    """
-    return gensalt()
-
-def generate_key_from_password(password : str, salt : bytes) -> bytes:
+def generate_key_from_password(password : str, salt : bytes = None) -> str:
     """
     Derive an encryption key from a password.
+
+    :param password: The password to derive an encryption key from.
+    :param salt: The salt to use in the key creation.
+    :return: A base64 encoded key with the salt concatenated in the format: key::salt
     """
-    key = PBKDF2HMAC(
+    if salt is None:
+        salt = gensalt()
+
+    kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
         length=32,
         salt=salt,
         iterations=100000
     )
-    return base64.urlsafe_b64encode(key.derive(password.encode("utf-8")))
+
+    key = kdf.derive(password.encode("utf-8"))
+    encoded_key = base64.urlsafe_b64encode(key).decode("utf-8")
+    encoded_salt = base64.urlsafe_b64encode(salt).decode("utf-8")
+
+    return f"{encoded_key}::{encoded_salt}"
 
 def encrypt_data(plaintext, password : str, salt : bytes) -> str:
     """
