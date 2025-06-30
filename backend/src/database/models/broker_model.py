@@ -1,7 +1,6 @@
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, MappedColumn, relationship
 
-from backend.src.database.models.api_key_model import ApiKey
 from backend.src.database.session import Base
 
 class Broker(Base):
