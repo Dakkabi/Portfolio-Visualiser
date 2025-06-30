@@ -5,6 +5,9 @@ from sqlalchemy.orm import Session
 from backend.src.database.models.broker_model import Broker
 from backend.src.schemas.model.broker_schema import BrokerCreate
 
+def get_brokers(db : Session):
+    return db.query(Broker).all()
+
 def get_broker(db: Session, broker_name: str):
     return db.query(Broker).filter(Broker.name == broker_name).first()
 
