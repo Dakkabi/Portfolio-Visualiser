@@ -11,3 +11,4 @@ class ApiKeySchema(ApiKeyBase):
 class ApiKeyCreate(ApiKeyBase):
     api_key: str
     private_key: str
+    secret_key: str
