@@ -21,7 +21,7 @@ def generate_key_from_password(user_id: int, password : str) -> str:
     :param password: The password to derive an encryption key from.
     :return: A base64 url-safe encoded key.
     """
-    salt = sha256(str(user_id).encode("utf-8")).digest()[:16]
+    salt = sha256(str(user_id).encode("utf-8")).digest()
 
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
