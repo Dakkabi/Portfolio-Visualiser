@@ -4,7 +4,6 @@ from fastapi.testclient import TestClient
 from backend.src.database.models.user_model import User
 from backend.src.database.session import get_db
 from backend.src.main import app
-from backend.src.routes.models.user_router import get_user_by_id
 from backend.src.services.auth.auth_service import get_current_active_user
 from backend.test.database.test_session import db
 

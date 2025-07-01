@@ -1,5 +1,5 @@
-from fastapi import FastAPI
 import uvicorn
+from fastapi import FastAPI
 
 from backend.src.database.crud.broker_model import add_broker_from_file
 from backend.src.database.session import get_db

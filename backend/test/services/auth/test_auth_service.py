@@ -1,12 +1,10 @@
-from datetime import timedelta, datetime, timezone
-
 import pytest
-from fastapi import HTTPException
 
 from backend.src.database.crud.user_crud import create_user
 from backend.src.schemas.model.user_schema import UserCreate, UserSchema
 from backend.src.services.auth.auth_service import *
 from backend.test.database.test_session import db
+
 
 def test_authenticate_user(db):
     assert not authenticate_user("no@one.com", "null", db)

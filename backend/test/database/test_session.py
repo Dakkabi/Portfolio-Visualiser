@@ -1,8 +1,9 @@
+import pytest
 from sqlalchemy import create_engine, text
+from sqlalchemy.orm.session import Session, sessionmaker
+
 from backend.src.core.config import settings
 from backend.src.database.session import get_db, Base
-import pytest
-from sqlalchemy.orm.session import Session, sessionmaker
 
 
 @pytest.fixture
