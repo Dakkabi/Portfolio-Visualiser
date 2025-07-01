@@ -1,4 +1,6 @@
 import base64
+from hashlib import sha256
+
 from bcrypt import hashpw, gensalt, checkpw
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
@@ -11,16 +13,15 @@ def hash_password(password : str) -> str:
 def verify_password(plain_password : str, hashed_password : str) -> bool:
     return checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
 
-def generate_key_from_password(password : str, salt : bytes = None) -> str:
+def generate_key_from_password(user_id: int, password : str) -> str:
     """
     Derive an encryption key from a password.
 
+    :param user_id: User ID to generate a deterministic salt from.
     :param password: The password to derive an encryption key from.
-    :param salt: The salt to use in the key creation.
-    :return: A base64 encoded key with the salt concatenated in the format: key::salt
+    :return: A base64 url-safe encoded key.
     """
-    if salt is None:
-        salt = gensalt()
+    salt = sha256(str(user_id).encode("utf-8")).digest()[:16]
 
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
@@ -31,9 +32,7 @@ def generate_key_from_password(password : str, salt : bytes = None) -> str:
 
     key = kdf.derive(password.encode("utf-8"))
     encoded_key = base64.urlsafe_b64encode(key).decode("utf-8")
-    encoded_salt = base64.urlsafe_b64encode(salt).decode("utf-8")
-
-    return f"{encoded_key}::{encoded_salt}"
+    return encoded_key
 
 def encrypt_data(plaintext, password : str, salt : bytes) -> str:
     """
