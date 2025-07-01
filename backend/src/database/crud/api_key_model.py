@@ -4,6 +4,9 @@ from backend.src.database.models.api_key_model import ApiKey
 from backend.src.schemas.model.api_key_schema import ApiKeyCreate
 from backend.src.services.auth.security_service import encrypt_data
 
+def get_api_keys(db : Session):
+    return db.query(ApiKey).all()
+
 def get_api_key(db: Session, user_id: int, broker_name: str):
     return db.query(ApiKey).filter_by(user_id=user_id, broker_name=broker_name).first()
 
