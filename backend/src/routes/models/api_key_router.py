@@ -9,7 +9,7 @@ from backend.src.schemas.model.api_key_schema import ApiKeySchema, ApiKeyCreate
 
 api_key_router = APIRouter(
     prefix="/apikeys",
-    tags=["apikeys"]
+    tags=["API Keys"]
 )
 
 @api_key_router.get("/", response_model=List[ApiKeySchema])

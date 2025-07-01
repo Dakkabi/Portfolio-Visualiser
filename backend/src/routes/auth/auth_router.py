@@ -11,7 +11,7 @@ from backend.src.services.auth.auth_service import authenticate_user, create_acc
 
 auth_router = APIRouter(
     prefix='/auth',
-    tags=['auth'],
+    tags=['Authentication'],
 )
 
 @auth_router.post('/login')

@@ -9,7 +9,7 @@ from backend.src.services.auth.auth_service import get_current_active_user
 
 user_router = APIRouter(
     prefix="/users",
-    tags=["users"]
+    tags=["Users"]
 )
 
 @user_router.get("/", response_model=List[UserSchema])
