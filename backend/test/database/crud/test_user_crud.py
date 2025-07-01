@@ -1,5 +1,3 @@
-import pytest
-from sqlalchemy.orm.session import Session
 from backend.src.database.crud.user_crud import *
 from backend.test.database.test_session import db
 

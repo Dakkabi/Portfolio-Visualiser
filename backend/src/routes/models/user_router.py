@@ -1,7 +1,6 @@
 from typing import List
 
 from fastapi import APIRouter, HTTPException, Depends
-from sqlalchemy.orm import Session
 
 from backend.src.database.crud.user_crud import *
 from backend.src.database.session import get_db

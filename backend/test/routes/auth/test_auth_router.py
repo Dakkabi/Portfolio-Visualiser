@@ -1,7 +1,6 @@
 import pytest
+from fastapi import status
 from fastapi.testclient import TestClient
-from fastapi import status, FastAPI
-from sqlalchemy.orm import Session
 
 from backend.src.database.crud.user_crud import create_user
 from backend.src.database.session import get_db

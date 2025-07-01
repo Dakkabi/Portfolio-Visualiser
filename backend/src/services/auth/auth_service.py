@@ -1,16 +1,18 @@
 from datetime import timedelta, timezone, datetime
+from typing import Annotated
+
 import jwt
 from fastapi import HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
 from jwt import InvalidTokenError
 from sqlalchemy.orm import Session
-from typing import Annotated
+
 from backend.src.core.config import settings
-from backend.src.services.auth.security_service import verify_password
 from backend.src.database.crud.user_crud import get_user_by_email
 from backend.src.database.models.user_model import User
 from backend.src.database.session import get_db
 from backend.src.schemas.auth.token_schema import TokenData
+from backend.src.services.auth.security_service import verify_password
 
 ALGORITHM = "HS256"
 JWT_SECRET_KEY = settings.JWT_SECRET_KEY

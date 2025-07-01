@@ -2,10 +2,10 @@ from pydantic import BaseModel
 
 
 class BrokerBase(BaseModel):
-    pass
-
-class BrokerSchema(BaseModel):
     name: str
 
-class BrokerCreate(BrokerSchema):
+class BrokerSchema(BrokerBase):
+    pass
+
+class BrokerCreate(BrokerBase):
     pass
