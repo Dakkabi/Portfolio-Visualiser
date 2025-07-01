@@ -1,0 +1,15 @@
+from fastapi import APIRouter, Depends
+
+from backend.src.database.models.user_model import User
+from backend.src.schemas.auth.security_schema import ResponseSchema, DeriveKeyRequest
+from backend.src.services.auth.auth_service import get_current_user
+from backend.src.services.auth.security_service import generate_key_from_password
+
+security_router = APIRouter(
+    prefix="/encryption",
+    tags=["Encryption"]
+)
+
+@security_router.get("/derive-key", response_model=ResponseSchema)
+def derive_key(request : DeriveKeyRequest, user : User = Depends(get_current_user)):
+    return generate_key_from_password(user.id, request.password)
