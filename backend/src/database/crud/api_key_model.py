@@ -7,10 +7,10 @@ from backend.src.services.auth.security_service import encrypt_data
 def get_api_key(db: Session, user_id: int, broker_name: str):
     return db.query(ApiKey).filter_by(user_id=user_id, broker_name=broker_name).first()
 
-def create_api_key(db: Session, new_api_key: ApiKeyCreate, secret_key: str):
-    db_api_key = ApiKeyCreate(
-        api_key=encrypt_data(new_api_key.api_key, secret_key),
-        private_key=encrypt_data(new_api_key.private_key, secret_key),
+def create_api_key(db: Session, new_api_key: ApiKeyCreate):
+    db_api_key = ApiKey(
+        api_key=encrypt_data(new_api_key.api_key, new_api_key.secret_key),
+        private_key=encrypt_data(new_api_key.private_key, new_api_key.secret_key),
         user_id=new_api_key.user_id,
         broker_name=new_api_key.broker_name
     )
