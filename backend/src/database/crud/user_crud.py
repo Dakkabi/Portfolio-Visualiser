@@ -1,7 +1,9 @@
-from backend.src.services.auth.security_service import hash_password
 from sqlalchemy.orm.session import Session
+
 from backend.src.database.models.user_model import User
 from backend.src.schemas.model.user_schema import UserCreate
+from backend.src.services.auth.security_service import hash_password
+
 
 def get_users(db: Session):
     return db.query(User).all()

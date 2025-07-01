@@ -3,6 +3,7 @@ from cryptography.fernet import InvalidToken
 
 from backend.src.services.auth.security_service import *
 
+
 @pytest.fixture
 def users():
     return [
