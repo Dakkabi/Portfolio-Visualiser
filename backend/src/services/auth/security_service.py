@@ -34,38 +34,34 @@ def generate_key_from_password(user_id: int, password : str) -> str:
     encoded_key = base64.urlsafe_b64encode(key).decode("utf-8")
     return encoded_key
 
-def encrypt_data(plaintext, password : str, salt : bytes) -> str:
+def encrypt_data(plaintext, secret_key : str) -> str:
     """
     Encrypt data using a salt and password as key.
 
     :param plaintext: Plaintext data to encrypt into ciphertext.
-    :param password: Password to derive an encryption key.
-    :param salt: Salt to use for key generation.
+    :param secret_key: Secret key to encrypt the plaintext with.
 
-    :return: Encrypted data as String.
+    :return: Encrypted ciphertext as String.
     """
-    key = generate_key_from_password(password, salt)
-    fernet = Fernet(key)
+    fernet = Fernet(secret_key)
 
     plaintext = plaintext.encode("utf-8")
     token = fernet.encrypt(plaintext)
 
     return token.decode("utf-8")
 
-def decrypt_data(ciphertext : str, password : str, salt : bytes) -> str:
+def decrypt_data(ciphertext : str, secret_key : str) -> str:
     """
     Decrypt encrypted data using a salt and password as key.
 
     :param ciphertext: Encrypted data to decrypt into plaintext.
-    :param password: Password to derive an encryption key.
-    :param salt: Salt to use for key generation.
+    :param secret_key: Secret key to decrypt the ciphertext with.
 
-    :return: Decrypted data as String.
+    :return: Decrypted plaintext as String.
 
     :raises InvalidToken: The key is incorrect and has returned junk.
     """
-    key = generate_key_from_password(password, salt)
-    fernet = Fernet(key)
+    fernet = Fernet(secret_key)
 
     plaintext = fernet.decrypt(ciphertext)
 
