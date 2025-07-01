@@ -8,7 +8,7 @@ from backend.src.database.session import get_db
 from backend.src.schemas.model.api_key_schema import ApiKeySchema, ApiKeyCreate
 
 api_key_router = APIRouter(
-    prefix="/apikeys",
+    prefix="/api-keys",
     tags=["API Keys"]
 )
 
