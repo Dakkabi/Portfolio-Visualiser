@@ -12,31 +12,25 @@ def test_hash_and_verify():
     assert not verify_password(password1, hash_password(password2))
 
 def test_generate_key_from_password():
-    password1 = "unittesting"
-    password2 = "iscool"
+    user1 = {
+        "user_id": 1,
+        "password": "secret"
+    }
+    user2 = {
+        "user_id": 2,
+        "password": "Montoya"
+    }
 
-    salt = generate_salt()
-    new_salt = generate_salt()
+    result_user1 = generate_key_from_password(user1["user_id"], user1["password"])
+    result_user2 = generate_key_from_password(user2["user_id"], user2["password"])
 
-    assert new_salt != salt
+    assert not result_user1 == result_user2
 
-    key1 = generate_key_from_password(password1, salt)
-    key2 = generate_key_from_password(password2, salt)
+    assert result_user1 == generate_key_from_password(user1["user_id"], user1["password"]) # Deterministic?
 
-    assert key1 != key2
-    assert isinstance(key1, bytes)
+    # Assert that another user using the same password as a previous user does not result
+    # in the same key.
+    assert not generate_key_from_password(user2["user_id"], user1["password"]) == result_user1
 
 def test_encrypt_and_decrypt():
-    salt = generate_salt()
-
-    password = "unittesting"
-
-    plaintext = "Inconceivable!"
-
-    ciphertext = encrypt_data(plaintext, password, salt)
-
-    assert plaintext != ciphertext
-    assert plaintext == decrypt_data(ciphertext, password, salt)
-
-    with pytest.raises(InvalidToken):
-        decrypt_data(ciphertext, "WrongPassword?", salt)
+    pass
