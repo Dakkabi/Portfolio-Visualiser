@@ -2,12 +2,23 @@ from pydantic import BaseModel
 
 
 class ApiKeyBase(BaseModel):
-    user_id: int
     broker_name: str
 
 class ApiKeySchema(ApiKeyBase):
-    pass
+    user_id : int
 
-class ApiKeyCreate(ApiKeyBase):
+class ApiKeySensitive(ApiKeyBase):
     api_key: str
     private_key: str
+
+class ApiKeySensitiveSchema(ApiKeySensitive, ApiKeySchema):
+    pass
+
+class ApiKeyCreate(ApiKeySensitive):
+    pass
+
+class ApiKeyUpdate(ApiKeySensitive):
+    pass
+
+class ApiKeyDelete(ApiKeyBase):
+    pass

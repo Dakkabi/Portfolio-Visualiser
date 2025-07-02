@@ -2,7 +2,7 @@ import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
 
-from backend.src.database.crud.user_crud import create_user
+from backend.src.database.crud.user_crud import create_db_user
 from backend.src.database.session import get_db
 from backend.src.main import app
 from backend.src.schemas.model.user_schema import UserCreate
@@ -34,7 +34,7 @@ def test_login_for_access_token(db):
         email="success@test.com",
         password="something"
     )
-    create_user(db, new_user)
+    create_db_user(db, new_user)
     response = client.post(
         f"{url_prefix}/login",
         data={"username": new_user.email, "password": new_user.password},

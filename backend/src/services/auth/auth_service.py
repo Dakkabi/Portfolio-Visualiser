@@ -8,7 +8,7 @@ from jwt import InvalidTokenError
 from sqlalchemy.orm import Session
 
 from backend.src.core.config import settings
-from backend.src.database.crud.user_crud import get_user_by_email
+from backend.src.database.crud.user_crud import get_db_user_by_email
 from backend.src.database.models.user_model import User
 from backend.src.database.session import get_db
 from backend.src.schemas.auth.token_schema import TokenData
@@ -29,7 +29,7 @@ def authenticate_user(email: str, password: str, db: Session = Depends(get_db)) 
     :return: User Schema if the user is authenticated, False otherwise.
     """
 
-    user = get_user_by_email(db, email)
+    user = get_db_user_by_email(db, email)
     if not user:
         return False
 
@@ -99,7 +99,7 @@ async def get_current_user(
     except InvalidTokenError:
         raise credentials_exception
 
-    user = get_user_by_email(db, email=token_data.email)
+    user = get_db_user_by_email(db, email=token_data.email)
     if user is None:
         raise credentials_exception
 
