@@ -14,10 +14,15 @@ def get_db_api_key(db: Session, user_id: int, broker_name: str):
 def get_db_api_keys_by_user_id(db : Session, user_id: int):
     return db.query(ApiKey).filter_by(user_id=user_id).all()
 
-def create_db_api_key(db: Session, new_api_key: ApiKeyCreate, current_user: User):
+def create_db_api_key(
+        db: Session,
+        new_api_key: ApiKeyCreate,
+        secret_key: str,
+        current_user: User
+):
     db_api_key = ApiKey(
-        api_key=encrypt_data(new_api_key.api_key, new_api_key.secret_key),
-        private_key=encrypt_data(new_api_key.private_key, new_api_key.secret_key),
+        api_key=encrypt_data(new_api_key.api_key, secret_key),
+        private_key=encrypt_data(new_api_key.private_key, secret_key),
         user_id=current_user.id,
         broker_name=new_api_key.broker_name
     )
@@ -26,14 +31,19 @@ def create_db_api_key(db: Session, new_api_key: ApiKeyCreate, current_user: User
     db.refresh(db_api_key)
     return db_api_key
 
-def update_db_api_key(db : Session, new_api_key: ApiKeyUpdate, current_user: User):
+def update_db_api_key(
+        db : Session,
+        new_api_key: ApiKeyUpdate,
+        secret_key: str,
+        current_user: User
+):
     record = db.query(ApiKey).filter_by(
         user_id=current_user.id,
         broker_name=new_api_key.broker_name
     ).first()
 
-    record.api_key = encrypt_data(new_api_key.api_key, new_api_key.secret_key)
-    record.private_key = encrypt_data(new_api_key.private_key, new_api_key.secret_key)
+    record.api_key = encrypt_data(new_api_key.api_key, secret_key)
+    record.private_key = encrypt_data(new_api_key.private_key, secret_key)
 
     db.commit()
     db.refresh(record)
