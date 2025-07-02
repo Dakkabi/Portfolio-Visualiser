@@ -11,6 +11,9 @@ def get_api_keys(db : Session):
 def get_api_key(db: Session, user_id: int, broker_name: str):
     return db.query(ApiKey).filter_by(user_id=user_id, broker_name=broker_name).first()
 
+def get_api_keys_by_user_id(db : Session, user_id: int):
+    return db.query(ApiKey).filter_by(user_id=user_id).all()
+
 def create_api_key(db: Session, new_api_key: ApiKeyCreate, current_user: User):
     db_api_key = ApiKey(
         api_key=encrypt_data(new_api_key.api_key, new_api_key.secret_key),
