@@ -104,7 +104,3 @@ async def get_current_user(
         raise credentials_exception
 
     return user
-
-async def get_current_active_user(current_user: User = Depends(get_current_user)):
-    """Get user from the token, handled by FastAPI Dependency Injection."""
-    return current_user
