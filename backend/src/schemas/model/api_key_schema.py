@@ -20,5 +20,5 @@ class ApiKeyCreate(ApiKeySensitive):
 class ApiKeyUpdate(ApiKeySensitive):
     pass
 
-class ApiKeyDelete(ApiKeySensitive):
+class ApiKeyDelete(ApiKeyBase):
     pass
