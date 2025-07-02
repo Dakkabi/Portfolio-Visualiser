@@ -11,15 +11,15 @@ def test_create_user_and_get_user(db: Session):
         password="test"
     )
 
-    new_user = create_user(db, user)
+    new_user = create_db_user(db, user)
 
-    assert get_user(db, new_user.id) == new_user
-    assert get_user_by_email(db, new_user.email) == new_user
+    assert get_db_user(db, new_user.id) == new_user
+    assert get_db_user_by_email(db, new_user.email) == new_user
 
     assert new_user.password != user.password
 
-    assert isinstance(get_users(db), list)
-    assert len(get_users(db)) == 1
+    assert isinstance(get_db_users(db), list)
+    assert len(get_db_users(db)) == 1
 
-    create_user(db, user2)
-    assert len(get_users(db)) == 2
+    create_db_user(db, user2)
+    assert len(get_db_users(db)) == 2

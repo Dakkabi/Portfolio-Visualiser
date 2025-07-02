@@ -1,6 +1,6 @@
 import pytest
 
-from backend.src.database.crud.user_crud import create_user
+from backend.src.database.crud.user_crud import create_db_user
 from backend.src.schemas.model.user_schema import UserCreate, UserSchema
 from backend.src.services.auth.auth_service import *
 from backend.test.database.test_session import db
@@ -13,7 +13,7 @@ def test_authenticate_user(db):
         email="real@user.com",
         password="password"
     )
-    create_user(db, new_user)
+    create_db_user(db, new_user)
 
     assert not authenticate_user(new_user.email, "wrong_password", db)
 
@@ -52,7 +52,7 @@ async def test_get_current_user(db):
         email="not@real.com",
         password="test"
     )
-    db_user = create_user(db, new_user)
+    db_user = create_db_user(db, new_user)
     returned_user = await get_current_user(token, db)
     assert db_user.email ==  returned_user.email
 
