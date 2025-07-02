@@ -43,5 +43,4 @@ def delete_db_api_key(db: Session, api_key: ApiKeyDelete, user_id: int):
     record = get_db_api_key(db, user_id, api_key.broker_name)
     db.delete(record)
     db.commit()
-    db.refresh(record)
     return record
