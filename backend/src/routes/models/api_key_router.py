@@ -1,10 +1,11 @@
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from pycparser.c_ast import Return
 from sqlalchemy.orm import Session
 
-from backend.src.database.crud.api_key_model import create_api_key, get_api_keys, get_api_keys_by_user_id
+from backend.src.database.crud.api_key_model import create_api_key, get_api_keys, get_api_keys_by_user_id, get_api_key, \
+    delete_db_api_key
 from backend.src.database.models.user_model import User
 from backend.src.database.session import get_db
 from backend.src.schemas.model.api_key_schema import ApiKeySchema, ApiKeyCreate, ApiKeyAuthSchema
@@ -39,3 +40,15 @@ def add_api_key(
         current_user: User = Depends(get_current_active_user)
 ):
     return create_api_key(db, api_key, current_user)
+
+@api_key_router.delete("/{broker_name}", response_model=ApiKeySchema)
+def delete_api_key(
+        broker_name: str,
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_active_user)
+):
+    db_api_key = get_api_key(db, current_user.id, broker_name)
+    if db_api_key is None:
+        raise HTTPException(status_code=404, detail="API Key not found")
+
+    return delete_db_api_key(db, db_api_key, current_user.id)

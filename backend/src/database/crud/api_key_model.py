@@ -39,8 +39,8 @@ def update_api_key(db : Session, new_api_key: ApiKeyUpdate, current_user: User):
     db.refresh(record)
     return record
 
-def delete_api_key(db: Session, api_key: ApiKeyDelete, current_user: User):
-    record = get_api_key(db, current_user.id, api_key.broker_name)
+def delete_db_api_key(db: Session, api_key: ApiKeyDelete, user_id: int):
+    record = get_api_key(db, user_id, api_key.broker_name)
     db.delete(record)
     db.commit()
     db.refresh(record)
