@@ -7,7 +7,7 @@ from backend.src.database.crud.api_key_model import create_api_key, get_api_keys
 from backend.src.database.models.user_model import User
 from backend.src.database.session import get_db
 from backend.src.schemas.model.api_key_schema import ApiKeySchema, ApiKeyCreate
-from backend.src.services.auth.auth_service import get_current_user, get_current_active_user
+from backend.src.services.auth.auth_service import get_current_active_user
 
 api_key_router = APIRouter(
     prefix="/api-keys",
