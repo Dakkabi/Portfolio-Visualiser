@@ -7,15 +7,18 @@ class ApiKeyBase(BaseModel):
 class ApiKeySchema(ApiKeyBase):
     user_id : int
 
-class ApiKeySensitiveSchema(ApiKeyBase):
+class ApiKeySensitive(ApiKeyBase):
     api_key: str
     private_key: str
 
-class ApiKeyCreate(ApiKeySensitiveSchema):
-    secret_key: str
-
-class ApiKeyUpdate(ApiKeyCreate):
+class ApiKeySensitiveSchema(ApiKeySensitive, ApiKeySchema):
     pass
 
-class ApiKeyDelete(ApiKeyCreate):
+class ApiKeyCreate(ApiKeySensitive):
+    pass
+
+class ApiKeyUpdate(ApiKeySensitive):
+    pass
+
+class ApiKeyDelete(ApiKeySensitive):
     pass
