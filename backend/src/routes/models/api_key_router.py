@@ -37,7 +37,7 @@ def add_api_key(
     if db_api_key:
         raise HTTPException(status_code=409, detail="Key already exists")
 
-    return create_db_api_key(db, api_key, secret_key.secret_key, current_user)
+    return create_db_api_key(db, api_key, secret_key.secret_key, current_user.id)
 
 @api_key_router.post("/decrypt", response_model=List[ApiKeySensitiveSchema])
 def get_all_decoded_api_keys(
@@ -67,7 +67,7 @@ def update_api_key(
     if not db_api_key:
         raise HTTPException(status_code=404, detail="Key not found")
 
-    return update_db_api_key(db, new_api_key, secret_key.secret_key, current_user)
+    return update_db_api_key(db, new_api_key, secret_key.secret_key, current_user.id)
 
 @api_key_router.delete("/{broker_name}", response_model=ApiKeySchema)
 def delete_api_key(

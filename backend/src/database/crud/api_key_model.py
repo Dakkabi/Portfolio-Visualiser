@@ -18,12 +18,12 @@ def create_db_api_key(
         db: Session,
         new_api_key: ApiKeyCreate,
         secret_key: str,
-        current_user: User
+        user_id: int
 ):
     db_api_key = ApiKey(
         api_key=encrypt_data(new_api_key.api_key, secret_key),
         private_key=encrypt_data(new_api_key.private_key, secret_key),
-        user_id=current_user.id,
+        user_id=user_id,
         broker_name=new_api_key.broker_name
     )
     db.add(db_api_key)
@@ -35,10 +35,10 @@ def update_db_api_key(
         db : Session,
         new_api_key: ApiKeyUpdate,
         secret_key: str,
-        current_user: User
+        user_id: int
 ):
     record = db.query(ApiKey).filter_by(
-        user_id=current_user.id,
+        user_id=user_id,
         broker_name=new_api_key.broker_name
     ).first()
 
