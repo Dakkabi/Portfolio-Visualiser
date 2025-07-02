@@ -3,6 +3,7 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm.session import Session, sessionmaker
 
 from backend.src.core.config import settings
+from backend.src.database.crud.broker_model import add_broker_from_file
 from backend.src.database.session import get_db, Base
 
 
@@ -18,6 +19,9 @@ def db() -> Session:
         Base.metadata.create_all(bind=conn)
 
     db_session = SessionLocal()
+
+    add_broker_from_file(db_session)
+
     try:
         yield db_session
     finally:
