@@ -1,7 +1,6 @@
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
-from pycparser.c_ast import Return
 from sqlalchemy.orm import Session
 
 from backend.src.database.crud.api_key_model import create_api_key, get_api_keys, get_api_keys_by_user_id, get_api_key, \
