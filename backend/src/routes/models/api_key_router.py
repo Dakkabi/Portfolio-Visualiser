@@ -15,11 +15,7 @@ api_key_router = APIRouter(
     tags=["API Keys"]
 )
 
-@api_key_router.get("/", response_model=List[ApiKeySchema])
-def get_all_api_keys(db: Session = Depends(get_db)):
-    return get_api_keys(db)
-
-@api_key_router.get("/me", response_model=List[ApiKeyAuthSchema])
+@api_key_router.get("/", response_model=List[ApiKeyAuthSchema])
 def get_my_api_keys(
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_active_user)
