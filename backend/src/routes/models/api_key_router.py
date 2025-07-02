@@ -1,10 +1,8 @@
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
 
-from backend.src.database.crud.api_key_model import create_api_key, get_api_keys, get_api_keys_by_user_id, get_api_key, \
-    delete_db_api_key
+from backend.src.database.crud.api_key_model import *
 from backend.src.database.models.user_model import User
 from backend.src.database.session import get_db
 from backend.src.schemas.model.api_key_schema import ApiKeySchema, ApiKeyCreate, ApiKeyAuthSchema, ApiKeyUpdate
@@ -20,7 +18,7 @@ def get_my_api_keys(
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_active_user)
 ):
-    response = get_api_keys_by_user_id(db, current_user.id)
+    response = get_db_api_keys_by_user_id(db, current_user.id)
 
     for schema in response:
         # It is an ApiKey schema, not a dict
@@ -38,7 +36,7 @@ def add_api_key(
         db : Session = Depends(get_db),
         current_user: User = Depends(get_current_active_user)
 ):
-    db_api_key = get_api_key(db, api_key.user_id, api_key.broker_name)
+    db_api_key = get_db_api_key(db, api_key.user_id, api_key.broker_name)
     if db_api_key:
         # Masking is required as the IDE will complain otherwise
         new_api_key = ApiKeyUpdate(
@@ -47,9 +45,9 @@ def add_api_key(
             broker_name=api_key.broker_name,
             secret_key=api_key.secret_key
         )
-        return update_api_key(new_api_key, db, current_user)
+        return update_db_api_key(db, new_api_key, current_user)
 
-    return create_api_key(db, api_key, current_user)
+    return create_db_api_key(db, api_key, current_user)
 
 @api_key_router.put("/")
 def update_api_key(
@@ -57,11 +55,11 @@ def update_api_key(
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_active_user)
 ):
-    db_api_key = get_api_key(db, new_api_key.user_id, new_api_key.broker_name)
+    db_api_key = get_db_api_key(db, current_user.id, new_api_key.broker_name)
     if not db_api_key:
-        return create_api_key(db, new_api_key, current_user)
+        return create_db_api_key(db, new_api_key, current_user)
 
-    return update_api_key(new_api_key, db, current_user)
+    return update_db_api_key(db, new_api_key, current_user)
 
 @api_key_router.delete("/{broker_name}", response_model=ApiKeySchema)
 def delete_api_key(
@@ -69,7 +67,7 @@ def delete_api_key(
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_active_user)
 ):
-    db_api_key = get_api_key(db, current_user.id, broker_name)
+    db_api_key = get_db_api_key(db, current_user.id, broker_name)
     if db_api_key is None:
         raise HTTPException(status_code=404, detail="API Key not found")
 
