@@ -7,13 +7,11 @@ class ApiKeyBase(BaseModel):
 class ApiKeySchema(ApiKeyBase):
     user_id : int
 
-class ApiKeyAuthSchema(ApiKeySchema):
-    encrypted_api_key: str
-    encrypted_private_key: str
-
-class ApiKeyCreate(ApiKeyBase):
+class ApiKeySensitiveSchema(ApiKeyBase):
     api_key: str
     private_key: str
+
+class ApiKeyCreate(ApiKeySensitiveSchema):
     secret_key: str
 
 class ApiKeyUpdate(ApiKeyCreate):
