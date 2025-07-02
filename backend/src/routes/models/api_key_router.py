@@ -39,6 +39,17 @@ def add_api_key(
         db : Session = Depends(get_db),
         current_user: User = Depends(get_current_active_user)
 ):
+    db_api_key = get_api_key(db, api_key.user_id, api_key.broker_name)
+    if db_api_key:
+        # Masking is required as the IDE will complain otherwise
+        new_api_key = ApiKeyUpdate(
+            api_key=api_key.api_key,
+            private_key=api_key.private_key,
+            broker_name=api_key.broker_name,
+            secret_key=api_key.secret_key
+        )
+        return update_api_key(new_api_key, db, current_user)
+
     return create_api_key(db, api_key, current_user)
 
 @api_key_router.put("/")
