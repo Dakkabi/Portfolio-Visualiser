@@ -36,7 +36,7 @@ class Settings(BaseSettings):
 
     JWT_SECRET_KEY: str
 
-    TRADING212_API_Key: str
+    TRADING212_API_KEY: str
 
 load_dotenv()
 settings = Settings()
