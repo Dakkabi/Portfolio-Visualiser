@@ -1,3 +1,7 @@
+from datetime import datetime
+
+from typing_extensions import deprecated
+
 from backend.src.services.brokers.broker_api import AbstractBrokerAPI
 
 class Trading212(AbstractBrokerAPI):
@@ -31,3 +35,45 @@ class Trading212(AbstractBrokerAPI):
 
     def fetch_a_specific_position(self, ticker: str):
         return super().requests(method="GET", path=f"/api/v0/equity/portfolio/{ticker}")
+
+    # Historical Items
+    def historical_order_data(self, cursor: int, ticker: str, limit: int):
+        if (limit > 50) and (limit < 0):
+            raise ValueError("Limit must be between 0 and 50 inclusive.")
+
+        payload = {
+            "cursor": cursor,
+            "ticker": ticker,
+            "limit": limit
+        }
+        return super().requests("GET", "/api/v0/equity/history/orders", payload)
+
+    def paid_out_dividends(self, cursor: int, ticker: str, limit: int):
+        if (limit > 50) and (limit < 0):
+            raise ValueError("Limit must be between 0 and 50 inclusive.")
+
+        payload = {
+            "cursor": cursor,
+            "ticker": ticker,
+            "limit": limit
+        }
+        return super().requests("GET", "/api/v0/history/dividends", payload)
+
+    def exports_list(self):
+        return super().requests("GET", "/api/v0/history/exports")
+
+    @deprecated
+    def export_csv(self):
+        """Intentionally left unimplemented due to responsibility boundaries with users' broker accounts."""
+        raise NotImplementedError("Export CSV is too invasive, won't be supported.")
+
+    def transaction_list(self, cursor: str, time: datetime, limit: int):
+        if (limit > 50) and (limit < 0):
+            raise ValueError("Limit must be between 0 and 50 inclusive.")
+
+        payload = {
+            "cursor": cursor,
+            "time": time,
+            "limit": limit
+        }
+        return super().requests("GET", "/api/v0/history/transactions", payload)
