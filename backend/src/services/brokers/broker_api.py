@@ -2,7 +2,7 @@ from typing import Optional
 
 import requests
 
-class AbstractBroker:
+class AbstractBrokerAPI:
     base_domain = ""
 
     def __init__(self, api_key: str, private_key: Optional[str]):
