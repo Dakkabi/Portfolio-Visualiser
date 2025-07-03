@@ -10,6 +10,7 @@ from backend.src.schemas.auth.security_schema import SecurityUserSecretKey
 from backend.src.schemas.model.api_key_schema import *
 from backend.src.services.auth.auth_service import get_current_active_user
 from backend.src.services.auth.security_service import decrypt_data
+from backend.src.services.brokers.verify_api_key import registry
 
 api_key_router = APIRouter(
     prefix="/api-keys",
@@ -36,6 +37,13 @@ def add_api_key(
     db_api_key = get_db_api_key(db, current_user.id, api_key.broker_name)
     if db_api_key:
         raise HTTPException(status_code=409, detail="Key already exists")
+
+    api_key_verify_response = registry[api_key.broker_name](api_key.api_key)
+    if api_key_verify_response:
+        raise HTTPException(
+            status_code=api_key_verify_response.response.status_code,
+            detail="Key is invalid."
+        )
 
     return create_db_api_key(db, api_key, secret_key.secret_key, current_user.id)
 
