@@ -1,16 +1,30 @@
+import warnings
 from typing import Optional
 
 import requests
 
+from backend.src.core.config import settings
+
+
 class AbstractBrokerAPI:
     base_domain = ""
 
-    def __init__(self, api_key: str, private_key: Optional[str]):
+    is_private_key_required = False
+
+    def __init__(self, api_key: str = None, private_key: Optional[str] = None ):
+        broker_name = self.get_broker_name()
+
+        if api_key is None:
+            api_key = getattr(settings, f"{broker_name}_API_KEY")
         self.api_key = api_key
+
+        if private_key is None and self.is_private_key_required:
+            private_key = getattr(settings, f"{broker_name}_PRIVATE_KEY")
         self.private_key = private_key
 
+
     @staticmethod
-    def verify_api_key(api_key: str, private_key: Optional[str] = None):
+    def verify_api_key(**kwargs):
         """
         Ensure that the entered API key and optional Private Key are valid for the broker.
 
@@ -19,6 +33,15 @@ class AbstractBrokerAPI:
         :return: True if the API key is valid, False otherwise.
         """
         raise NotImplementedError()
+
+    def get_broker_name(self):
+        """
+        Return an all-capital name of the broker, by removing the '_api' suffix from the class name.
+
+        :return: Return the name of the broker.
+        """
+        class_name = self.__class__.__name__
+        return class_name[:-3].upper()
 
     def requests(self, method: str, path: str, params: Optional[dict] = None) -> dict:
         """
@@ -37,7 +60,7 @@ class AbstractBrokerAPI:
 
         headers = {
             "Content-Type": "application/json",
-            "Authorization": {self.api_key}
+            "Authorization": self.api_key
         }
 
         if method == "GET":
