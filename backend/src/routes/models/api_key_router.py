@@ -41,7 +41,7 @@ def add_api_key(
     api_key_verify_response = registry[api_key.broker_name](api_key.api_key)
     if api_key_verify_response:
         raise HTTPException(
-            status_code=api_key_verify_response.response.status_code,
+            status_code=400,
             detail="Key is invalid."
         )
 
