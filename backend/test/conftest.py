@@ -7,6 +7,10 @@ from backend.src.services.auth.auth_service import get_current_active_user
 from backend.test.database.test_session import db
 
 
+@pytest.fixture
+def global_secret_key():
+    return "96U4uCt0mB4X2gRFvdAUNVI0S8OsLVnzjxuy6tFaWv0="
+
 @pytest.fixture(scope="session")
 def dummy_active_user():
     return User(id=3, email="dummy@user.com", password="not_real")
