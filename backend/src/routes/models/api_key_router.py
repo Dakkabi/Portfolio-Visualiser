@@ -47,7 +47,7 @@ def add_api_key(
 
     return create_db_api_key(db, api_key, secret_key.secret_key, current_user.id)
 
-@api_key_router.post("/decrypt", response_model=List[ApiKeySensitiveSchema])
+@api_key_router.post("/decrypt/", response_model=List[ApiKeySensitiveSchema])
 def get_all_decoded_api_keys(
         secret_key: SecurityUserSecretKey,
         db: Session = Depends(get_db),
