@@ -61,6 +61,20 @@ def get_all_decoded_api_keys(
 
     return response
 
+@api_key_router.post("/decrypt/{broker_name}", response_model=ApiKeySensitiveSchema)
+def get_decoded_api_key(
+        broker_name: str,
+        secret_key: SecurityUserSecretKey,
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_active_user)
+):
+    response = get_db_api_key(db, current_user.id, broker_name)
+
+    response.api_key = decrypt_data(str(response.api_key), secret_key.secret_key)
+    response.private_key = decrypt_data(str(response.private_key), secret_key.secret_key)
+
+    return response
+
 @api_key_router.put("/", response_model=ApiKeySchema)
 def update_api_key(
         new_api_key: ApiKeyUpdate,
