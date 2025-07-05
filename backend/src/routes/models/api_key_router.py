@@ -75,7 +75,7 @@ def get_decoded_api_key(
 
     return response
 
-@api_key_router.put("/", response_model=ApiKeySchema)
+@api_key_router.put("/", response_model=ApiKeySensitiveSchema)
 def update_api_key(
         new_api_key: ApiKeyUpdate,
         secret_key: SecurityUserSecretKey,
