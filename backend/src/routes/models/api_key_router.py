@@ -10,6 +10,7 @@ from backend.src.schemas.auth.security_schema import SecurityUserSecretKey
 from backend.src.schemas.model.api_key_schema import *
 from backend.src.services.auth.auth_service import get_current_active_user
 from backend.src.services.auth.security_service import decrypt_data
+from backend.src.services.brokers.verify_api_key import registry
 
 api_key_router = APIRouter(
     prefix="/api-keys",
@@ -37,9 +38,16 @@ def add_api_key(
     if db_api_key:
         raise HTTPException(status_code=409, detail="Key already exists")
 
+    api_key_verify_response = registry[api_key.broker_name](api_key.api_key)
+    if api_key_verify_response:
+        raise HTTPException(
+            status_code=400,
+            detail="Key is invalid."
+        )
+
     return create_db_api_key(db, api_key, secret_key.secret_key, current_user.id)
 
-@api_key_router.post("/decrypt", response_model=List[ApiKeySensitiveSchema])
+@api_key_router.post("/decrypt/", response_model=List[ApiKeySensitiveSchema])
 def get_all_decoded_api_keys(
         secret_key: SecurityUserSecretKey,
         db: Session = Depends(get_db),
@@ -53,7 +61,21 @@ def get_all_decoded_api_keys(
 
     return response
 
-@api_key_router.put("/", response_model=ApiKeySchema)
+@api_key_router.post("/decrypt/{broker_name}", response_model=ApiKeySensitiveSchema)
+def get_decoded_api_key(
+        broker_name: str,
+        secret_key: SecurityUserSecretKey,
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_active_user)
+):
+    response = get_db_api_key(db, current_user.id, broker_name)
+
+    response.api_key = decrypt_data(str(response.api_key), secret_key.secret_key)
+    response.private_key = decrypt_data(str(response.private_key), secret_key.secret_key)
+
+    return response
+
+@api_key_router.put("/", response_model=ApiKeySensitiveSchema)
 def update_api_key(
         new_api_key: ApiKeyUpdate,
         secret_key: SecurityUserSecretKey,
@@ -66,6 +88,13 @@ def update_api_key(
     db_api_key = get_db_api_key(db, current_user.id, new_api_key.broker_name)
     if not db_api_key:
         raise HTTPException(status_code=404, detail="Key not found")
+
+    api_key_verify_response = registry[new_api_key.broker_name](new_api_key.api_key)
+    if api_key_verify_response:
+        raise HTTPException(
+            status_code=400,
+            detail="Key is invalid."
+        )
 
     return update_db_api_key(db, new_api_key, secret_key.secret_key, current_user.id)
 

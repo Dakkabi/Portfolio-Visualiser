@@ -15,22 +15,22 @@ class AbstractBrokerAPI:
         broker_name = self.get_broker_name()
 
         if api_key is None:
-            api_key = getattr(settings, f"{broker_name}_API_KEY")
+            api_key = getattr(settings, f"{broker_name}_API_KEY", None)
         self.api_key = api_key
 
         if private_key is None and self.is_private_key_required:
-            private_key = getattr(settings, f"{broker_name}_PRIVATE_KEY")
+            private_key = getattr(settings, f"{broker_name}_PRIVATE_KEY", None)
         self.private_key = private_key
 
 
     @staticmethod
-    def verify_api_key(**kwargs):
+    def verify_api_key_response(**kwargs) -> None | Exception:
         """
         Ensure that the entered API key and optional Private Key are valid for the broker.
 
         :param api_key: The API key to verify.
         :param private_key: The Private key to verify.
-        :return: True if the API key is valid, False otherwise.
+        :return: None is API Key is valid, status code and detail if not.
         """
         raise NotImplementedError()
 
