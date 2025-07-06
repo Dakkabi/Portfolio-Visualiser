@@ -7,7 +7,7 @@ export let brokersInfo = [
             `<img src="/brokers/trading212/trading212_settings_instruction.png" alt="">`,
             `2. Click the Settings row, and then the API row.`,
             `<img src="/brokers/trading212/trading212_api_creation_instruction.png" alt="">`,
-            `3. Give it a meaningful name, and please give all permissions for the least problems.`,
+            `3. Give it a meaningful name, and please give all permissions for the least issues.`,
             `<img src="/brokers/trading212/trading212_api_permission_instruction.png" alt="">`,
             `4. Upon creation, copy it using the Copy icon, and input it into the box below.`,
             `<img src="/brokers/trading212/trading212_api_key_save.png" alt="">`
