@@ -30,7 +30,7 @@
             <div class="divider text-xl mt-4">Crypto Exchanges</div>
             <ul class="menu menu-horizontal">
                 <li class="card bg-base-100 image-full w-72 shadow-sm">
-                    <label for="kraken_exchange_modal">
+                    <label for="kraken_modal">
                         <img
                             src="/brokers/kraken/kraken_logo.png"
                             alt="Kraken Crypto Exchange"

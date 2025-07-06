@@ -14,7 +14,7 @@ export let brokersInfo = [
         ]
     },
     {
-        id: 'kraken_exchange_modal',
+        id: 'kraken_modal',
         title: "Kraken Exchange",
         instructions: [
             `1. On the Kraken main page, click your User icon, go to Settings. Choose <b>Connections & API</b> tab, and click Create API Key for Spot Trading API.`,
