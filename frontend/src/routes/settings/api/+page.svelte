@@ -1,17 +1,10 @@
 <script>
-    import {globalColour} from "../../../components/svgGlobalColour.js";
+    import { globalColour } from "../../../components/svgGlobalColour.js";
+    import { brokersInfo } from "./brokerModalInstructions.js";
 
     import BrokerModal from "../../../components/brokerModal.svelte";
-    const brokers = [
-        {
-            id: 'trading212_modal',
-            title: 'Trading212',
-            instructions: [
-                'Make an API Key.',
-                'Put it here.'
-            ]
-        }
-    ]
+    const brokers = brokersInfo
+
 </script>
 
 <div class="drawer drawer-open">
