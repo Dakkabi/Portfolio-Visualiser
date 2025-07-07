@@ -2,6 +2,7 @@ export let brokersInfo = [
     {
         id: 'trading212_modal',
         title: 'Trading212',
+        isPrivateKeyRequired: false,
         instructions: [
             `1. On the Trading212 main page, click the Hamburger icon to bring up an Information page.`,
             `<img src="/brokers/trading212/trading212_settings_instruction.png" alt="">`,
@@ -16,6 +17,7 @@ export let brokersInfo = [
     {
         id: 'kraken_modal',
         title: "Kraken Exchange",
+        isPrivateKeyRequired: true,
         instructions: [
             `1. On the Kraken main page, click your User icon, go to Settings. Choose <b>Connections & API</b> tab, and click Create API Key for Spot Trading API.`,
             `<img src="/brokers/kraken/kraken_create_api_key_instruction.png" alt="" >`,
