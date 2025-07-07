@@ -25,7 +25,22 @@
             })
     }
 
-     function loginUser(email, password) {
+    function createSecretKey(password) {
+        return axios.post(
+            'api/encryption/derive-key',
+            {
+                'password': password
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`,
+                    'Content-Type': 'application/json'
+                }
+            }
+        ).then(response => response.data);
+    }
+
+     async function loginUser(email, password) {
         // OAuth2 requires a url-encoded form, and will deny JSON
         const formData = new URLSearchParams();
         formData.append('grant_type', 'password');
@@ -42,9 +57,14 @@
              }
          )
              .then(
-                 response => {
+                 async response => {
                     const token = response.data.access_token;
                     loginUserResponse = 'Successful login, you will be redirected shortly.';
+
+                    sessionStorage.setItem("access_token", token);
+
+                    const secret_key = await createSecretKey(password);
+                    sessionStorage.setItem("secret_key", secret_key);
 
                     goto('/dashboard');
                  }
