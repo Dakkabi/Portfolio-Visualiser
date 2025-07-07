@@ -2,7 +2,7 @@
     import { globalColour } from "../../../components/svgGlobalColour.js";
     import { brokersInfo } from "./brokerModalInstructions.js";
 
-    import BrokerModal from "../../../components/brokerModal.svelte";
+    import BrokerModal from "./brokerModal.svelte";
     const brokers = brokersInfo
 
 </script>
