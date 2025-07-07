@@ -80,5 +80,6 @@
         id={broker.id}
         title={broker.title}
         instructions={broker.instructions}
+        isPrivateKeyRequired={broker.isPrivateKeyRequired}
     />
 {/each}
