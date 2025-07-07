@@ -9,8 +9,6 @@ from backend.src.core.config import settings
 class AbstractBrokerAPI:
     base_domain = ""
 
-    is_private_key_required = False
-
     def __init__(self, api_key: str = None, private_key: Optional[str] = None ):
         broker_name = self.get_broker_name()
 
@@ -18,7 +16,7 @@ class AbstractBrokerAPI:
             api_key = getattr(settings, f"{broker_name}_API_KEY", None)
         self.api_key = api_key
 
-        if private_key is None and self.is_private_key_required:
+        if private_key is None:
             private_key = getattr(settings, f"{broker_name}_PRIVATE_KEY", None)
         self.private_key = private_key
 
