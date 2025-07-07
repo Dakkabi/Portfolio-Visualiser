@@ -76,5 +76,3 @@ class Trading212(AbstractBrokerAPI):
             "limit": limit
         }
         return super().requests("GET", "/api/v0/history/transactions", payload)
-
-print(Trading212().verify_api_key_response("tet").response.reason)
