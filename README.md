@@ -1,16 +1,17 @@
 
 # 📈 Portfolio Visualiser
 
-A fullstack website that retrieves a range of client's asset data using broker's APIs or manually through spreadsheet files. Condensing it into a single portfolio that can be easily visualised, analysed and backtested against other portfolios or strategies.
-
-
-
+A fullstack website that retrieves a range of client's asset data
+using broker's APIs or manually through spreadsheet files.
+Condensing it into a single portfolio that can be easily visualised,
+analysed and backtested against other portfolios or strategies.
 
 
 ## ✨ Features
 
-- OAuth2 User Authorisation
-- ...and more to come!
+- OAuth2 User Authorisation with JWT Session Tokens
+- No-Knowledge Server-Side Encryption
+- ...and many more to come!
 
 
 ## 🛠️ Tech Stack
@@ -24,6 +25,7 @@ A fullstack website that retrieves a range of client's asset data using broker's
 
 **Server**:
 - PostgreSQL
+- Alembic
 
 **Frontend**
 - Svelte
@@ -67,6 +69,7 @@ npm run dev --open
 
 This is (currently) a personal project; there are no other authors apart from myself. Please see __Contributing__ if you would like to help contribute! :)
 
+
 ## 👨‍💻 Contributing
 
 Contributions will be very helpful in adding new features that may of been overlooked,
@@ -76,7 +79,6 @@ I recommend using PyCharm as this will help with FastAPI integration and Pytest 
 
 - Backend merge requests should include successful pytest coverage for your additions.
 - Comments docstring are necessary and should use the reST format (default in PyCharm).
- 
 
 
 ## ☁️ Environment Variables
@@ -85,6 +87,7 @@ The full `.env` file requirements are found in `.env.local` with some default va
 
 `backend/src/core/config.py` will import the `.env` file, which can then be retrieved by importing `settings()` and add some type hinting via pydantic
 - Adding new `.env` variables, you should specify the type in the config file.
+
 
 ## 💬 Feedback
 
