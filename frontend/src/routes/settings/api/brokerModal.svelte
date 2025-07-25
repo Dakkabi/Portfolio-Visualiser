@@ -7,7 +7,27 @@
     let apiKey = '';
     let privateKey = '';
 
-    function addApiKey(brokerName, apiKey, privateKey = '') {
+    /**
+     * Trim the last 5 characters in a string, which should be "*_modal".
+     * "broker_modal" -> "broker".
+     *
+     * @param str The string input.
+     * @return String without the "_modal" suffix.
+     */
+    function trimModalFromStr(str) {
+        return str.slice(0, -5);
+    }
+
+    /**
+     * Send an API request to add (or update if already exists) the API Key and if provided Private Key
+     * into the database.
+     *
+     * @param brokerModalId The modal the user was on when they entered their API keys.
+     * @param apiKey The API key.
+     * @param privateKey The Private key if required.
+     */
+    function addApiKey(brokerModalId, apiKey, privateKey = '') {
+        let brokerName = trimModalFromStr(brokerModalId);
 
     }
 </script>
