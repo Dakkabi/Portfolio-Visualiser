@@ -6,4 +6,4 @@ class Kraken(AbstractBrokerAPI):
 
     @staticmethod
     def verify_api_key_response():
-        return True
+        return None
