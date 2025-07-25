@@ -1,6 +1,6 @@
 export let brokersInfo = [
     {
-        id: 'trading212_modal',
+        id: 'trading212Modal',
         title: 'Trading212',
         isPrivateKeyRequired: false,
         instructions: [
@@ -15,7 +15,7 @@ export let brokersInfo = [
         ]
     },
     {
-        id: 'kraken_modal',
+        id: 'krakenModal',
         title: "Kraken Exchange",
         isPrivateKeyRequired: true,
         instructions: [

@@ -18,7 +18,7 @@
             <div class="divider text-xl mt-4">Stock Brokers</div>
             <ul class="menu menu-horizontal">
                 <li class="card bg-base-100 image-full w-72 shadow-sm">
-                    <label for="trading212_modal">
+                    <label for="trading212Modal">
                         <img
                             src="/brokers/trading212/trading_212_logo.png"
                             alt="Trading212"
@@ -30,7 +30,7 @@
             <div class="divider text-xl mt-4">Crypto Exchanges</div>
             <ul class="menu menu-horizontal">
                 <li class="card bg-base-100 image-full w-72 shadow-sm">
-                    <label for="kraken_modal">
+                    <label for="krakenModal">
                         <img
                             src="/brokers/kraken/kraken_logo.png"
                             alt="Kraken Crypto Exchange"
