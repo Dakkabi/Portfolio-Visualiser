@@ -1,4 +1,6 @@
 <script>
+    import api from "@api";
+
     export let id;
     export let title;
     export let instructions = [];
@@ -29,6 +31,24 @@
      */
     function addApiKey(brokerModalId, apiKey, privateKey = '') {
         let brokerName = trimBrokerNameFromModalId(brokerModalId);
+
+        try {
+            const response = api.post(
+                "/api-keys/",
+                {
+                    "api_key": {
+                        "broker_name": brokerName,
+                        "api_key": apiKey,
+                        "private_key": privateKey
+                    },
+                    "secret_key": {
+                        "secret_key": sessionStorage.getItem("secret_key")
+                    }
+                }
+            )
+        } catch (error) {
+            console.log(error);
+        }
     }
 </script>
 
