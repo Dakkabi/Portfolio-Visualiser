@@ -89,7 +89,7 @@ def update_api_key(
     if not db_api_key:
         raise HTTPException(status_code=404, detail="Key not found")
 
-    api_key_verify_response = registry[new_api_key.broker_name](new_api_key.api_key)
+    api_key_verify_response = broker_registry[new_api_key.broker_name](new_api_key.api_key)
     if api_key_verify_response:
         raise HTTPException(
             status_code=400,
