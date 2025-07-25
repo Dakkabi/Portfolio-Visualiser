@@ -8,14 +8,15 @@
     let privateKey = '';
 
     /**
-     * Trim the last 5 characters in a string, which should be "*_modal".
-     * "broker_modal" -> "broker".
+     * Trim the broker name from the modal id, slicing the "_modal" and capitalising the first letter.
+     * "broker_modal" -> "Broker".
      *
-     * @param str The string input.
-     * @return String without the "_modal" suffix.
+     * @param brokerModalId The modal id opened currently.
+     * @return String The broker name.
      */
-    function trimModalFromStr(str) {
-        return str.slice(0, -5);
+    function trimBrokerNameFromModalId(brokerModalId) {
+        let brokerName = brokerModalId.slice(0, -5);
+        return brokerName.charAt(0).toUpperCase() + brokerName.slice(1)
     }
 
     /**
@@ -27,8 +28,7 @@
      * @param privateKey The Private key if required.
      */
     function addApiKey(brokerModalId, apiKey, privateKey = '') {
-        let brokerName = trimModalFromStr(brokerModalId);
-
+        let brokerName = trimBrokerNameFromModalId(brokerModalId);
     }
 </script>
 
