@@ -2,3 +2,5 @@ fastapi
 python-multipart
 pydantic
 pydantic-settings
+SQLAlchemy
+alembic
