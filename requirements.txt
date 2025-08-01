@@ -7,3 +7,5 @@ alembic
 bcrypt
 PyJWT
 starlette
+uvicorn
+python-dotenv
