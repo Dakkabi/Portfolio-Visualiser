@@ -1,0 +1,11 @@
+fastapi
+python-multipart
+pydantic
+pydantic-settings
+SQLAlchemy
+alembic
+bcrypt
+PyJWT
+starlette
+uvicorn
+python-dotenv
