@@ -18,7 +18,7 @@ from backend.services.security.cryptography_service import verify_password
 ALGORITHM = "HS256"
 SECRET_KEY = settings.JWT_SECRET_KEY
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/users/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 def authenticate_user(email: str, password: str, db: Session = Depends(get_db)):
     user = get_db_user_by_email(db, email)
