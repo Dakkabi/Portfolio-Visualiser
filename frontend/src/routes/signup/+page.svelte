@@ -57,6 +57,9 @@
                     </div>
                 {/if}
 
+                <div class="divider"></div>
+
+                <span class="text-center">Already have an account? <a href="/login" class="link-hover font-bold">Login Here.</a></span>
             </div>
         </div>
     </div>
