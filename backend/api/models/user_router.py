@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from backend.database.crud.user_crud import create_db_user
@@ -18,4 +19,10 @@ def get_me(current_user: User = Depends(get_current_active_user)):
 
 @user_router.post("/", response_model=UserSchema)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    return create_db_user(db, user)
+    try:
+        return create_db_user(db, user)
+    except IntegrityError:
+        raise HTTPException(
+            status_code=409,
+            detail="User with email already exists.",
+        )
