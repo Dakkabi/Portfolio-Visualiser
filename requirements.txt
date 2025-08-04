@@ -1,2 +1,9 @@
 fastapi
 uvicorn
+psycopg2-binary
+pydantic
+pydantic-settings
+SQLAlchemy
+python-dotenv
+alembic
+bcrypt
