@@ -4,7 +4,10 @@ from backend.src.database.models.user_model import User
 from backend.src.schemas.model.user_schema import UserCreate
 from backend.src.services.security.cryptography_service import get_password_hash
 
-def create_db_user(db: Session, user: UserCreate):
+def get_db_user_by_email(db: Session, email: str) -> User | None:
+     return db.query(User).filter(User.email == email).first()
+
+def create_db_user(db: Session, user: UserCreate) -> User:
     db_user = User(
         email=user.email,
         password=get_password_hash(user.password)
