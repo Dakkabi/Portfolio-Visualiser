@@ -37,12 +37,12 @@ def authenticate_user(email: str, password: str, db: Session = Depends(get_db)) 
 
     return user
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None) -> dict:
+def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
     """Create a JWT encoded access token and add an expiry value.
 
     :param data: The data to encode.
-    :param expires_delta:
-    :return: The encoded data.
+    :param expires_delta: How long the access token is valid for.
+    :return: The encoded data as a string.
     """
 
     to_encode = data.copy()
