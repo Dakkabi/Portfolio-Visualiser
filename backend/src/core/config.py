@@ -29,4 +29,6 @@ class Settings(BaseSettings):
             self.POSTGRESQL_DATABASE
         )
 
+    JWT_SECRET_KEY: str
+
 settings = Settings()
