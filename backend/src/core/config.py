@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     POSTGRESQL_SERVER: str
     POSTGRESQL_PORT: int
     POSTGRESQL_DATABASE: str
+    POSTGRESQL_TEST_DATABASE: str
 
     @computed_field
     @property
