@@ -8,7 +8,7 @@ client = TestClient(app)
 
 @pytest.fixture
 def unauthorised_client():
-    """Remove the get_current_active_user fixture, to simulate a user that isn't logged-in."""
+    """Remove the get_current_active_user override, to simulate a user that isn't logged-in."""
 
     # Store original dependency override
     original_get_current_active_user = app.dependency_overrides.get(get_current_active_user)
