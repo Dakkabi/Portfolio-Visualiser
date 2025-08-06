@@ -1,7 +1,10 @@
 import React from "react";
+import AuthForm from "../components/auth/AuthForm.tsx";
 
 const Login: React.FC = () => {
-    return <h1>Hello World!</h1>;
+    return (
+        <AuthForm />
+    );
 }
 
 export default Login;
