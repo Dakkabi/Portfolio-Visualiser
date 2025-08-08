@@ -2,11 +2,10 @@ import axios from "axios";
 
 let baseUrl = "/api"
 
-const api = axios.create({
+export const api = axios.create({
     baseURL: baseUrl,
 });
 
-const protectedApi = axios.create({
+export const protectedApi = axios.create({
     baseURL: baseUrl,
 });
-
