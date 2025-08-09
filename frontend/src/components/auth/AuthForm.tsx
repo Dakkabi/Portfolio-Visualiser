@@ -1,15 +1,23 @@
 import React, {useState} from "react";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 type AuthFormProps = {
-    title: string;
-    buttonText: string;
-    onButtonClick: (email: string, password: string) => void;
-    redirectText: string;
-    redirectPath: string;
+    title: string,
+    buttonText: string,
+    onButtonClick: (email: string, password: string) => void,
+    redirectText: string,
+    redirectPath: string,
+    alertMessage?: React.ReactNode,
 };
 
-const AuthForm: React.FC<AuthFormProps> = ({title, buttonText, onButtonClick, redirectText, redirectPath}) => {
+const AuthForm: React.FC<AuthFormProps> = ({
+                                               title,
+                                               buttonText,
+                                               onButtonClick,
+                                               redirectText,
+                                               redirectPath,
+                                               alertMessage,
+                                           }) => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
@@ -18,6 +26,7 @@ const AuthForm: React.FC<AuthFormProps> = ({title, buttonText, onButtonClick, re
             <div className="hero-content flex-col">
                 <div className="text-center">
                     <h1 className="text-5xl font-bold">Portfolio Visualiser</h1>
+                    {alertMessage}
                 </div>
                 <div className="card bg-base-100 w-full max-w-sm shrink-0">
                     <div className="card-body">
@@ -42,7 +51,8 @@ const AuthForm: React.FC<AuthFormProps> = ({title, buttonText, onButtonClick, re
                                 onChange={(newPassword) => setPassword(newPassword.target.value)}
                             />
 
-                            <button className="btn btn-neutral mt-4" onClick={() => onButtonClick(email, password)}>{buttonText}</button>
+                            <button className="btn btn-neutral mt-4"
+                                    onClick={() => onButtonClick(email, password)}>{buttonText}</button>
                         </fieldset>
 
                         <div className="divider"></div>
