@@ -6,9 +6,13 @@ from sqlalchemy.orm import sessionmaker
 
 from backend.src.core.config import settings
 from backend.src.core.services.auth.auth_service import get_current_active_user
+from backend.src.database.crud.user_crud import create_db_user
 from backend.src.database.models.user_model import User
 from backend.src.database.session import Base, get_db
 from backend.src.main import app
+from backend.src.schemas.models.user_schema import UserCreate
+
+pytest_cache = {}
 
 # Test Database Setup
 SQLALCHEMY_TEST_DATABASE_URI = settings.SQLALCHEMY_DATABASE_URI.replace(
@@ -36,6 +40,27 @@ def override_get_current_active_user() -> User:
         password="password"
     )
 
+@pytest.fixture(scope="session")
+def get_test_db():
+    return next(override_get_db())
+
+# Setup Mock user
+get_user_argument = UserCreate(
+    email="test@test.com",
+    password="password"
+)
+@pytest.fixture(scope="session")
+def get_user(get_test_db):
+    if pytest_cache.get("user"):
+        return pytest_cache.get("user")
+
+    db_user = create_db_user(
+        get_test_db,
+        get_user_argument
+    )
+
+    pytest_cache["user"] = db_user
+    return db_user
 
 @pytest.fixture(scope="session", autouse=True)
 def override_dependency():
