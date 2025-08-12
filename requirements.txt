@@ -13,3 +13,4 @@ sqlalchemy~=2.0.43
 pytest
 pytest-cov
 httpx
+pytest-asyncio
