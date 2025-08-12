@@ -10,3 +10,5 @@ pydantic-settings
 psycopg2-binary
 alembic~=1.16.4
 sqlalchemy~=2.0.43
+pytest
+pytest-cov
