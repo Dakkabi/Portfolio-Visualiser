@@ -1,3 +1,9 @@
+starlette
+pyjwt
+bcrypt
+uvicorn
+fastapi
+python-multipart
 pydantic
 python-dotenv
 pydantic-settings
