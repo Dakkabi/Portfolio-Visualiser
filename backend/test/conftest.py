@@ -1,0 +1,37 @@
+from typing import Generator
+
+import pytest
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+from backend.src.core.config import settings
+from backend.src.database.session import Base, get_db
+from backend.src.main import app
+
+# Test Database Setup
+SQLALCHEMY_TEST_DATABASE_URI = settings.SQLALCHEMY_DATABASE_URI.replace(
+    settings.POSTGRESQL_DATABASE,
+    settings.POSTGRESQL_TEST_DATABASE
+)
+engine = create_engine(SQLALCHEMY_TEST_DATABASE_URI)
+TestSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+Base.metadata.drop_all(bind=engine)
+Base.metadata.create_all(bind=engine)
+
+def override_get_db() -> Generator:
+    db = TestSessionLocal()
+
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+@pytest.fixture(scope="session", autouse=True)
+def override_dependency():
+    app.dependency_overrides[get_db] = override_get_db
+
+    yield
+
+    app.dependency_overrides = {}
