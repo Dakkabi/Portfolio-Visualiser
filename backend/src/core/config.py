@@ -12,6 +12,8 @@ class Settings(BaseSettings):
         env_ignore_empty=True
     )
 
+    JWT_SECRET_KEY: str
+
     POSTGRESQL_USERNAME: str
     POSTGRESQL_PASSWORD: str
     POSTGRESQL_SERVER: str
