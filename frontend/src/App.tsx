@@ -2,7 +2,7 @@ import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Login from "./pages/Login.tsx";
 import SignUp from "./pages/SignUp.tsx";
 
-function App() {
+export function App() {
     return (
         <BrowserRouter>
             <Routes>
@@ -14,5 +14,3 @@ function App() {
         </BrowserRouter>
     )
 }
-
-export default App;
