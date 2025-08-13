@@ -1,4 +1,5 @@
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import "./App.css"
 import Login from "./pages/Login.tsx";
 import SignUp from "./pages/SignUp.tsx";
 
