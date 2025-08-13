@@ -3,7 +3,7 @@ import "./App.css"
 import Login from "./pages/Login.tsx";
 import SignUp from "./pages/SignUp.tsx";
 
-export default function App() {
+function App() {
     return (
         <BrowserRouter>
             <Routes>
@@ -15,3 +15,5 @@ export default function App() {
         </BrowserRouter>
     )
 }
+
+export default App;
