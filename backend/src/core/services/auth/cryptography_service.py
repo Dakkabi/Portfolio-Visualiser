@@ -1,4 +1,17 @@
 from bcrypt import hashpw, gensalt, checkpw
+from cryptography.fernet import Fernet
+
+from backend.src.core.config import settings
+
+FERNET_KEY = Fernet(settings.FERNET_MASTER_KEY.encode("utf-8"))
+
+def encrypt_string(plaintext: str) -> str:
+    """Encrypt a string input using Fernet"""
+    return FERNET_KEY.encrypt(plaintext.encode("utf-8")).decode("utf-8")
+
+def decrypt_string(ciphertext: str) -> str:
+    """Decrypt an encrypted string using Fernet"""
+    return FERNET_KEY.decrypt(ciphertext.encode("utf-8")).decode("utf-8")
 
 def get_password_hash(password: str) -> str:
     """Return the hash of an input.
