@@ -9,7 +9,7 @@ class ApiKeyBase(BaseModel):
     broker_name: str
 
 class UserBase(BaseModel):
-    user_id: str
+    user_id: int
 
 class ApiKeyRequest(ApiKeyBase):
     pass
