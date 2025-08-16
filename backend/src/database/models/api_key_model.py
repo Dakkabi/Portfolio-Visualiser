@@ -1,8 +1,6 @@
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from backend.src.database.models.broker_model import Broker
-from backend.src.database.models.user_model import User
 from backend.src.database.session import Base
 
 
@@ -13,7 +11,7 @@ class ApiKey(Base):
     private_key: Mapped[str] = mapped_column(String)
 
     users_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
-    users: Mapped[User] = relationship(back_populates="api_keys")
+    users: Mapped["User"] = relationship(back_populates="api_keys")
 
     brokers_name: Mapped[str] = mapped_column(ForeignKey("brokers.name"), primary_key=True)
-    brokers: Mapped[Broker] = relationship(back_populates="api_keys")
+    brokers: Mapped["Broker"] = relationship(back_populates="api_keys")

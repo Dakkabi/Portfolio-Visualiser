@@ -1,6 +1,7 @@
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
+from backend.src.database.models.api_key_model import ApiKey
 from backend.src.database.session import Base
 
 
@@ -11,4 +12,4 @@ class User(Base):
     email: Mapped[str] = mapped_column(String, unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String, nullable=False)
 
-    keys: Mapped["ApiKey"] = relationship(back_populates="users")
+    api_keys: Mapped[ApiKey] = relationship(back_populates="users")
