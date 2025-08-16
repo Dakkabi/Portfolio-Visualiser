@@ -3,6 +3,9 @@ from starlette.exceptions import HTTPException
 
 
 class BrokerClient(ABC):
+    def __init__(self, api_key: str, private_key: str = None):
+        self.api_key = api_key
+        self.private_key = private_key
 
     @abstractmethod
     def validate_api_key(self, api_key: str, private_key: str = None) -> HTTPException | bool:
