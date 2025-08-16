@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     )
 
     JWT_SECRET_KEY: str
+    FERNET_MASTER_KEY: str
 
     POSTGRESQL_USERNAME: str
     POSTGRESQL_PASSWORD: str
