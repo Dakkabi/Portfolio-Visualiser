@@ -6,7 +6,7 @@ from pydantic import BaseModel
 class ApiKeyBase(BaseModel):
     api_key: str
     private_key: str
-    broker_name: str
+    brokers_name: str
 
 class UserBase(BaseModel):
     user_id: int
