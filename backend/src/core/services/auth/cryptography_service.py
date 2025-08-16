@@ -1,9 +1,4 @@
-from cryptography.fernet import Fernet
 from bcrypt import hashpw, gensalt, checkpw
-
-def generate_key() -> str:
-    """Generates a URL-safe base64-encoded 32-byte key, and returns it decoded to string."""
-    return Fernet.generate_key().decode("utf-8")
 
 def get_password_hash(password: str) -> str:
     """Return the hash of an input.

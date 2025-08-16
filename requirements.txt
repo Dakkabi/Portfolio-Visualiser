@@ -1,4 +1,3 @@
-cryptography
 starlette
 pyjwt
 bcrypt
