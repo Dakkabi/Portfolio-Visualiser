@@ -1,11 +1,12 @@
 from typing import Generator
 
 import pytest
-from sqlalchemy import create_engine, True_
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, Session
 
 from backend.src.core.config import settings
 from backend.src.core.services.auth.auth_service import get_current_active_user
+from backend.src.database.crud.broker_crud import read_file_into_broker_table
 from backend.src.database.crud.user_crud import create_db_user
 from backend.src.database.models.user_model import User
 from backend.src.database.session import Base, get_db
@@ -29,9 +30,13 @@ def override_get_db() -> Generator:
     db = TestSessionLocal()
 
     try:
+        bootstrap_db(db)
         yield db
     finally:
         db.close()
+
+def bootstrap_db(db: Session):
+    read_file_into_broker_table(db)
 
 def override_get_current_active_user() -> User:
     return User(
