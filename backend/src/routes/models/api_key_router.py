@@ -21,7 +21,7 @@ def get_valid_api_key(brokers_name: str, user_id: int, db: Session) -> ApiKey | 
             detail="Broker not found"
         )
 
-    db_api_key = get_db_api_key(db, user_id, brokers_name)
+    db_api_key = get_db_encrypted_api_key(db, user_id, brokers_name)
     if db_api_key is None:
         raise HTTPException(
             status_code=404,

@@ -6,12 +6,16 @@ from backend.src.schemas.models.api_key_schema import *
 
 def get_db_api_key(db: Session, users_id: int, brokers_name: str) -> ApiKey | None:
     """Return an api key record by broker name and user id, returns decrypted values."""
-    db_api_key = db.query(ApiKey).filter(ApiKey.brokers_name == brokers_name, ApiKey.users_id == users_id).first()
+    db_api_key = get_db_encrypted_api_key(db, users_id, brokers_name)
     if db_api_key:
         db_api_key.api_key = decrypt_string(str(db_api_key.api_key))
         db_api_key.private_key = decrypt_string(str(db_api_key.private_key))
 
     return db_api_key
+
+def get_db_encrypted_api_key(db: Session, users_id: int, brokers_name: str) -> ApiKey | None:
+    """Return an api key record by broker name and user id, returns encrypted values."""
+    return db.query(ApiKey).filter(ApiKey.brokers_name == brokers_name, ApiKey.users_id == users_id).first()
 
 def create_db_api_key(db: Session, api_key: ApiKeyCreate) -> ApiKey:
     """Create a new ApiKey record in the database, encrypting the values.
