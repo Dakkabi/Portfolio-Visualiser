@@ -2,16 +2,15 @@ from starlette.testclient import TestClient
 
 from backend.src.main import app
 from backend.src.routes.models import api_key_router
-from backend.src.routes.models.api_key_router import validate_broker_api_keys
 from backend.src.schemas.models.api_key_schema import ApiKeyRequest
 
 client = TestClient(app)
 
-def _mock_check_api_key_values_are_valid(brokers_name: str, api_key: str, private_key: str = None):
+def _mock_validate_broker_api_keys(brokers_name: str, api_key: str, private_key: str = None):
     return True
 
 def test_api_key_post(monkeypatch):
-    monkeypatch.setattr(api_key_router, "check_api_key_values_are_valid", _mock_check_api_key_values_are_valid)
+    monkeypatch.setattr(api_key_router, "validate_broker_api_keys", _mock_validate_broker_api_keys)
 
     api_key_request = ApiKeyRequest(
         api_key="test",
@@ -51,7 +50,7 @@ def test_api_key_get_by_brokers_name():
     assert db_api_key["brokers_name"] == "Trading212"
 
 def test_api_key_put(monkeypatch):
-    monkeypatch.setattr(api_key_router, "check_api_key_values_are_valid", _mock_check_api_key_values_are_valid)
+    monkeypatch.setattr(api_key_router, "validate_broker_api_keys", _mock_validate_broker_api_keys)
     api_key_request = ApiKeyRequest(
         api_key="randomised",
         private_key="randomised",
