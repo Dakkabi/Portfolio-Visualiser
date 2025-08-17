@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 class ApiKeyBase(BaseModel):
     api_key: str
-    private_key: str
+    private_key: str | None = None
     brokers_name: str
 
 class UserBase(BaseModel):
