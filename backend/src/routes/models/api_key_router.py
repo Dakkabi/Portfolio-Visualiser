@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 from backend.src.core.services.auth.auth_service import get_current_active_user
+from backend.src.core.services.brokers import BROKER_REGISTRY
 from backend.src.database.crud.api_key_crud import *
 from backend.src.database.crud.broker_crud import get_db_broker
 from backend.src.database.models.user_model import User
@@ -29,6 +30,10 @@ def get_valid_api_key(brokers_name: str, user_id: int, db: Session) -> ApiKey | 
 
     return db_api_key
 
+def check_api_key_values_are_valid(brokers_name: str, api_key: str, private_key: str = None) -> bool | HTTPException:
+    """Check if the API key values are accepted by the Broker clients, else raise an HTTPException."""
+    return BROKER_REGISTRY[brokers_name].validate_api_key(api_key, private_key)
+
 @api_key_router.get("/{brokers_name}", response_model=ApiKeySchema)
 def api_key_get_by_brokers_name(
         brokers_name: str,
@@ -56,6 +61,8 @@ def api_key_post(
         if e.detail != "API key not found":
             raise e
 
+    check_api_key_values_are_valid(api_key.brokers_name, api_key.api_key, api_key.private_key)
+
     api_key_create = ApiKeyCreate(
         api_key=api_key.api_key,
         private_key=api_key.private_key,
@@ -74,6 +81,7 @@ def api_key_put(
 
     # More of a check, if db_api_key is returned, it exists, therefore ApiKeyRequest parameters are valid.
     get_valid_api_key(api_key.brokers_name, current_user.id, db)
+    check_api_key_values_are_valid(api_key.brokers_name, api_key.api_key, api_key.private_key)
 
     api_key_update = ApiKeyUpdate(
         api_key=api_key.api_key,
