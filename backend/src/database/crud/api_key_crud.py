@@ -4,9 +4,14 @@ from backend.src.core.services.auth.cryptography_service import encrypt_string, 
 from backend.src.database.models.api_key_model import ApiKey
 from backend.src.schemas.models.api_key_schema import *
 
-def get_db_api_key(db: Session, api_key: ApiKeyRead) -> ApiKey | None:
-    """Return an api key record by broker name and user id, returns encrypted values."""
-    return db.query(ApiKey).filter(ApiKey.brokers_name == api_key.broker_name, ApiKey.users_id == api_key.user_id).first()
+def get_db_api_key(db: Session, users_id: int, brokers_name: str) -> ApiKey | None:
+    """Return an api key record by broker name and user id, returns decrypted values."""
+    db_api_key = db.query(ApiKey).filter(ApiKey.brokers_name == brokers_name, ApiKey.users_id == users_id).first()
+    if db_api_key:
+        db_api_key.api_key = decrypt_string(str(db_api_key.api_key))
+        db_api_key.private_key = decrypt_string(str(db_api_key.private_key))
+
+    return db_api_key
 
 def create_db_api_key(db: Session, api_key: ApiKeyCreate) -> ApiKey:
     """Create a new ApiKey record in the database, encrypting the values.
