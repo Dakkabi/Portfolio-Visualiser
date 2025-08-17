@@ -9,7 +9,7 @@ class BrokerClient(ABC):
 
     @staticmethod
     @abstractmethod
-    def validate_api_key(**kwargs) -> HTTPException | bool:
+    def validate_api_key(api_key: str, private_key: str) -> HTTPException | bool:
         """Using an API endpoint, validate that the API key and optionally a Private key is valid.
 
         :param api_key: An Api key to validate.
