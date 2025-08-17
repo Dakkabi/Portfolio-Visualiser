@@ -52,14 +52,17 @@ def api_key_post(
 ):
     """Create a new API key record in the database."""
     try:
-        if get_valid_api_key(api_key.brokers_name, current_user.id, db) is not None:
-            raise HTTPException(
-                status_code=409,
-                detail="API key already exists"
-            )
+        db_api_key = get_valid_api_key(api_key.brokers_name, current_user.id, db)
+        raise HTTPException(
+            status_code=409,
+            detail="API key already exists"
+        )
+
     except HTTPException as e:
-        if e.detail != "API key not found":
-            raise e
+        if e.detail == "API key not found":
+            pass
+        else:
+            raise
 
     check_api_key_values_are_valid(api_key.brokers_name, api_key.api_key, api_key.private_key)
 
