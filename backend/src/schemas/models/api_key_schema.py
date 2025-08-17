@@ -17,7 +17,10 @@ class ApiKeyRequest(ApiKeyBase):
 class ApiKeyCreate(ApiKeyBase, UserBase):
     pass
 
-class ApiKeyRead(ApiKeyBase):
+class ApiKeyUpdate(ApiKeyCreate):
+    pass
+
+class ApiKeyRead(ApiKeyBase, UserBase):
     pass
 
 class ApiKeySchema(ApiKeyBase):
