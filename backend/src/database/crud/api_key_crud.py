@@ -20,7 +20,7 @@ def create_db_api_key(db: Session, api_key: ApiKeyCreate) -> ApiKey:
     :param api_key: The ApiKey record to create.
     """
     db_api_key = ApiKey(
-        users_id=api_key.user_id,
+        users_id=api_key.users_id,
         brokers_name=api_key.brokers_name,
         api_key=encrypt_string(api_key.api_key),
         private_key=encrypt_string(api_key.private_key),
@@ -30,3 +30,18 @@ def create_db_api_key(db: Session, api_key: ApiKeyCreate) -> ApiKey:
     db.refresh(db_api_key)
     return db_api_key
 
+def update_db_api_key(db: Session, api_key: ApiKeyUpdate) -> ApiKey:
+    """Overwrite an ApiKey's values in the database, encrypting the new values."""
+    db_api_key = get_db_api_key(db, api_key.users_id, api_key.brokers_name)
+    db_api_key.api_key = encrypt_string(str(db_api_key.api_key))
+    db_api_key.private_key = encrypt_string(str(db_api_key.private_key))
+    db.commit()
+    db.refresh(db_api_key)
+    return db_api_key
+
+def delete_db_api_key(db: Session, users_id: int, brokers_name: str) -> ApiKey | None:
+    """Delete an ApiKey record by broker name and user id."""
+    db_api_key = get_db_api_key(db, users_id, brokers_name)
+    db.delete(db_api_key)
+    db.commit()
+    return db_api_key
