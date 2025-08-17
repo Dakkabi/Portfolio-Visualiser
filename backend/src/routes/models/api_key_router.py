@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
 from backend.src.core.services.auth.auth_service import get_current_active_user
 from backend.src.database.crud.api_key_crud import *
@@ -18,7 +18,13 @@ def api_key_get_by_brokers_name(
         db: Session = Depends(get_db)
 ):
     """Fetch api key value(s) by brokers name, if exists."""
-    return get_db_api_key(db, current_user.id, brokers_name)
+    db_api_key = get_db_api_key(db, current_user.id, brokers_name)
+    if db_api_key is None:
+        raise HTTPException(
+            status_code=404,
+            detail="API key not found"
+        )
+    return db_api_key
 
 @api_key_router.post("/", response_model=ApiKeySchema)
 def api_key_post(
@@ -30,7 +36,31 @@ def api_key_post(
     api_key_create = ApiKeyCreate(
         api_key=api_key.api_key,
         private_key=api_key.private_key,
-        user_id=current_user.id,
+        users_id=current_user.id,
         brokers_name=api_key.brokers_name
     )
     return create_db_api_key(db, api_key_create)
+
+@api_key_router.put("/", response_model=ApiKeySchema)
+def api_key_put(
+        api_key: ApiKeyRequest,
+        current_user: User = Depends(get_current_active_user),
+        db: Session = Depends(get_db)
+):
+    """Update an existing ApiKey record in the database."""
+    api_key_update = ApiKeyUpdate(
+        api_key=api_key.api_key,
+        private_key=api_key.private_key,
+        users_id=current_user.id,
+        brokers_name=api_key.brokers_name
+    )
+    return update_db_api_key(db, api_key_update)
+
+@api_key_router.delete("/{brokers_name}", response_model=ApiKeySchema)
+def api_key_delete(
+        brokers_name: str,
+        current_user: User = Depends(get_current_active_user),
+        db: Session = Depends(get_db)
+):
+    """Delete an ApiKey record."""
+    return delete_db_api_key(db, current_user.id, brokers_name)
