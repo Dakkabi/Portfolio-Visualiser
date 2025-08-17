@@ -33,6 +33,12 @@ def api_key_post(
         db: Session = Depends(get_db)
 ):
     """Create a new API key record in the database."""
+    if get_db_api_key(db, current_user.id, api_key.brokers_name) is not None:
+        raise HTTPException(
+            status_code=400,
+            detail="API key already exists"
+        )
+
     api_key_create = ApiKeyCreate(
         api_key=api_key.api_key,
         private_key=api_key.private_key,
@@ -48,6 +54,12 @@ def api_key_put(
         db: Session = Depends(get_db)
 ):
     """Update an existing ApiKey record in the database."""
+    if get_db_api_key(db, current_user.id, api_key.brokers_name) is None:
+        raise HTTPException(
+            status_code=404,
+            detail="API key not found"
+        )
+
     api_key_update = ApiKeyUpdate(
         api_key=api_key.api_key,
         private_key=api_key.private_key,
@@ -63,4 +75,10 @@ def api_key_delete(
         db: Session = Depends(get_db)
 ):
     """Delete an ApiKey record."""
+    if get_db_api_key(db, current_user.id, brokers_name) is None:
+        raise HTTPException(
+            status_code=404,
+            detail="API key not found"
+        )
+
     return delete_db_api_key(db, current_user.id, brokers_name)
