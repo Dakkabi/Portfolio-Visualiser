@@ -13,7 +13,7 @@ api_key_router = APIRouter(
     tags=["API Keys"]
 )
 
-def get_valid_api_key(brokers_name: str, user_id: int, db: Session) -> ApiKey | HTTPException:
+def check_api_key_parameters(brokers_name: str, user_id: int, db: Session) -> ApiKey | HTTPException:
     """Check that request parameters are valid, if so return the db record, else raise an HTTPException."""
     if get_db_broker(db, brokers_name) is None:
         raise HTTPException(
@@ -30,7 +30,7 @@ def get_valid_api_key(brokers_name: str, user_id: int, db: Session) -> ApiKey | 
 
     return db_api_key
 
-def check_api_key_values_are_valid(brokers_name: str, api_key: str, private_key: str = None) -> bool | HTTPException:
+def validate_broker_api_keys(brokers_name: str, api_key: str, private_key: str = None) -> bool | HTTPException:
     """Check if the API key values are accepted by the Broker clients, else raise an HTTPException."""
     return BROKER_REGISTRY[brokers_name].validate_api_key(api_key, private_key)
 
@@ -41,7 +41,7 @@ def api_key_get_by_brokers_name(
         db: Session = Depends(get_db)
 ):
     """Fetch api key value(s) by brokers name, if exists."""
-    db_api_key = get_valid_api_key(brokers_name, current_user.id, db)
+    db_api_key = check_api_key_parameters(brokers_name, current_user.id, db)
     return db_api_key
 
 @api_key_router.post("/", response_model=ApiKeySchema)
@@ -52,7 +52,7 @@ def api_key_post(
 ):
     """Create a new API key record in the database."""
     try:
-        db_api_key = get_valid_api_key(api_key.brokers_name, current_user.id, db)
+        db_api_key = check_api_key_parameters(api_key.brokers_name, current_user.id, db)
         raise HTTPException(
             status_code=409,
             detail="API key already exists"
@@ -64,7 +64,7 @@ def api_key_post(
         else:
             raise
 
-    check_api_key_values_are_valid(api_key.brokers_name, api_key.api_key, api_key.private_key)
+    validate_broker_api_keys(api_key.brokers_name, api_key.api_key, api_key.private_key)
 
     api_key_create = ApiKeyCreate(
         api_key=api_key.api_key,
@@ -83,8 +83,8 @@ def api_key_put(
     """Update an existing ApiKey record in the database."""
 
     # More of a check, if db_api_key is returned, it exists, therefore ApiKeyRequest parameters are valid.
-    get_valid_api_key(api_key.brokers_name, current_user.id, db)
-    check_api_key_values_are_valid(api_key.brokers_name, api_key.api_key, api_key.private_key)
+    check_api_key_parameters(api_key.brokers_name, current_user.id, db)
+    validate_broker_api_keys(api_key.brokers_name, api_key.api_key, api_key.private_key)
 
     api_key_update = ApiKeyUpdate(
         api_key=api_key.api_key,
@@ -103,5 +103,5 @@ def api_key_delete(
     """Delete an ApiKey record."""
 
     # More of a check, if db_api_key is returned, it exists and therefore is valid.
-    get_valid_api_key(brokers_name, current_user.id, db)
+    check_api_key_parameters(brokers_name, current_user.id, db)
     return delete_db_api_key(db, current_user.id, brokers_name)
