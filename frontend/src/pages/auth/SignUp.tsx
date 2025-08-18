@@ -1,6 +1,6 @@
-import AuthForm from "../components/auth/AuthForm.tsx";
-import {api} from "../config/axios.config.tsx";
-import Alert from "../components/Alert.tsx";
+import AuthForm from "../../components/auth/AuthForm.tsx";
+import {api} from "../../config/axios.config.tsx";
+import Alert from "../../components/Alert.tsx";
 import {useState} from "react";
 
 function SignUp() {
@@ -17,7 +17,7 @@ function SignUp() {
             "/users",
             { email: email, password: password }
         )
-            .then(response => {
+            .then(() => {
                 setResponseAlertProps({message: "Success, you will be shortly redirected.", type: "alert-success"})
             })
             .catch(error => {
