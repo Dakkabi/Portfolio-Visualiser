@@ -1,7 +1,7 @@
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import "./App.css"
-import Login from "./pages/Login.tsx";
-import SignUp from "./pages/SignUp.tsx";
+import Login from "./pages/auth/Login.tsx";
+import SignUp from "./pages/auth/SignUp.tsx";
 
 function App() {
     return (

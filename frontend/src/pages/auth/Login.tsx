@@ -1,7 +1,7 @@
-import AuthForm from "../components/auth/AuthForm.tsx"
-import Alert from "../components/Alert.tsx";
+import AuthForm from "../../components/auth/AuthForm.tsx"
+import Alert from "../../components/Alert.tsx";
 import {useState} from "react";
-import {api} from "../config/axios.config.tsx";
+import {api} from "../../config/axios.config.tsx";
 
 function Login() {
     let [responseAlertProps, setResponseAlertProps] = useState({message: "", type: ""})
