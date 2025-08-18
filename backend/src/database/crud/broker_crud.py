@@ -7,7 +7,12 @@ from backend.src.database.models.broker_model import Broker
 SUPPORTED_BROKERS_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "supported_brokers.txt")
 
 def get_db_broker(db: Session, broker_name: str) -> Broker | None:
+    """Return a broker's name if it exists in the database, None otherwise."""
     return db.query(Broker).filter(Broker.name == broker_name).first()
+
+def get_db_brokers(db: Session) -> list[type[Broker]]:
+    """Return a list of all supported brokers in the database."""
+    return db.query(Broker).all()
 
 def create_db_broker(db: Session, broker_name: str) -> Broker:
     """Add a new broker name to the database.
