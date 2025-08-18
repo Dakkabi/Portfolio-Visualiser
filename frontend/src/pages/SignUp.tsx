@@ -17,7 +17,7 @@ function SignUp() {
             "/users",
             { email: email, password: password }
         )
-            .then(response => {
+            .then(() => {
                 setResponseAlertProps({message: "Success, you will be shortly redirected.", type: "alert-success"})
             })
             .catch(error => {
