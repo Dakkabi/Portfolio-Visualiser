@@ -1,5 +1,5 @@
 import enum
 
-class BrokerType(enum.Enum):
-    broker = "Broker"
-    exchange = "Exchange"
+class AssetType(enum.Enum):
+    stocks = "Stocks"
+    crypto = "Crypto"
