@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 
 import requests
-from starlette.exceptions import HTTPException
+from requests import HTTPError
+from fastapi.exceptions import HTTPException
 
 
 class BrokerClient(ABC):
@@ -32,18 +33,23 @@ class BrokerClient(ABC):
         :param params: Optional parameters to pass to the request.
         :return: A json response as a dict.
 
-        :raises HTTPError: If server responded with an error.
+        :raises HTTPException: If server responded with an error.
         """
         url = self.BASE_URL + path
         headers = {"Authorization": self.api_key}
 
-        if method == "GET":
-            response = requests.get(url, headers=headers, params=params)
-        elif method == "POST":
-            response = requests.post(url, headers=headers, json=params)
-        else:
-            raise ValueError("Unknown HTTP method: {}".format(method))
+        response = {}
+        try:
+            if method == "GET":
+                response = requests.get(url, headers=headers, params=params)
+            elif method == "POST":
+                response = requests.post(url, headers=headers, json=params)
+            else:
+                raise ValueError("Unknown HTTP method: {}".format(method))
 
-        response.raise_for_status()
+            response.raise_for_status()
+        except HTTPError:
+            raise HTTPException(status_code=response.status_code, detail=response.text)
+
         return response.json()
 
