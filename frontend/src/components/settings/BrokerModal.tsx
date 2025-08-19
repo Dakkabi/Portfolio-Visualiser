@@ -25,7 +25,7 @@ const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose }
                     <legend className="fieldset-legend">Enter API Key</legend>
                     <input type="text" className="input" placeholder="Not Hidden" />
 
-                    {!isPrivateKeyRequired(brokerName) ? (
+                    {isPrivateKeyRequired(brokerName) ? (
                         <>
                             <legend className="fieldset-legend">Enter Private Key</legend>
                             <input type="text" className="input" placeholder="Not Hidden" />
