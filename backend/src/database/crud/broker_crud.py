@@ -42,8 +42,6 @@ def read_file_into_broker_table(db: Session, file_path: str = None):
         file_path = SUPPORTED_BROKERS_PATH
 
     with open(file_path, "r") as file:
-        db_brokers = get_db_brokers(db)
-
         for line in file:
             line = line.strip()
 
@@ -51,7 +49,7 @@ def read_file_into_broker_table(db: Session, file_path: str = None):
             asset_types = asset_type_list.split(",")
 
             if broker_name != "NAME": # Header line
-                if broker_name not in db_brokers:
+                if get_db_broker(db, broker_name) is None:
                     asset_type_enum_list = []
                     for asset_type in asset_types:
                         asset_type_enum_list.append(AssetType(asset_type))
