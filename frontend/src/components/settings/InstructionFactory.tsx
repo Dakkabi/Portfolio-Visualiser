@@ -23,19 +23,7 @@ const instructionsMap: Record<string, React.FC> = {
  *
  * @param name The Broker's name to search for.
  */
-export function getInstructionByName(name: string) {
-    const Component = instructionsMap[name];
-    return Component ? <Component /> : <div>Unknown instructions for {name}</div>
-}
-
-/**
- * Return a boolean on whether a Private Key field is required by checking if a Broker is in a pre-defined list.
- *
- * @param brokerName The broker's name.
- */
-export function isPrivateKeyRequired(brokerName: string): boolean {
-    const isRequired: string[] = [
-        "Kraken",
-    ];
-    return isRequired.includes(brokerName);
+export default function getInstructionByBrokerName(brokerName: string) {
+    const Component = instructionsMap[brokerName];
+    return Component ? <Component /> : <div>Unknown instructions for {brokerName}</div>
 }
