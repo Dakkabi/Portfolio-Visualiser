@@ -12,27 +12,25 @@ const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose }
     let [privateKey, setPrivateKey] = useState("");
 
     /**
-     * Handle verifying if the api key and optional private key are valid keys, then save to the database.
+     * Handle verifying if the api key and private key are valid, then save to the database.
      *
      * @param brokerName The platform that provided the keys.
      * @param apiKey The main key allowing access to the platform's routes.
-     * @param privateKey An optional private key.
+     * @param privateKey A private key.
      */
-    function handleAPIKeySubmit(brokerName: string, apiKey: string, privateKey: string) {
+    function handleApiKeySubmit(brokerName: string, apiKey: string, privateKey: string) {
         if (!isPrivateKeyRequired(brokerName)) {privateKey = "";}
 
 
     }
 
-
     if (!isOpen) return null;
 
     return (
-        <dialog className="modal modal-open">
-            <div className="modal-box">
-                <form method="dialog">
-                    <button onClick={onClose} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                </form>
+        <div className="modal modal-open">
+            <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+                <button onClick={onClose} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+
                 {getInstructionByName(brokerName)}
 
                 <div className="divider"></div>
@@ -43,6 +41,7 @@ const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose }
                         type="text"
                         className="input"
                         placeholder="Not Hidden"
+                        value={apiKey}
                         onChange={(newApiKey) => setApiKey(newApiKey.target.value)}
                     />
 
@@ -53,6 +52,7 @@ const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose }
                                 type="text"
                                 className="input"
                                 placeholder="Not Hidden"
+                                value={privateKey}
                                 onChange={
                                 (newPrivateKey) => setPrivateKey(newPrivateKey.target.value)
                             }
@@ -60,10 +60,10 @@ const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose }
                         </>
                     ) : ""}
 
-                    <button onClick={() => handleAPIKeySubmit(brokerName, apiKey, privateKey)} type="submit" className="btn btn-wide mt-4">Submit</button>
+                    <button onClick={() => handleApiKeySubmit(brokerName, apiKey, privateKey)} type="submit" className="btn btn-wide mt-4">Submit</button>
                 </fieldset>
             </div>
-        </dialog>
+        </div>
     )
 }
 
