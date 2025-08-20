@@ -4,7 +4,7 @@ import BrokerCard from "../../components/settings/BrokerCard.tsx";
 import BrokerModal from "../../components/settings/BrokerModal.tsx";
 
 function Connections() {
-    const [brokers, setBrokers] = useState<{ name: string, type: string[] }[]>([]);
+    const [brokers, setBrokers] = useState<{ name: string, type: string[], private_key_required: boolean }[]>([]);
     const [modalProps, setModalProps] = useState<{ brokerName: string, isOpen: boolean }>(
         { brokerName: "", isOpen: false }
     );
@@ -14,6 +14,20 @@ function Connections() {
     }
     function closeBrokerModal() {
         setModalProps({ brokerName: "", isOpen: false });
+    }
+
+    /**
+     * Check if the broker requires an additional private key field.
+     *
+     * @param brokerName The broker to search for.
+     */
+    function isPrivateKeyRequired(brokerName: string): boolean {
+        for (let i = 0; i < brokers.length; i++) {
+            if (brokers[i].name === brokerName) {
+                return brokers[i].private_key_required;
+            }
+        }
+        return false;
     }
 
     useEffect(() => {
@@ -36,6 +50,7 @@ function Connections() {
                     brokerName={modalProps.brokerName}
                     isOpen={modalProps.isOpen}
                     onClose={closeBrokerModal}
+                    isPrivateKeyRequired={isPrivateKeyRequired(modalProps.brokerName)}
                 />
             </div>
             <div className="text-center">
