@@ -12,7 +12,7 @@ const BrokerCard: React.FC<BrokerCardProps> = ({ brokerName, cardClickEvent }) =
             <a onClick={() => cardClickEvent(brokerName)} className="card w-87 cursor-pointer">
                 <figure>
                     <img
-                        src={`/logo/${brokerName}/${brokerName}Billboard.webp`}
+                        src={`/Brokers/${brokerName}/${brokerName}Billboard.webp`}
                         alt={brokerName + " Billboard"}
                     />
                 </figure>
