@@ -1,13 +1,14 @@
-import {getInstructionByName, isPrivateKeyRequired} from "./InstructionFactory.tsx";
+import getInstructionByBrokerName from "./InstructionFactory.tsx";
 import React, {useState} from "react";
 
 interface BrokerModalProps {
     brokerName: string;
     isOpen: boolean;
     onClose: () => void;
+    isPrivateKeyRequired: boolean;
 }
 
-const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose }) => {
+const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose, isPrivateKeyRequired }) => {
     let [apiKey, setApiKey] = useState("");
     let [privateKey, setPrivateKey] = useState("");
 
@@ -19,8 +20,7 @@ const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose }
      * @param privateKey A private key.
      */
     function handleApiKeySubmit(brokerName: string, apiKey: string, privateKey: string) {
-        if (!isPrivateKeyRequired(brokerName)) {privateKey = "";}
-
+        if (!isPrivateKeyRequired) {privateKey = "";}
 
     }
 
@@ -31,7 +31,7 @@ const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose }
             <div className="modal-box" onClick={(e) => e.stopPropagation()}>
                 <button onClick={onClose} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
 
-                {getInstructionByName(brokerName)}
+                {getInstructionByBrokerName(brokerName)}
 
                 <div className="divider"></div>
 
@@ -45,7 +45,7 @@ const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose }
                         onChange={(newApiKey) => setApiKey(newApiKey.target.value)}
                     />
 
-                    {isPrivateKeyRequired(brokerName) ? (
+                    {isPrivateKeyRequired ? (
                         <>
                             <legend className="fieldset-legend">Enter Private Key</legend>
                             <input
