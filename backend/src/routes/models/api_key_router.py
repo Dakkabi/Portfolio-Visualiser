@@ -41,8 +41,8 @@ def api_key_get_by_brokers_name(
         db: Session = Depends(get_db)
 ):
     """Fetch api key value(s) by brokers name, if exists."""
-    db_api_key = check_api_key_parameters(brokers_name, current_user.id, db)
-    return db_api_key
+    check_api_key_parameters(brokers_name, current_user.id, db)
+    return get_db_api_key(db, current_user.id, brokers_name)
 
 @api_key_router.post("/", response_model=ApiKeySchema)
 def api_key_post(
