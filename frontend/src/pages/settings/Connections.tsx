@@ -1,9 +1,20 @@
 import {useEffect, useState} from "react";
 import {api} from "../../config/axios.config.tsx";
 import BrokerCard from "../../components/settings/BrokerCard.tsx";
+import BrokerModal from "../../components/settings/BrokerModal.tsx";
 
 function Connections() {
     const [brokers, setBrokers] = useState<{ name: string, type: string[] }[]>([]);
+    const [modalProps, setModalProps] = useState<{ brokerName: string, isOpen: boolean }>(
+        { brokerName: "", isOpen: false }
+    );
+
+    function openBrokerModal(brokerName: string) {
+        setModalProps({ brokerName: brokerName, isOpen: true });
+    }
+    function closeBrokerModal() {
+        setModalProps({ brokerName: "", isOpen: false });
+    }
 
     useEffect(() => {
         api.get("/brokers")
@@ -19,30 +30,45 @@ function Connections() {
     const cryptoExchanges = brokers.filter(exchange => exchange.type.includes("Crypto"));
 
     return (
-        <div className="text-center">
-            <h1 className="text-5xl font-bold">Connections</h1>
+        <div>
+            <div>
+                <BrokerModal
+                    brokerName={modalProps.brokerName}
+                    isOpen={modalProps.isOpen}
+                    onClose={closeBrokerModal}
+                />
+            </div>
+            <div className="text-center">
+                <h1 className="text-5xl font-bold">Connections</h1>
 
-            <div className="divider"></div>
+                <div className="divider"></div>
 
-            <h1 className="text-4xl font-bold">Brokers</h1>
-            <ul className="menu menu-horizontal">
-                {stockBrokers.map((broker) => (
-                    <li key={broker.name}>
-                        <BrokerCard brokerName={broker.name} />
-                    </li>
-                ))}
-            </ul>
+                <h1 className="text-4xl font-bold">Brokers</h1>
+                <ul className="menu menu-horizontal">
+                    {stockBrokers.map((broker) => (
+                        <li key={broker.name}>
+                            <BrokerCard
+                                brokerName={broker.name}
+                                cardClickEvent={openBrokerModal}
+                            />
+                        </li>
+                    ))}
+                </ul>
 
-            <div className="divider"></div>
+                <div className="divider"></div>
 
-            <h1 className="text-4xl font-bold">Crypto Exchanges</h1>
-            <ul className="menu menu-horizontal">
-                {cryptoExchanges.map((exchange) => (
-                    <li key={exchange.name}>
-                        <BrokerCard brokerName={exchange.name} />
-                    </li>
-                ))}
-            </ul>
+                <h1 className="text-4xl font-bold">Crypto Exchanges</h1>
+                <ul className="menu menu-horizontal">
+                    {cryptoExchanges.map((exchange) => (
+                        <li key={exchange.name}>
+                            <BrokerCard
+                                brokerName={exchange.name}
+                                cardClickEvent={openBrokerModal}
+                            />
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
     )
 }
