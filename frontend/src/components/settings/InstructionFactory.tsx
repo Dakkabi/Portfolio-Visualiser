@@ -1,27 +1,43 @@
 import React from "react";
 
-import Trading212Logo from "../../assets/brokers/Trading212/Trading212Logo.webp"
-
-function Trading212() {
+function InstructionTemplateBuilder({ brokerName, children }) {
     return (
         <div>
             <img
-                src={Trading212Logo}
-                alt="Trading212"
+                src={`/logo/${brokerName}/${brokerName}Logo.webp`}
+                alt={brokerName + " Logo"}
                 className="w-100 h-auto"
             />
+            {children}
         </div>
     )
 }
 
+function Trading212() {
+    return (
+        <InstructionTemplateBuilder brokerName="Trading212">
+            <></>
+        </InstructionTemplateBuilder>
+    )
+}
+
+function Kraken() {
+    return (
+        <InstructionTemplateBuilder brokerName="Kraken">
+            <></>
+        </InstructionTemplateBuilder>
+    )
+}
+
 const instructionsMap: Record<string, React.FC> = {
-    Trading212
+    Trading212,
+    Kraken,
 } satisfies Record<string, React.FC>
 
 /**
  * Get an Instructions component for a Broker, via the Broker's name.
  *
- * @param name The Broker's name to search for.
+ * @param brokerName The Broker's name to search for.
  */
 export default function getInstructionByBrokerName(brokerName: string) {
     const Component = instructionsMap[brokerName];
