@@ -25,14 +25,4 @@ protectedApi.interceptors.request.use(
     (error) => Promise.reject(error)
 )
 
-protectedApi.interceptors.response.use(
-    (response) => response,
-    (error) => {
-        if (error.response && error.response.status === 401) {
-            sessionStorage.removeItem("accessToken");
-            window.location.href = "/login";
-        }
-    }
-)
-
 export { api, protectedApi };
