@@ -1,44 +1,28 @@
-import React, {useState} from "react";
-import BrokerModal from "./BrokerModal.tsx";
+import React from "react";
 
 interface BrokerCardProps {
     brokerName: string;
+    cardClickEvent: (brokerName: string) => void;
+    showStatus: boolean;
 }
 
-const BrokerCard: React.FC<BrokerCardProps> = ({ brokerName }) => {
-    let [modalProps, setModalProps] = useState({brokerName: "", isOpen: false});
-
-    /**
-     * Close an opened Modal, and wipe the state.
-     */
-    function closeModal() {
-        setModalProps({ brokerName: "", isOpen: false});
-    }
-
-    /**
-     * Open's a BrokerModal component with the instructions loaded specific to the param inputted.
-     *
-     * @param brokerName The instruction manual to render inside the Modal.
-     */
-    function openModal(brokerName: string) {
-        setModalProps({ brokerName: brokerName, isOpen: true });
-    }
+const BrokerCard: React.FC<BrokerCardProps> = ({ brokerName, cardClickEvent, showStatus }) => {
 
     return (
         <div>
-            <a onClick={() => {openModal(brokerName)}} className="card w-87 cursor-pointer">
+            <a onClick={() => cardClickEvent(brokerName)} className="card w-87 cursor-pointer">
+                {showStatus ?
+                    <div aria-label="status" className="status status-xl status-success absolute top-2 right-2" />
+                    :
+                    ""
+                }
                 <figure>
                     <img
-                        src={`/logo/${brokerName}Billboard.webp`}
+                        src={`/Brokers/${brokerName}/${brokerName}Billboard.webp`}
                         alt={brokerName + " Billboard"}
                     />
                 </figure>
             </a>
-            <BrokerModal
-                brokerName={modalProps.brokerName}
-                isOpen={modalProps.isOpen}
-                onClose={closeModal}
-            />
         </div>
     )
 }

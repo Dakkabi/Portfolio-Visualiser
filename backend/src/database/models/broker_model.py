@@ -1,4 +1,4 @@
-from sqlalchemy import String, Enum
+from sqlalchemy import String, Enum, Boolean
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
@@ -12,5 +12,6 @@ class Broker(Base):
 
     name: Mapped[str] = mapped_column(String, primary_key=True)
     type : Mapped[list[AssetType]] = mapped_column(ARRAY(Enum(AssetType, name="asset_type")))
+    private_key_required: Mapped[bool] = mapped_column(Boolean)
 
     api_keys: Mapped[ApiKey] = relationship(back_populates="brokers")

@@ -25,7 +25,8 @@ def create_db_broker(db: Session, broker: BrokerCreate) -> Broker:
     """
     db_broker = Broker(
         name=broker.name,
-        type=broker.type
+        type=broker.type,
+        private_key_required=broker.private_key_required,
     )
     db.add(db_broker)
     db.commit()
@@ -38,27 +39,40 @@ def read_file_into_broker_table(db: Session, file_path: str = None):
     :param db: The database session.
     :param file_path: The path to the file to read, default is `/backend/src/assets/supported_brokers.txt`.
     """
+    def convert_string_to_bool(string: str) -> bool:
+        """Convert a string to boolean value."""
+        bool_map = {"true": True, "false": False}
+        try:
+            return bool_map[string.strip().lower()]
+        except KeyError:
+            raise ValueError(f"Couldn't convert string value '{string}' to boolean value.")
+
     if file_path is None:
         file_path = SUPPORTED_BROKERS_PATH
 
     with open(file_path, "r") as file:
-        db_brokers = get_db_brokers(db)
-
         for line in file:
             line = line.strip()
 
-            broker_name, asset_type_list = line.split(":")
+            line_split = line.split(":")
+            if len(line_split) != 3: raise ValueError(f"Invalid line format: {line}")
+
+            broker_name = line_split[0]
+            private_key_required = line_split[1]
+            asset_type_list = line_split[2]
+
             asset_types = asset_type_list.split(",")
 
             if broker_name != "NAME": # Header line
-                if broker_name not in db_brokers:
+                if get_db_broker(db, broker_name) is None:
                     asset_type_enum_list = []
                     for asset_type in asset_types:
                         asset_type_enum_list.append(AssetType(asset_type))
 
                     broker_create = BrokerCreate(
                         name=broker_name,
-                        type=asset_type_enum_list
+                        type=asset_type_enum_list,
+                        private_key_required=convert_string_to_bool(private_key_required),
                     )
 
                     create_db_broker(db, broker_create)
