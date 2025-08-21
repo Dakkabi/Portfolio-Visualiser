@@ -20,7 +20,14 @@ class Trading212(BrokerClient):
                 # No open position with that ticker
                 # API Key is valid, the user just doesn't own any AAPL.
                 return True
-            raise
+            elif e.status_code == 401:
+                raise HTTPException(status_code=401, detail="Invalid API key")
+
+            elif e.status_code == 403:
+                raise HTTPException(status_code=403, detail="Invalid API key scope, valid key but insufficient permissions.")
+
+            raise HTTPException(status_code=e.status_code, detail=f"Unable to verify API keys, client returned: '{e.status_code}: {e.detail}'")
+
 
     # Personal Portfolio
     def fetch_a_specific_position(self, ticker: str) -> dict:
