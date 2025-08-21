@@ -1,10 +1,11 @@
 import {useEffect, useState} from "react";
-import {api} from "../../config/axios.config.tsx";
+import {api, protectedApi} from "../../config/axios.config.tsx";
 import BrokerCard from "../../components/settings/BrokerCard.tsx";
 import BrokerModal from "../../components/settings/BrokerModal.tsx";
 
 function Connections() {
     const [brokers, setBrokers] = useState<{ name: string, type: string[], private_key_required: boolean }[]>([]);
+    const [connections, setConnections] = useState<{users_id: Number, api_key: string, private_key: string, brokers_name: string}[]>([]);
     const [modalProps, setModalProps] = useState<{ brokerName: string, isOpen: boolean }>(
         { brokerName: "", isOpen: false }
     );
@@ -30,6 +31,33 @@ function Connections() {
         return false;
     }
 
+    /**
+     * Update the connectedBrokers array to update displays on the connected broker cards.
+     */
+    function refreshConnectedBrokers() {
+        protectedApi.get("/keys/")
+            .then(response => {
+                setConnections(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
+    /**
+     * Return a boolean on whether the user has provided valid keys for a broker.
+     *
+     * @param brokersName The broker to check for.
+     */
+    function isConnected(brokersName: string) {
+        for (let i = 0; i < connections.length; i++) {
+            if (connections[i].brokers_name === brokersName) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     useEffect(() => {
         api.get("/brokers")
             .then(response => {
@@ -38,6 +66,8 @@ function Connections() {
             .catch(error => {
                 console.log(error);
             })
+
+        refreshConnectedBrokers(); // Run once on component startup.
     }, [])
 
     const stockBrokers = brokers.filter(broker => broker.type.includes("Stocks"));
@@ -65,6 +95,7 @@ function Connections() {
                             <BrokerCard
                                 brokerName={broker.name}
                                 cardClickEvent={openBrokerModal}
+                                showStatus={isConnected(broker.name)}
                             />
                         </li>
                     ))}
@@ -79,6 +110,7 @@ function Connections() {
                             <BrokerCard
                                 brokerName={exchange.name}
                                 cardClickEvent={openBrokerModal}
+                                showStatus={isConnected(exchange.name)}
                             />
                         </li>
                     ))}
