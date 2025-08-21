@@ -45,10 +45,10 @@ const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose, 
                     setAlertProps({message: "Successfully updated API keys.", type: "alert-success"})
 
                 } catch (putError: any) {
-                    setAlertProps({message: `${putError.status}: ${putError.message}`, type: "alert-error"})
+                    setAlertProps({message: `${putError.status}: ${putError.response.data.detail}`, type: "alert-error"})
                 }
             } else {
-                setAlertProps({message: `${postError.status}: ${postError.message}`, type: "alert-error"})
+                setAlertProps({message: `${postError.status}: ${postError.response.data.detail}`, type: "alert-error"})
             }
         }
     }
