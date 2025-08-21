@@ -81,6 +81,7 @@ function Connections() {
                     isOpen={modalProps.isOpen}
                     onClose={closeBrokerModal}
                     isPrivateKeyRequired={isPrivateKeyRequired(modalProps.brokerName)}
+                    connected={isConnected(modalProps.brokerName)}
                 />
             </div>
             <div className="text-center">
