@@ -5,12 +5,14 @@ from backend.src.core.config import settings
 
 FERNET_KEY = Fernet(settings.FERNET_MASTER_KEY.encode("utf-8"))
 
-def encrypt_string(plaintext: str) -> str:
-    """Encrypt a string input using Fernet"""
+def encrypt_string(plaintext: str) -> str | None:
+    """Encrypt a string input using Fernet, return None if no plaintext."""
+    if plaintext is None: return None
     return FERNET_KEY.encrypt(plaintext.encode("utf-8")).decode("utf-8")
 
-def decrypt_string(ciphertext: str) -> str:
-    """Decrypt an encrypted string using Fernet"""
+def decrypt_string(ciphertext: str) -> str | None:
+    """Decrypt an encrypted string using Fernet, return None if no ciphertext."""
+    if ciphertext is None: return None
     return FERNET_KEY.decrypt(ciphertext.encode("utf-8")).decode("utf-8")
 
 def get_password_hash(password: str) -> str:
