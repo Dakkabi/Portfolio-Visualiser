@@ -5,7 +5,7 @@ import BrokerModal from "../../components/settings/BrokerModal.tsx";
 
 function Connections() {
     const [brokers, setBrokers] = useState<{ name: string, type: string[], private_key_required: boolean }[]>([]);
-    const [connections, setConnections] = useState<{users_id: Number, api_key: string, private_key: string, brokers_name: string}[]>([]);
+    const [connections, setConnections] = useState<{api_key: string, private_key: string, brokers_name: string}[]>([]);
     const [modalProps, setModalProps] = useState<{ brokerName: string, isOpen: boolean }>(
         { brokerName: "", isOpen: false }
     );
@@ -58,6 +58,26 @@ function Connections() {
         return false;
     }
 
+    /**
+     * Removes a broker connection from connections array.
+     *
+     * It would also be possible by calling `refreshConnectedBrokers()`,
+     * but there is little concern for sync issues, as a page-refresh will fix that.
+     * Therefore, this is a suitable optimisation.
+     *
+     * @param brokerName The broker to remove.
+     */
+    function removeConnection(brokerName: string) {
+        const splicedConnections = connections.filter(
+            (connection) => connection.brokers_name !== brokerName
+        );
+        setConnections(splicedConnections);
+    }
+
+    function addConnection(params: {api_key: string, private_key: string | null, brokers_name: string}) {
+        setConnections(oldConnections => [...oldConnections, params]);
+    }
+
     useEffect(() => {
         api.get("/brokers")
             .then(response => {
@@ -67,7 +87,7 @@ function Connections() {
                 console.log(error);
             })
 
-        refreshConnectedBrokers(); // Run once on component startup.
+        refreshConnectedBrokers();
     }, [])
 
     const stockBrokers = brokers.filter(broker => broker.type.includes("Stocks"));
@@ -82,6 +102,8 @@ function Connections() {
                     onClose={closeBrokerModal}
                     isPrivateKeyRequired={isPrivateKeyRequired(modalProps.brokerName)}
                     connected={isConnected(modalProps.brokerName)}
+                    onDeleteApiKey={() => removeConnection(modalProps.brokerName)}
+                    onAddApiKey={addConnection}
                 />
             </div>
             <div className="text-center">
