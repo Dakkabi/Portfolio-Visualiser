@@ -33,8 +33,6 @@ const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose, 
             brokers_name: brokerName,
         };
 
-        console.log(params);
-
         try {
             await protectedApi.post(endpoint, params);
             setAlertProps({message: "Successfully added new API keys.", type: "alert-success"})
