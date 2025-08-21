@@ -13,6 +13,11 @@ api_key_router = APIRouter(
     tags=["API Keys"]
 )
 
+def is_private_key_required(brokers_name: str, db: Session) -> bool:
+    """Return a bool indicating whether the private_key field is required for a broker."""
+    db_broker = get_db_broker(db, brokers_name)
+    return bool(db_broker.private_key_required)
+
 def check_api_key_parameters(brokers_name: str, user_id: int, db: Session) -> ApiKey | HTTPException:
     """Check that request parameters are valid, if so return the db record, else raise an HTTPException."""
     if get_db_broker(db, brokers_name) is None:
@@ -66,6 +71,8 @@ def api_key_post(
 
     validate_broker_api_keys(api_key.brokers_name, api_key.api_key, api_key.private_key)
 
+    if not is_private_key_required(api_key.brokers_name, db): api_key.private_key = None
+
     api_key_create = ApiKeyCreate(
         api_key=api_key.api_key,
         private_key=api_key.private_key,
@@ -85,6 +92,8 @@ def api_key_put(
     # More of a check, if db_api_key is returned, it exists, therefore ApiKeyRequest parameters are valid.
     check_api_key_parameters(api_key.brokers_name, current_user.id, db)
     validate_broker_api_keys(api_key.brokers_name, api_key.api_key, api_key.private_key)
+
+    if not is_private_key_required(api_key.brokers_name, db): api_key.private_key = None
 
     api_key_update = ApiKeyUpdate(
         api_key=api_key.api_key,
