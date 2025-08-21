@@ -9,9 +9,11 @@ interface BrokerModalProps {
     onClose: () => void;
     isPrivateKeyRequired: boolean;
     connected: boolean;
+    onDeleteApiKey: (brokerName: string) => void;
+    onAddApiKey: (params: { api_key: string, private_key: string | null, brokers_name: string }) => void;
 }
 
-const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose, isPrivateKeyRequired, connected }) => {
+const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose, isPrivateKeyRequired, connected, onDeleteApiKey, onAddApiKey }) => {
     let [apiKey, setApiKey] = useState("");
     let [privateKey, setPrivateKey] = useState("");
 
@@ -45,6 +47,8 @@ const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose, 
                     await protectedApi.put(endpoint, params);
                     setAlertProps({message: "Successfully updated API keys.", type: "alert-success"})
 
+                    onAddApiKey(params);
+
                 } catch (putError: any) {
                     setAlertProps({message: `${putError.status}: ${putError.response.data.detail}`, type: "alert-error"})
                 }
@@ -60,7 +64,27 @@ const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose, 
      * @param brokerName The broker key to find the ApiKey records to delete.
      */
     function handleDeleteApiKeys(brokerName: string) {
+        protectedApi.delete(`/keys/${brokerName}`)
+            .then(() => {
+                setAlertProps({message: "Successfully deleted your API Keys.", type: "alert-success"})
+            })
+            .catch(error => {
+                setAlertProps({message: `${error.status}: ${error.response.data.detail}`, type: "alert-error"})
+                return;
+            });
 
+        onDeleteApiKey(brokerName);
+    }
+
+    /**
+     * Clear the modal state when closing the Modal, before invoking the parent prop function.
+     */
+    function clearModalState() {
+        setApiKey("");
+        setPrivateKey("");
+        setAlertProps({message: "", type: ""});
+
+        onClose();
     }
 
     if (!isOpen) return null;
@@ -68,7 +92,7 @@ const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose, 
     return (
         <div className="modal modal-open">
             <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-                <button onClick={onClose} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                <button onClick={clearModalState} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
 
                 {getInstructionByBrokerName(brokerName)}
 
