@@ -8,9 +8,10 @@ interface BrokerModalProps {
     isOpen: boolean;
     onClose: () => void;
     isPrivateKeyRequired: boolean;
+    connected: boolean;
 }
 
-const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose, isPrivateKeyRequired }) => {
+const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose, isPrivateKeyRequired, connected }) => {
     let [apiKey, setApiKey] = useState("");
     let [privateKey, setPrivateKey] = useState("");
 
@@ -51,6 +52,15 @@ const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose, 
                 setAlertProps({message: `${postError.status}: ${postError.response.data.detail}`, type: "alert-error"})
             }
         }
+    }
+
+    /**
+     * Handle deleting the API Keys from the database.
+     *
+     * @param brokerName The broker key to find the ApiKey records to delete.
+     */
+    function handleDeleteApiKeys(brokerName: string) {
+
     }
 
     if (!isOpen) return null;
@@ -94,7 +104,22 @@ const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose, 
                         </>
                     ) : ""}
 
-                    <button onClick={() => handleApiKeySubmit(brokerName, apiKey, privateKey)} type="submit" className="btn btn-wide mt-4">Submit</button>
+                    <button
+                        onClick={() => handleApiKeySubmit(brokerName, apiKey, privateKey)}
+                        type="submit"
+                        className="btn btn-wide mt-4"
+                    >
+                        Submit
+                    </button>
+
+                    <button
+                        onClick={() => handleDeleteApiKeys(brokerName)}
+                        className="btn btn-wide btn-outline btn-error mt-4"
+                        disabled={!connected}
+                    >
+                        Delete API Keys
+                    </button>
+
                 </fieldset>
             </div>
         </div>
