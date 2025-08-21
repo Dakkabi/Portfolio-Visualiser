@@ -39,6 +39,14 @@ def validate_broker_api_keys(brokers_name: str, api_key: str, private_key: str =
     """Check if the API key values are accepted by the Broker clients, else raise an HTTPException."""
     return BROKER_REGISTRY[brokers_name].validate_api_key(api_key, private_key)
 
+@api_key_router.get("/", response_model=list[ApiKeySchema])
+def api_key_get(
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_active_user)
+):
+    """Return a list of all API Keys that belong to the user."""
+    return get_db_api_keys(db, current_user.id)
+
 @api_key_router.get("/{brokers_name}", response_model=ApiKeySchema)
 def api_key_get_by_brokers_name(
         brokers_name: str,
