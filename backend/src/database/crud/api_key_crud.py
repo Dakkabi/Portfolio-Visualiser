@@ -56,7 +56,7 @@ def update_db_api_key(db: Session, api_key: ApiKeyUpdate) -> ApiKey:
 
 def delete_db_api_key(db: Session, users_id: int, brokers_name: str) -> ApiKey | None:
     """Delete an ApiKey record by broker name and user id."""
-    db_api_key = get_db_api_key(db, users_id, brokers_name)
+    db_api_key = get_db_encrypted_api_key(db, users_id, brokers_name)
     db.delete(db_api_key)
     db.commit()
     return db_api_key
