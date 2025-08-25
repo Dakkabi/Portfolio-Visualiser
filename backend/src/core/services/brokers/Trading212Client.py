@@ -2,7 +2,6 @@ from starlette.exceptions import HTTPException
 
 from backend.src.core.services.brokers.AbstractBrokerClient import BrokerClient
 
-
 class Trading212(BrokerClient):
     BASE_URL = "https://live.trading212.com"
 
@@ -90,3 +89,56 @@ class Trading212(BrokerClient):
             - 429 Limited: 1 / 1s
         """
         return super().requests("GET", "/api/v0/equity/portfolio/" + ticker)
+
+    # Historical Items
+    def historical_order_data(self, cursor: int, ticker: str = None, limit: int = 50):
+        """Fetch historical asset order data.
+
+        :param cursor: Pagination cursor.
+        :param ticker: Optional ticker filter, defaults to None.
+        :param limit: Max items per page, defaults to 50, must be lower than or equal to 50.
+
+        :raises HTTPException: If request fails, possible responses include:
+
+            - 200 OK
+            - 400 Bad filtering arguments
+            - 401 Bad API key
+            - 403 Scope (history:orders) missing for API key
+            - 408 Timed-out
+            - 429 Limited: 1 / 1m
+        """
+        if limit > 50: raise ValueError("Limit cannot be greater than 50")
+
+        params = {
+            "cursor": cursor,
+            "ticker": ticker,
+            "limit": limit,
+        }
+
+        return super().requests("GET", "/api/v0/equity/history/orders", params)
+
+    def paid_out_dividends(self, cursor: int, ticker: str = None, limit: int = 50):
+        """Fetch all historical dividend payment.
+
+        :param cursor: Pagination cursor.
+        :param ticker: Optional ticker filter, defaults to None.
+        :param limit: Max items per page, defaults to 50, must be lower than or equal to 50.
+
+        :raises HTTPException: If request fails, possible responses include:
+
+            - 200 OK
+            - 400 Bad filtering arguments
+            - 401 Bad API key
+            - 403 Scope (history:dividends) missing for API key
+            - 408 Timed-out
+            - 429 Limited: 6 / 1m
+        """
+        if limit > 50: raise ValueError("Limit cannot be greater than 50")
+
+        params = {
+            "cursor": cursor,
+            "ticker": ticker,
+            "limit": limit,
+        }
+
+        return super().requests("GET", "/api/v0/history/dividends", params)
