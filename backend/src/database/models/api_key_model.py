@@ -8,7 +8,7 @@ class ApiKey(Base):
     __tablename__ = 'api_keys'
 
     api_key: Mapped[str] = mapped_column(String, nullable=False)
-    private_key: Mapped[str] = mapped_column(String)
+    private_key: Mapped[str] = mapped_column(String, nullable=True)
 
     users_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
     users: Mapped["User"] = relationship(back_populates="api_keys")

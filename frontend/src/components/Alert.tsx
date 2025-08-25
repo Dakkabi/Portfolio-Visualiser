@@ -1,11 +1,9 @@
 import React from "react";
 
-type validAlertType = "alert-success" | "alert-info" | "alert-warning" | "alert-danger";
-
 interface AlertProps {
     message: string
     type: string;
-    properties?: validAlertType;
+    properties?: string;
 }
 
 const Alert: React.FC<AlertProps> = ({message, type, properties}) => {

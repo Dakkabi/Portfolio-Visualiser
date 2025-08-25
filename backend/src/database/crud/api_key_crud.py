@@ -4,6 +4,17 @@ from backend.src.core.services.auth.cryptography_service import encrypt_string, 
 from backend.src.database.models.api_key_model import ApiKey
 from backend.src.schemas.models.api_key_schema import *
 
+def get_db_api_keys(db: Session, users_id: int):
+    """Return all user's API Keys"""
+    db_api_keys = db.query(ApiKey).filter(ApiKey.users_id == users_id).all()
+    for api_key in db_api_keys:
+        api_key.api_key = decrypt_string(str(api_key.api_key))
+
+        if api_key.private_key is not None:
+            api_key.private_key = decrypt_string(str(api_key.private_key))
+
+    return db_api_keys
+
 def get_db_api_key(db: Session, users_id: int, brokers_name: str) -> ApiKey | None:
     """Return an api key record by broker name and user id, returns decrypted values."""
     db_api_key = get_db_encrypted_api_key(db, users_id, brokers_name)
@@ -45,7 +56,7 @@ def update_db_api_key(db: Session, api_key: ApiKeyUpdate) -> ApiKey:
 
 def delete_db_api_key(db: Session, users_id: int, brokers_name: str) -> ApiKey | None:
     """Delete an ApiKey record by broker name and user id."""
-    db_api_key = get_db_api_key(db, users_id, brokers_name)
+    db_api_key = get_db_encrypted_api_key(db, users_id, brokers_name)
     db.delete(db_api_key)
     db.commit()
     return db_api_key

@@ -14,7 +14,7 @@ class BrokerClient(ABC):
 
     @staticmethod
     @abstractmethod
-    def validate_api_key(api_key: str, private_key: str) -> HTTPException | bool:
+    def validate_api_key(api_key: str, private_key: str) -> bool:
         """Using an API endpoint, validate that the API key and optionally a Private key is valid.
 
         :param api_key: An Api key to validate.
@@ -25,7 +25,7 @@ class BrokerClient(ABC):
         """
         pass
 
-    def requests(self, method: str, path: str, params: dict = None) -> dict:
+    def send_request(self, method: str, path: str, params: dict = None) -> dict:
         """Send a request to an api endpoint, return the json response.
 
         :param method: The HTTP method to use, valid values are GET, POST.
@@ -48,8 +48,8 @@ class BrokerClient(ABC):
                 raise ValueError("Unknown HTTP method: {}".format(method))
 
             response.raise_for_status()
-        except HTTPError:
-            raise HTTPException(status_code=response.status_code, detail=response.text)
+            return response.json()
 
-        return response.json()
+        except HTTPError:
+            raise HTTPException(status_code=response.status_code, detail=response.reason)
 

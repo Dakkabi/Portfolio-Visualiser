@@ -13,6 +13,11 @@ api_key_router = APIRouter(
     tags=["API Keys"]
 )
 
+def is_private_key_required(brokers_name: str, db: Session) -> bool:
+    """Return a bool indicating whether the private_key field is required for a broker."""
+    db_broker = get_db_broker(db, brokers_name)
+    return bool(db_broker.private_key_required)
+
 def check_api_key_parameters(brokers_name: str, user_id: int, db: Session) -> ApiKey | HTTPException:
     """Check that request parameters are valid, if so return the db record, else raise an HTTPException."""
     if get_db_broker(db, brokers_name) is None:
@@ -34,6 +39,14 @@ def validate_broker_api_keys(brokers_name: str, api_key: str, private_key: str =
     """Check if the API key values are accepted by the Broker clients, else raise an HTTPException."""
     return BROKER_REGISTRY[brokers_name].validate_api_key(api_key, private_key)
 
+@api_key_router.get("/", response_model=list[ApiKeySchema])
+def api_key_get(
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_active_user)
+):
+    """Return a list of all API Keys that belong to the user."""
+    return get_db_api_keys(db, current_user.id)
+
 @api_key_router.get("/{brokers_name}", response_model=ApiKeySchema)
 def api_key_get_by_brokers_name(
         brokers_name: str,
@@ -41,8 +54,8 @@ def api_key_get_by_brokers_name(
         db: Session = Depends(get_db)
 ):
     """Fetch api key value(s) by brokers name, if exists."""
-    db_api_key = check_api_key_parameters(brokers_name, current_user.id, db)
-    return db_api_key
+    check_api_key_parameters(brokers_name, current_user.id, db)
+    return get_db_api_key(db, current_user.id, brokers_name)
 
 @api_key_router.post("/", response_model=ApiKeySchema)
 def api_key_post(
@@ -66,6 +79,8 @@ def api_key_post(
 
     validate_broker_api_keys(api_key.brokers_name, api_key.api_key, api_key.private_key)
 
+    if not is_private_key_required(api_key.brokers_name, db): api_key.private_key = None
+
     api_key_create = ApiKeyCreate(
         api_key=api_key.api_key,
         private_key=api_key.private_key,
@@ -85,6 +100,8 @@ def api_key_put(
     # More of a check, if db_api_key is returned, it exists, therefore ApiKeyRequest parameters are valid.
     check_api_key_parameters(api_key.brokers_name, current_user.id, db)
     validate_broker_api_keys(api_key.brokers_name, api_key.api_key, api_key.private_key)
+
+    if not is_private_key_required(api_key.brokers_name, db): api_key.private_key = None
 
     api_key_update = ApiKeyUpdate(
         api_key=api_key.api_key,

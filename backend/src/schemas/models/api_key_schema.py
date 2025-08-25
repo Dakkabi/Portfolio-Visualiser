@@ -20,5 +20,5 @@ class ApiKeyUpdate(ApiKeyCreate):
 class ApiKeyRead(ApiKeyBase, UserBase):
     pass
 
-class ApiKeySchema(ApiKeyBase, UserBase):
+class ApiKeySchema(ApiKeyBase):
     pass
