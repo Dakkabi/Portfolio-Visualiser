@@ -45,6 +45,48 @@ class Trading212(BrokerClient):
         return super().requests("GET", "/api/v0/equity/account/info")
 
     # Personal Portfolio
-    def fetch_a_specific_position(self, ticker: str) -> dict:
-        """Fetch an open position by ticker"""
+    def fetch_all_open_positions(self):
+        """Fetch all open positions.
+
+        :raises HTTPException: If request fails, possible responses include:
+
+            - 200 OK
+            - 401 Bad API key
+            - 403 Scope (portfolio) missing for API key
+            - 408 Timed-out
+            - 429 Limited: 1 / 5s
+        """
+        return super().requests("GET", "/api/v0/equity/portfolio")
+
+    def search_for_a_specific_position_by_ticker(self, ticker: str):
+        """Fetch an open position by ticker, using POST method.
+
+        :param ticker: Ticker to search for.
+
+        :raises HTTPException: If request fails, possible responses include:
+
+            - 200 OK
+            - 400 Invalid ticker supplied
+            - 401 Bad API key
+            - 403 Scope (portfolio) missing for API key
+            - 404 No open position with ticker supplied
+            - 408 Timed-out
+            - 429 Limited: 1 / 1s
+        """
+
+    def fetch_a_specific_position(self, ticker: str):
+        """Fetch an open position by ticker, using GET method.
+
+        :param ticker: Ticker to search for.
+
+        :raises HTTPException: If request fails, possible responses include:
+
+            - 200 OK
+            - 400 Invalid ticker supplied
+            - 401 Bad API key
+            - 403 Scope (portfolio) missing for API key
+            - 404 No open position with ticker supplied
+            - 408 Timed-out
+            - 429 Limited: 1 / 1s
+        """
         return super().requests("GET", "/api/v0/equity/portfolio/" + ticker)
