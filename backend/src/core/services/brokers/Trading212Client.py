@@ -17,6 +17,33 @@ class Trading212(BrokerClient):
                 return True
             raise e
 
+    # Account Data
+    def fetch_account_cash(self):
+        """Fetch cash information
+
+        :raises HTTPException: If request fails, possible responses include:
+
+            - 200 OK
+            - 401 Bad API key
+            - 403 Scope (account) missing for API key
+            - 408 Timed-out
+            - 429 Limited: 1 / 2s
+        """
+        return super().requests("GET", "/api/v0/equity/account/cash")
+
+    def fetch_account_metadata(self):
+        """Fetch account information.
+
+        :raises HTTPException: If request fails, possible responses include:
+
+            - 200 OK
+            - 401 Bad API key
+            - 403 Scope (account) missing for API key
+            - 408 Timed-out
+            - 429 Limited: 1 / 30s
+        """
+        return super().requests("GET", "/api/v0/equity/account/info")
+
     # Personal Portfolio
     def fetch_a_specific_position(self, ticker: str) -> dict:
         """Fetch an open position by ticker"""
