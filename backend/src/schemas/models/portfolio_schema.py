@@ -1,18 +1,15 @@
 from pydantic import BaseModel
 
-class User(BaseModel):
-    id: int
-
 class CashBase(BaseModel):
     total: float
 
 class PortfolioBase(BaseModel):
     Cash: CashBase
 
-class PortfolioCreate(PortfolioBase, User):
+class PortfolioCreate(PortfolioBase):
     pass
 
-class PortfolioUpdate(PortfolioBase, User):
+class PortfolioUpdate(PortfolioBase):
     pass
 
 class PortfolioSchema(PortfolioBase):
