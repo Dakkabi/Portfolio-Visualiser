@@ -3,6 +3,7 @@ from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 from backend.src.database.models.api_key_model import ApiKey
 from backend.src.database.session import Base
+from backend.src.database.models.portfolio_model import Portfolio
 
 
 class User(Base):
@@ -13,3 +14,4 @@ class User(Base):
     password: Mapped[str] = mapped_column(String, nullable=False)
 
     api_keys: Mapped[ApiKey] = relationship(back_populates="users")
+    portfolios: Mapped[Portfolio] = relationship(back_populates="users")
