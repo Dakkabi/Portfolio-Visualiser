@@ -1,16 +1,21 @@
+from typing import Dict
+
 from pydantic import BaseModel
 
 class CashBase(BaseModel):
     total: float
 
+class BrokerBase(BaseModel):
+    broker_name: str
+
 class PortfolioBase(BaseModel):
-    Cash: CashBase
+    cash: Dict[str, CashBase]
 
-class PortfolioCreate(PortfolioBase):
-    pass
+class PortfolioCreate(BrokerBase):
+    portfolio: PortfolioBase
 
-class PortfolioUpdate(PortfolioBase):
-    pass
+class PortfolioUpdate(BrokerBase):
+    portfolio: PortfolioBase
 
 class PortfolioSchema(PortfolioBase):
     pass
