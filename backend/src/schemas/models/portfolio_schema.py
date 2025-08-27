@@ -1,5 +1,3 @@
-from typing import Dict
-
 from pydantic import BaseModel
 
 class CashBase(BaseModel):
@@ -9,7 +7,7 @@ class BrokerBase(BaseModel):
     broker_name: str
 
 class PortfolioBase(BaseModel):
-    cash: Dict[str, CashBase]
+    Cash: CashBase
 
 class PortfolioCreate(BrokerBase):
     portfolio: PortfolioBase
