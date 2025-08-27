@@ -5,6 +5,14 @@ from backend.src.core.services.brokers.AbstractBrokerClient import BrokerClient
 class Trading212(BrokerClient):
     BASE_URL = "https://live.trading212.com"
 
+    def build_cash(self) -> dict:
+        data = {}
+
+        fetch_account_cash = self.fetch_account_cash()
+        data["total"] = fetch_account_cash["total"]
+
+        return data
+
     @staticmethod
     def validate_api_key(api_key: str, private_key: str) -> HTTPException | bool:
         try:
@@ -28,7 +36,7 @@ class Trading212(BrokerClient):
             - 408 Timed-out
             - 429 Limited: 1 / 2s
         """
-        return super().requests("GET", "/api/v0/equity/account/cash")
+        return super().send_request("GET", "/api/v0/equity/account/cash")
 
     def fetch_account_metadata(self):
         """Fetch account information.
@@ -41,7 +49,7 @@ class Trading212(BrokerClient):
             - 408 Timed-out
             - 429 Limited: 1 / 30s
         """
-        return super().requests("GET", "/api/v0/equity/account/info")
+        return super().send_request("GET", "/api/v0/equity/account/info")
 
     # Personal Portfolio
     def fetch_all_open_positions(self):
@@ -55,7 +63,7 @@ class Trading212(BrokerClient):
             - 408 Timed-out
             - 429 Limited: 1 / 5s
         """
-        return super().requests("GET", "/api/v0/equity/portfolio")
+        return super().send_request("GET", "/api/v0/equity/portfolio")
 
     def search_for_a_specific_position_by_ticker(self, ticker: str):
         """Fetch an open position by ticker, using POST method.
@@ -88,7 +96,7 @@ class Trading212(BrokerClient):
             - 408 Timed-out
             - 429 Limited: 1 / 1s
         """
-        return super().requests("GET", "/api/v0/equity/portfolio/" + ticker)
+        return super().send_request("GET", "/api/v0/equity/portfolio/" + ticker)
 
     # Historical Items
     def historical_order_data(self, cursor: int, ticker: str = None, limit: int = 50):
@@ -115,7 +123,7 @@ class Trading212(BrokerClient):
             "limit": limit,
         }
 
-        return super().requests("GET", "/api/v0/equity/history/orders", params)
+        return super().send_request("GET", "/api/v0/equity/history/orders", params)
 
     def paid_out_dividends(self, cursor: int, ticker: str = None, limit: int = 50):
         """Fetch all historical dividend payment.
@@ -141,4 +149,4 @@ class Trading212(BrokerClient):
             "limit": limit,
         }
 
-        return super().requests("GET", "/api/v0/history/dividends", params)
+        return super().send_request("GET", "/api/v0/history/dividends", params)
