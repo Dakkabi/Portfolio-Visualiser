@@ -9,6 +9,7 @@ from backend.src.database.session import get_db
 from backend.src.routes.auth.auth_router import auth_router
 from backend.src.routes.models.api_key_router import api_key_router
 from backend.src.routes.models.broker_router import broker_router
+from backend.src.routes.models.portfolio_router import portfolio_router
 from backend.src.routes.models.user_router import user_router
 
 @asynccontextmanager
@@ -35,6 +36,7 @@ app.include_router(auth_router, prefix=prefixUrl)
 app.include_router(user_router, prefix=prefixUrl)
 app.include_router(api_key_router, prefix=prefixUrl)
 app.include_router(broker_router, prefix=prefixUrl)
+app.include_router(portfolio_router, prefix=prefixUrl)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
