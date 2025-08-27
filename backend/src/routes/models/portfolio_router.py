@@ -24,7 +24,7 @@ def portfolio_get_broker(
         db: Session = Depends(get_db)
 ):
     """Get the portfolio information for a broker."""
-    if get_db_broker(broker_name) is None:
+    if get_db_broker(db, broker_name) is None:
         raise HTTPException(status_code=404, detail=f"Broker '{broker_name}' not found")
 
     if (db_api_keys := get_db_api_key(db, current_user.id, broker_name)) is None:
