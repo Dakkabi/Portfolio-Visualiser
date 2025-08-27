@@ -20,7 +20,9 @@ def get_db_api_key(db: Session, users_id: int, brokers_name: str) -> ApiKey | No
     db_api_key = get_db_encrypted_api_key(db, users_id, brokers_name)
     if db_api_key:
         db_api_key.api_key = decrypt_string(str(db_api_key.api_key))
-        db_api_key.private_key = decrypt_string(str(db_api_key.private_key))
+
+        if db_api_key.private_key is not None:
+            db_api_key.private_key = decrypt_string(str(db_api_key.private_key))
 
     return db_api_key
 
