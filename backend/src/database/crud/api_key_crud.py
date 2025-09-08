@@ -15,9 +15,9 @@ def get_db_api_keys(db: Session, user_id: int):
 
     return db_api_keys
 
-def get_db_api_key(db: Session, user_id: int, brokers_name: str) -> ApiKey | None:
+def get_db_api_key(db: Session, user_id: int, broker_name: str) -> ApiKey | None:
     """Return an api key record by broker name and user id, returns decrypted values."""
-    db_api_key = get_db_encrypted_api_key(db, user_id, brokers_name)
+    db_api_key = get_db_encrypted_api_key(db, user_id, broker_name)
     if db_api_key:
         db_api_key.api_key = decrypt_string(str(db_api_key.api_key))
 

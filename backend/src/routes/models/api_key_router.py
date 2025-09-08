@@ -40,7 +40,7 @@ def api_key_get(
     return get_db_api_keys(db, current_user.id)
 
 @api_key_router.get("/{broker_name}", response_model=ApiKeySchema)
-def api_key_get_by_brokers_name(
+def api_key_get_by_broker_name(
         broker_name: str,
         current_user: User = Depends(get_current_active_user),
         db: Session = Depends(get_db)
@@ -77,8 +77,8 @@ def api_key_put(
 
     if not check_api_key_exists(current_user.id, api_key.broker_name, db): raise HTTPException(status_code=404, detail="No such API Key exists in table")
 
-    if not is_private_key_required(api_key.brokers_name, db): api_key.private_key = None
-    validate_broker_api_keys(api_key.brokers_name, api_key.api_key, api_key.private_key)
+    if not is_private_key_required(api_key.broker_name, db): api_key.private_key = None
+    validate_broker_api_keys(api_key.broker_name, api_key.api_key, api_key.private_key)
 
     return update_db_api_key(db, api_key, current_user.id)
 

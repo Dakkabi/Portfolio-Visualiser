@@ -5,7 +5,7 @@ from backend.src.schemas.models.portfolio_schema import PortfolioCreate, Portfol
 
 
 def get_db_portfolio_by_user_id_and_broker_name(db: Session, user_id: int, broker_name: str):
-    return db.query(Portfolio).filter_by(user_id=user_id, brokers_name=broker_name).first()
+    return db.query(Portfolio).filter_by(user_id=user_id, broker_name=broker_name).first()
 
 def create_db_portfolio(db: Session, portfolio: PortfolioCreate, user_id: int) -> Portfolio:
     """Create a new portfolio entry in the database."""
