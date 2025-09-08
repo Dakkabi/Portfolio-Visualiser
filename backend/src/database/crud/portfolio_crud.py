@@ -11,7 +11,7 @@ def create_db_portfolio(db: Session, portfolio: PortfolioCreate, user_id: int) -
     """Create a new portfolio entry in the database."""
     db_portfolio = Portfolio(
         user_id=user_id,
-        portfolio={**portfolio.portfolio},
+        portfolio=portfolio.portfolio.model_dump(),
         broker_name=portfolio.broker_name,
     )
     db.add(db_portfolio)
@@ -21,7 +21,7 @@ def create_db_portfolio(db: Session, portfolio: PortfolioCreate, user_id: int) -
 
 def update_db_portfolio(db: Session, portfolio: PortfolioUpdate, user_id: int):
     """Update an existing portfolio entry in the database."""
-    db_portfolio = get_db_portfolio_by_user_id_and_broker_name (db, user_id, portfolio.broker_name)
+    db_portfolio = get_db_portfolio_by_user_id_and_broker_name(db, user_id, portfolio.broker_name)
     db_portfolio.portfolio = {**portfolio.portfolio}
     db.commit()
     db.refresh(db_portfolio)
