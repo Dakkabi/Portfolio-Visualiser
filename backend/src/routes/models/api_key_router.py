@@ -18,25 +18,17 @@ def is_private_key_required(broker_name: str, db: Session) -> bool:
     db_broker = get_db_broker(db, broker_name)
     return bool(db_broker.private_key_required)
 
-def check_api_key_parameters(broker_name: str, user_id: int, db: Session) -> ApiKey | HTTPException:
-    """Check that request parameters are valid, if so return the db record, else raise an HTTPException."""
-    if get_db_broker(db, broker_name) is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Broker not found"
-        )
+def check_broker_exists(broker_name: str, db: Session) -> None:
+    """Raise an exception if a given broker name is not in the brokers table."""
+    if not get_db_broker(db, broker_name):
+        raise HTTPException(status_code=404, detail="Broker not found")
 
-    db_api_key = get_db_encrypted_api_key(db, user_id, broker_name)
-    if db_api_key is None:
-        raise HTTPException(
-            status_code=404,
-            detail="API key not found"
-        )
+def check_api_key_exists(user_id: int, broker_name: str, db: Session ) -> bool:
+    """Return a bool indicating whether an api_key record already exists between a user_id and a broker name."""
+    return get_db_encrypted_api_key(db, user_id, broker_name) is not None
 
-    return db_api_key
-
-def validate_broker_api_keys(broker_name: str, api_key: str, private_key: str = None) -> bool | HTTPException:
-    """Check if the API key values are accepted by the Broker clients, else raise an HTTPException."""
+def validate_broker_api_keys(broker_name: str, api_key: str, private_key: str = None) -> bool:
+    """Check if the API key values are accepted by the Broker clients."""
     return BROKER_REGISTRY[broker_name].validate_api_key(api_key, private_key)
 
 @api_key_router.get("/", response_model=list[ApiKeySchema])
@@ -54,7 +46,8 @@ def api_key_get_by_brokers_name(
         db: Session = Depends(get_db)
 ):
     """Fetch api key value(s) by brokers name, if exists."""
-    check_api_key_parameters(broker_name, current_user.id, db)
+    check_broker_exists(broker_name, db)
+
     return get_db_api_key(db, current_user.id, broker_name)
 
 @api_key_router.post("/", response_model=ApiKeySchema)
@@ -64,19 +57,8 @@ def api_key_post(
         db: Session = Depends(get_db)
 ):
     """Create a new API key record in the database."""
-    try:
-        db_api_key = check_api_key_parameters(api_key.brokers_name, current_user.id, db)
-        raise HTTPException(
-            status_code=409,
-            detail="API key already exists"
-        )
-
-    except HTTPException as e:
-        if e.detail == "API key not found":
-            pass
-        else:
-            raise
-
+    if check_api_key_exists(current_user.id, api_key.broker_name, db): raise HTTPException(status_code=409, detail="API key(s) already exists")
+    check_broker_exists(api_key.broker_name, db)
     validate_broker_api_keys(api_key.broker_name, api_key.api_key, api_key.private_key)
 
     if not is_private_key_required(api_key.broker_name, db): api_key.private_key = None
@@ -91,11 +73,12 @@ def api_key_put(
 ):
     """Update an existing ApiKey record in the database."""
 
-    # More of a check, if db_api_key is returned, it exists, therefore ApiKeyRequest parameters are valid.
-    check_api_key_parameters(api_key.brokers_name, current_user.id, db)
-    validate_broker_api_keys(api_key.brokers_name, api_key.api_key, api_key.private_key)
+    check_broker_exists(api_key.broker_name, db)
+
+    if not check_api_key_exists(current_user.id, api_key.broker_name, db): raise HTTPException(status_code=404, detail="No such API Key exists in table")
 
     if not is_private_key_required(api_key.brokers_name, db): api_key.private_key = None
+    validate_broker_api_keys(api_key.brokers_name, api_key.api_key, api_key.private_key)
 
     return update_db_api_key(db, api_key, current_user.id)
 
@@ -107,6 +90,7 @@ def api_key_delete(
 ):
     """Delete an ApiKey record."""
 
-    # More of a check, if db_api_key is returned, it exists and therefore is valid.
-    check_api_key_parameters(broker_name, current_user.id, db)
+    check_broker_exists(broker_name, db)
+    if not check_api_key_exists(current_user.id, broker_name, db): raise HTTPException(status_code=404, detail="No such API Key exists in table")
+
     return delete_db_api_key(db, current_user.id, broker_name)
