@@ -13,8 +13,8 @@ class Portfolio(Base):
     portfolio: Mapped[dict] = mapped_column(JSON)
     last_updated: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
 
-    users_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     users: Mapped["User"] = relationship(back_populates="portfolios")
 
-    brokers_name: Mapped[str] = mapped_column(ForeignKey("brokers.name"), nullable=True, unique=True)
+    broker_name: Mapped[str] = mapped_column(ForeignKey("brokers.name"), nullable=True, unique=True)
     brokers: Mapped["Broker"] = relationship(back_populates="portfolios")

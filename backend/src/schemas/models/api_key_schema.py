@@ -3,10 +3,10 @@ from pydantic import BaseModel
 class ApiKeyBase(BaseModel):
     api_key: str
     private_key: str | None = None
-    brokers_name: str
+    broker_name: str
 
 class UserBase(BaseModel):
-    users_id: int
+    user_id: int
 
 class ApiKeyRequest(ApiKeyBase):
     pass

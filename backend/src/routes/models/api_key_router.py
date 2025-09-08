@@ -13,20 +13,20 @@ api_key_router = APIRouter(
     tags=["API Keys"]
 )
 
-def is_private_key_required(brokers_name: str, db: Session) -> bool:
+def is_private_key_required(broker_name: str, db: Session) -> bool:
     """Return a bool indicating whether the private_key field is required for a broker."""
-    db_broker = get_db_broker(db, brokers_name)
+    db_broker = get_db_broker(db, broker_name)
     return bool(db_broker.private_key_required)
 
-def check_api_key_parameters(brokers_name: str, user_id: int, db: Session) -> ApiKey | HTTPException:
+def check_api_key_parameters(broker_name: str, user_id: int, db: Session) -> ApiKey | HTTPException:
     """Check that request parameters are valid, if so return the db record, else raise an HTTPException."""
-    if get_db_broker(db, brokers_name) is None:
+    if get_db_broker(db, broker_name) is None:
         raise HTTPException(
             status_code=404,
             detail="Broker not found"
         )
 
-    db_api_key = get_db_encrypted_api_key(db, user_id, brokers_name)
+    db_api_key = get_db_encrypted_api_key(db, user_id, broker_name)
     if db_api_key is None:
         raise HTTPException(
             status_code=404,
@@ -35,9 +35,9 @@ def check_api_key_parameters(brokers_name: str, user_id: int, db: Session) -> Ap
 
     return db_api_key
 
-def validate_broker_api_keys(brokers_name: str, api_key: str, private_key: str = None) -> bool | HTTPException:
+def validate_broker_api_keys(broker_name: str, api_key: str, private_key: str = None) -> bool | HTTPException:
     """Check if the API key values are accepted by the Broker clients, else raise an HTTPException."""
-    return BROKER_REGISTRY[brokers_name].validate_api_key(api_key, private_key)
+    return BROKER_REGISTRY[broker_name].validate_api_key(api_key, private_key)
 
 @api_key_router.get("/", response_model=list[ApiKeySchema])
 def api_key_get(
@@ -47,15 +47,15 @@ def api_key_get(
     """Return a list of all API Keys that belong to the user."""
     return get_db_api_keys(db, current_user.id)
 
-@api_key_router.get("/{brokers_name}", response_model=ApiKeySchema)
+@api_key_router.get("/{broker_name}", response_model=ApiKeySchema)
 def api_key_get_by_brokers_name(
-        brokers_name: str,
+        broker_name: str,
         current_user: User = Depends(get_current_active_user),
         db: Session = Depends(get_db)
 ):
     """Fetch api key value(s) by brokers name, if exists."""
-    check_api_key_parameters(brokers_name, current_user.id, db)
-    return get_db_api_key(db, current_user.id, brokers_name)
+    check_api_key_parameters(broker_name, current_user.id, db)
+    return get_db_api_key(db, current_user.id, broker_name)
 
 @api_key_router.post("/", response_model=ApiKeySchema)
 def api_key_post(
@@ -77,15 +77,15 @@ def api_key_post(
         else:
             raise
 
-    validate_broker_api_keys(api_key.brokers_name, api_key.api_key, api_key.private_key)
+    validate_broker_api_keys(api_key.broker_name, api_key.api_key, api_key.private_key)
 
-    if not is_private_key_required(api_key.brokers_name, db): api_key.private_key = None
+    if not is_private_key_required(api_key.broker_name, db): api_key.private_key = None
 
     api_key_create = ApiKeyCreate(
         api_key=api_key.api_key,
         private_key=api_key.private_key,
-        users_id=current_user.id,
-        brokers_name=api_key.brokers_name
+        user_id=current_user.id,
+        broker_name=api_key.broker_name
     )
     return create_db_api_key(db, api_key_create)
 
@@ -106,19 +106,19 @@ def api_key_put(
     api_key_update = ApiKeyUpdate(
         api_key=api_key.api_key,
         private_key=api_key.private_key,
-        users_id=current_user.id,
-        brokers_name=api_key.brokers_name
+        user_id=current_user.id,
+        broker_name=api_key.broker_name
     )
     return update_db_api_key(db, api_key_update)
 
-@api_key_router.delete("/{brokers_name}", response_model=ApiKeySchema)
+@api_key_router.delete("/{broker_name}", response_model=ApiKeySchema)
 def api_key_delete(
-        brokers_name: str,
+        broker_name: str,
         current_user: User = Depends(get_current_active_user),
         db: Session = Depends(get_db)
 ):
     """Delete an ApiKey record."""
 
     # More of a check, if db_api_key is returned, it exists and therefore is valid.
-    check_api_key_parameters(brokers_name, current_user.id, db)
-    return delete_db_api_key(db, current_user.id, brokers_name)
+    check_api_key_parameters(broker_name, current_user.id, db)
+    return delete_db_api_key(db, current_user.id, broker_name)

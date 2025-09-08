@@ -10,9 +10,9 @@ def get_db_portfolio_by_user_id_and_broker_name(db: Session, user_id: int, broke
 def create_db_portfolio(db: Session, portfolio: PortfolioCreate, user_id: int) -> Portfolio:
     """Create a new portfolio entry in the database."""
     db_portfolio = Portfolio(
-        users_id=user_id,
+        user_id=user_id,
         portfolio={**portfolio.portfolio},
-        brokers_name=portfolio.broker_name,
+        broker_name=portfolio.broker_name,
     )
     db.add(db_portfolio)
     db.commit()
