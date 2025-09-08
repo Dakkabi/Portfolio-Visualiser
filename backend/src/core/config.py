@@ -33,4 +33,8 @@ class Settings(BaseSettings):
             self.POSTGRESQL_DATABASE
         )
 
+    TRADING212_API_KEY: str
+    KRAKEN_API_KEY: str
+    KRAKEN_PRIVATE_KEY: str
+
 settings = Settings()
