@@ -59,7 +59,7 @@ def api_key_get_by_brokers_name(
 
 @api_key_router.post("/", response_model=ApiKeySchema)
 def api_key_post(
-        api_key: ApiKeyRequest,
+        api_key: ApiKeyCreate,
         current_user: User = Depends(get_current_active_user),
         db: Session = Depends(get_db)
 ):
@@ -81,17 +81,11 @@ def api_key_post(
 
     if not is_private_key_required(api_key.broker_name, db): api_key.private_key = None
 
-    api_key_create = ApiKeyCreate(
-        api_key=api_key.api_key,
-        private_key=api_key.private_key,
-        user_id=current_user.id,
-        broker_name=api_key.broker_name
-    )
-    return create_db_api_key(db, api_key_create)
+    return create_db_api_key(db, api_key, current_user.id)
 
 @api_key_router.put("/", response_model=ApiKeySchema)
 def api_key_put(
-        api_key: ApiKeyRequest,
+        api_key: ApiKeyUpdate,
         current_user: User = Depends(get_current_active_user),
         db: Session = Depends(get_db)
 ):
@@ -103,13 +97,7 @@ def api_key_put(
 
     if not is_private_key_required(api_key.brokers_name, db): api_key.private_key = None
 
-    api_key_update = ApiKeyUpdate(
-        api_key=api_key.api_key,
-        private_key=api_key.private_key,
-        user_id=current_user.id,
-        broker_name=api_key.broker_name
-    )
-    return update_db_api_key(db, api_key_update)
+    return update_db_api_key(db, api_key, current_user.id)
 
 @api_key_router.delete("/{broker_name}", response_model=ApiKeySchema)
 def api_key_delete(
