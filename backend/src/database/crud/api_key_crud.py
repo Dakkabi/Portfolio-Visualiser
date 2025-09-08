@@ -30,14 +30,14 @@ def get_db_encrypted_api_key(db: Session, user_id: int, broker_name: str) -> Api
     """Return an api key record by broker name and user id, returns encrypted values."""
     return db.query(ApiKey).filter(ApiKey.broker_name == broker_name, ApiKey.user_id == user_id).first()
 
-def create_db_api_key(db: Session, api_key: ApiKeyCreate) -> ApiKey:
+def create_db_api_key(db: Session, api_key: ApiKeyCreate, user_id: int) -> ApiKey:
     """Create a new ApiKey record in the database, encrypting the values.
 
     :param db: The database session.
     :param api_key: The ApiKey record to create.
     """
     db_api_key = ApiKey(
-        user_id=api_key.user_id,
+        user_id=user_id,
         broker_name=api_key.broker_name,
         api_key=encrypt_string(api_key.api_key),
         private_key=encrypt_string(api_key.private_key),
@@ -47,9 +47,9 @@ def create_db_api_key(db: Session, api_key: ApiKeyCreate) -> ApiKey:
     db.refresh(db_api_key)
     return db_api_key
 
-def update_db_api_key(db: Session, api_key: ApiKeyUpdate) -> ApiKey:
+def update_db_api_key(db: Session, api_key: ApiKeyUpdate, user_id: int) -> ApiKey:
     """Overwrite an ApiKey's values in the database, encrypting the new values."""
-    db_api_key = get_db_api_key(db, api_key.user_id, api_key.broker_name)
+    db_api_key = get_db_api_key(db, user_id, api_key.broker_name)
     db_api_key.api_key = encrypt_string(str(db_api_key.api_key))
     db_api_key.private_key = encrypt_string(str(db_api_key.private_key))
     db.commit()
