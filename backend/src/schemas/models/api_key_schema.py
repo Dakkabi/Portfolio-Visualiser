@@ -5,19 +5,13 @@ class ApiKeyBase(BaseModel):
     private_key: str | None = None
     broker_name: str
 
-class UserBase(BaseModel):
-    user_id: int
-
-class ApiKeyRequest(ApiKeyBase):
-    pass
-
-class ApiKeyCreate(ApiKeyBase, UserBase):
+class ApiKeyCreate(ApiKeyBase):
     pass
 
 class ApiKeyUpdate(ApiKeyCreate):
     pass
 
-class ApiKeyRead(ApiKeyBase, UserBase):
+class ApiKeyRead(ApiKeyBase):
     pass
 
 class ApiKeySchema(ApiKeyBase):
