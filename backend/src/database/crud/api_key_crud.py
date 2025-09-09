@@ -18,11 +18,13 @@ def get_db_api_keys(db: Session, user_id: int):
 def get_db_api_key(db: Session, user_id: int, broker_name: str) -> ApiKey | None:
     """Return an api key record by broker name and user id, returns decrypted values."""
     db_api_key = get_db_encrypted_api_key(db, user_id, broker_name)
-    if db_api_key:
-        db_api_key.api_key = decrypt_string(str(db_api_key.api_key))
+    if db_api_key is None:
+        return None
 
-        if db_api_key.private_key is not None:
-            db_api_key.private_key = decrypt_string(str(db_api_key.private_key))
+    db_api_key.api_key = decrypt_string(str(db_api_key.api_key))
+
+    if db_api_key.private_key is not None:
+        db_api_key.private_key = decrypt_string(str(db_api_key.private_key))
 
     return db_api_key
 
@@ -35,12 +37,13 @@ def create_db_api_key(db: Session, api_key: ApiKeyCreate, user_id: int) -> ApiKe
 
     :param db: The database session.
     :param api_key: The ApiKey record to create.
+    :param user_id: The user id of the user.
     """
     db_api_key = ApiKey(
         user_id=user_id,
         broker_name=api_key.broker_name,
-        api_key=encrypt_string(api_key.api_key),
-        private_key=encrypt_string(api_key.private_key),
+        api_key=encrypt_string(str(api_key.api_key)),
+        private_key=encrypt_string(str(api_key.private_key)),
     )
     db.add(db_api_key)
     db.commit()
