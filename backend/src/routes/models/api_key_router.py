@@ -47,6 +47,8 @@ def api_key_get_by_broker_name(
 ):
     """Fetch api key value(s) by brokers name, if exists."""
     check_broker_exists(broker_name, db)
+    if not check_api_key_exists(current_user.id, broker_name, db):
+        raise HTTPException(status_code=404, detail="API Key not found for broker")
 
     return get_db_api_key(db, current_user.id, broker_name)
 
