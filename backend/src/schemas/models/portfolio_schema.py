@@ -1,20 +1,14 @@
 from pydantic import BaseModel
 
-class CashBase(BaseModel):
-    total: float
-
-class BrokerBase(BaseModel):
+class PortfolioBase(BaseModel):
     broker_name: str
 
-class PortfolioBase(BaseModel):
-    Cash: CashBase
+class PortfolioCreate(PortfolioBase):
+    portfolio: dict
 
-class PortfolioCreate(BrokerBase):
-    portfolio: PortfolioBase
-
-class PortfolioUpdate(BrokerBase):
-    portfolio: PortfolioBase
+class PortfolioUpdate(PortfolioBase):
+    portfolio: dict
 
 class PortfolioSchema(PortfolioBase):
-    pass
+    portfolio: dict
 
