@@ -11,7 +11,7 @@ def create_db_portfolio(db: Session, portfolio: PortfolioCreate, user_id: int) -
     """Create a new portfolio entry in the database."""
     db_portfolio = Portfolio(
         user_id=user_id,
-        portfolio=portfolio.portfolio.model_dump(),
+        portfolio=portfolio.portfolio,
         broker_name=portfolio.broker_name,
     )
     db.add(db_portfolio)
