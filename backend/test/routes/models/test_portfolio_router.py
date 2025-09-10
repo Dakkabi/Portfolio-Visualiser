@@ -15,6 +15,13 @@ def _mock_build_portfolio(broker_name, db_api_key, private_key):
 
     return Portfolio(cash_cls)
 
+def _mock_build_portfolio_update(broker_name, db_api_key, private_key):
+    cash_cls = Cash(
+        20,
+    )
+
+    return Portfolio(cash_cls)
+
 def _mock_get_db_api_key(db, user_id, broker_name):
     return ApiKey(
         user_id=1,
@@ -36,4 +43,15 @@ def test_portfolio_get_broker_success(monkeypatch):
 
     response = client.get("/api/portfolio/Trading212")
     assert response.status_code == 200
+
+    data = response.json()
+    assert data["portfolio"]["Cash"]["total"] == 10
+
+    monkeypatch.setattr(portfolio_router, "build_portfolio", _mock_build_portfolio_update)
+    response = client.get("/api/portfolio/Trading212")
+    assert response.status_code == 200
+
+    data = response.json()
+    assert data["portfolio"]["Cash"]["total"] == 20
+
 
