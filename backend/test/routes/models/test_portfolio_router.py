@@ -2,9 +2,9 @@ from starlette.testclient import TestClient
 
 from backend.src.core.models.portfolio import Portfolio, Cash
 from backend.src.core.models import portfolio
-from backend.src.database.crud import api_key_crud
 from backend.src.database.models.api_key_model import ApiKey
 from backend.src.main import app
+from backend.src.routes.models import portfolio_router
 
 client = TestClient(app)
 
@@ -23,16 +23,17 @@ def _mock_get_db_api_key(db, user_id, broker_name):
         private_key="test"
     )
 
-def test_portfolio_get_broker(monkeypatch):
-    monkeypatch.setattr(portfolio, "build_portfolio", _mock_build_portfolio)
-
+def test_portfolio_get_broker_failure(monkeypatch):
     response = client.get("/api/portfolio/unknown_broker")
     assert response.status_code == 404
 
     response = client.get("/api/portfolio/Kraken")
     assert response.status_code == 409
 
-    monkeypatch.setattr(api_key_crud, "get_db_api_key", _mock_get_db_api_key)
+def test_portfolio_get_broker_success(monkeypatch):
+    monkeypatch.setattr(portfolio_router, "get_db_api_key", _mock_get_db_api_key)
+    monkeypatch.setattr(portfolio_router, "build_portfolio", _mock_build_portfolio)
+
     response = client.get("/api/portfolio/Trading212")
     assert response.status_code == 200
 
