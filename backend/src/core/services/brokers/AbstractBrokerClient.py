@@ -12,6 +12,11 @@ class BrokerClient(ABC):
         self.api_key = api_key
         self.private_key = private_key
 
+    @abstractmethod
+    def build_cash(self) -> dict:
+        """Return a dict with all the cash information of a user's portfolio."""
+        pass
+
     @staticmethod
     @abstractmethod
     def validate_api_key(api_key: str, private_key: str) -> bool:
