@@ -15,9 +15,6 @@ portfolio_router = APIRouter(
     tags=["Portfolio"]
 )
 
-# There are no POST endpoints, as this is a facade pattern, therefore it will automatically build and return a portfolio
-# for a Broker, if there exists an API Key.
-
 @portfolio_router.get("/{broker_name}", response_model=PortfolioSchema)
 def portfolio_get_broker(
         broker_name: str,
