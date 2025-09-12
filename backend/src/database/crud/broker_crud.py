@@ -4,7 +4,6 @@ import os.path
 from sqlalchemy.orm import Session
 
 from backend.src.database.models.broker_model import Broker
-from backend.src.schemas.models.broker_enum import AssetType
 from backend.src.schemas.models.broker_schema import BrokerCreate
 
 SUPPORTED_BROKERS_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "supported_brokers.json")
