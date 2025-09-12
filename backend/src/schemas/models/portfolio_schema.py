@@ -1,14 +1,17 @@
 from pydantic import BaseModel
 
 class PortfolioBase(BaseModel):
+    portfolio: dict
+
+class BrokerBase(BaseModel):
     broker_name: str
 
-class PortfolioCreate(PortfolioBase):
-    portfolio: dict
+class PortfolioCreate(PortfolioBase, BrokerBase):
+    pass
 
-class PortfolioUpdate(PortfolioBase):
-    portfolio: dict
+class PortfolioUpdate(PortfolioBase, BrokerBase):
+    pass
 
 class PortfolioSchema(PortfolioBase):
-    portfolio: dict
+    pass
 
