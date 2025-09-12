@@ -1,11 +1,11 @@
 {
   "Trading212": {
-    "requires_private_key": false,
+    "private_key_required": false,
     "asset_types": ["Stocks"],
     "rate_limit": 60
   },
   "Kraken": {
-    "requires_private_key": true,
+    "private_key_required": true,
     "asset_types": ["Crypto"],
     "rate_limit": 60
   }
