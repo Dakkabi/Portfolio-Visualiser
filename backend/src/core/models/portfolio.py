@@ -11,6 +11,9 @@ class Portfolio:
     def __init__(self, cash_cls: Cash):
         self.Cash = cash_cls
 
+    def __add__(self, other):
+        self.Cash += other.Cash
+
     def to_dict(self):
         """Return a dict representation of the portfolio."""
         return {
@@ -18,6 +21,13 @@ class Portfolio:
                 "total": self.Cash.total,
             }
         }
+
+    @staticmethod
+    def from_dict(data: dict):
+        """Return a Portfolio object from a dict."""
+        cash_cls = Cash(**data["Cash"])
+
+        return Portfolio(cash_cls)
 
 def build_portfolio(broker_name: str, api_key: str, private_key: str = None):
     """Build and populate a portfolio class using the broker's client services.
