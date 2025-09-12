@@ -5,14 +5,32 @@ from backend.src.core.services.brokers import BROKER_REGISTRY
 
 @dataclass
 class Cash:
-    total: float
+    total: float = 0
+
+    def __add__(self, other):
+        if not isinstance(other, Cash):
+            raise NotImplemented
+
+        return Cash(
+            self.total + other.total
+        )
 
 class Portfolio:
     def __init__(self, cash_cls: Cash):
         self.Cash = cash_cls
 
     def __add__(self, other):
-        self.Cash += other.Cash
+        if not isinstance(other, Portfolio):
+            raise NotImplemented
+
+        new_portfolio = Portfolio(
+            self.Cash + other.Cash,
+        )
+        return new_portfolio
+
+    @classmethod
+    def empty(cls):
+        return Portfolio(Cash())
 
     def to_dict(self):
         """Return a dict representation of the portfolio."""
