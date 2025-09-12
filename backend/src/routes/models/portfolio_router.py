@@ -1,14 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from backend.src.core.models.portfolio import Portfolio, build_portfolio
 from backend.src.core.services.auth.auth_service import get_current_active_user
-from backend.src.core.services.time_service import epoch_now
-from backend.src.database.crud.api_key_crud import get_db_api_key
-from backend.src.database.crud.broker_crud import get_db_broker
+from backend.src.core.services.models.portfolio_service import create_or_update_portfolio
 from backend.src.database.crud.portfolio_crud import *
 from backend.src.database.models.user_model import User
 from backend.src.database.session import get_db
-from backend.src.schemas.models.portfolio_schema import PortfolioCreate, PortfolioUpdate, PortfolioSchema
+from backend.src.schemas.models.portfolio_schema import PortfolioSchema
 
 portfolio_router = APIRouter(
     prefix="/portfolio",
@@ -22,32 +19,7 @@ def portfolio_get_broker(
         db: Session = Depends(get_db)
 ):
     """Get the portfolio information for a broker."""
-    if get_db_broker(db, broker_name) is None:
-        raise HTTPException(status_code=404, detail=f"Broker '{broker_name}' not found")
-
-    if (db_api_keys := get_db_api_key(db, current_user.id, broker_name)) is None:
-        raise HTTPException(status_code=409, detail="User does not have API keys for the broker requested")
-
-    current_portfolio = get_db_portfolio_by_user_id_and_broker_name(db, current_user.id, broker_name)
-    broker_rate_limit = get_db_broker(db, broker_name).rate_limit
-    if epoch_now() <= (current_portfolio.last_update + broker_rate_limit):
-        return get_db_portfolio_by_user_id_and_broker_name(db, current_user.id, broker_name)
-
-    new_portfolio = build_portfolio(broker_name, db_api_keys.api_key, db_api_keys.private_key)
-    new_portfolio = new_portfolio.to_dict()
-
-    if current_portfolio is None:
-        db_portfolio = PortfolioCreate(
-            broker_name=broker_name,
-            portfolio=new_portfolio,
-        )
-        return create_db_portfolio(db, db_portfolio, current_user.id)
-
-    db_portfolio = PortfolioUpdate(
-        broker_name=broker_name,
-        portfolio=new_portfolio,
-    )
-    return update_db_portfolio(db, db_portfolio, current_user.id)
+    return create_or_update_portfolio(db, broker_name, current_user.id)
 
 
 @portfolio_router.get("/total", response_model=PortfolioSchema)
