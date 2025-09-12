@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from backend.src.core.models.portfolio import build_portfolio
 from backend.src.core.services.auth.auth_service import get_current_active_user
+from backend.src.core.services.time_service import epoch_now
 from backend.src.database.crud.api_key_crud import get_db_api_key
 from backend.src.database.crud.broker_crud import get_db_broker
 from backend.src.database.crud.portfolio_crud import *
@@ -30,18 +31,23 @@ def portfolio_get_broker(
     if (db_api_keys := get_db_api_key(db, current_user.id, broker_name)) is None:
         raise HTTPException(status_code=409, detail="User does not have API keys for the broker requested")
 
-    portfolio = build_portfolio(broker_name, db_api_keys.api_key, db_api_keys.private_key)
-    portfolio = portfolio.to_dict()
+    current_portfolio = get_db_portfolio_by_user_id_and_broker_name(db, current_user.id, broker_name)
+    broker_rate_limit = get_db_broker(db, broker_name).rate_limit
+    if epoch_now() <= (current_portfolio.last_update + broker_rate_limit):
+        return get_db_portfolio_by_user_id_and_broker_name(db, current_user.id, broker_name)
 
-    if get_db_portfolio_by_user_id_and_broker_name(db, current_user.id, broker_name) is None:
+    new_portfolio = build_portfolio(broker_name, db_api_keys.api_key, db_api_keys.private_key)
+    new_portfolio = new_portfolio.to_dict()
+
+    if current_portfolio is None:
         db_portfolio = PortfolioCreate(
             broker_name=broker_name,
-            portfolio=portfolio,
+            portfolio=new_portfolio,
         )
         return create_db_portfolio(db, db_portfolio, current_user.id)
 
     db_portfolio = PortfolioUpdate(
         broker_name=broker_name,
-        portfolio=portfolio,
+        portfolio=new_portfolio,
     )
     return update_db_portfolio(db, db_portfolio, current_user.id)
