@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 
 from backend.src.core.services.auth.auth_service import get_current_active_user
 from backend.src.core.services.models.portfolio_service import create_or_update_portfolio, sum_all_portfolios
