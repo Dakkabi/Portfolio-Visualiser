@@ -6,7 +6,7 @@ from backend.src.database.models.broker_model import Broker
 from backend.src.schemas.models.broker_enum import AssetType
 from backend.src.schemas.models.broker_schema import BrokerCreate
 
-SUPPORTED_BROKERS_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "supported_brokers.txt")
+SUPPORTED_BROKERS_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "supported_brokers.json")
 
 def get_db_broker(db: Session, broker_name: str) -> Broker | None:
     """Return a broker's name if it exists in the database, None otherwise."""
@@ -37,7 +37,7 @@ def read_file_into_broker_table(db: Session, file_path: str = None):
     """Read a file, line by line, and add it as a record to the brokers table.
 
     :param db: The database session.
-    :param file_path: The path to the file to read, default is `/backend/src/assets/supported_brokers.txt`.
+    :param file_path: The path to the file to read, default is `/backend/src/assets/supported_brokers.json`.
     """
     def convert_string_to_bool(string: str) -> bool:
         """Convert a string to boolean value."""
