@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from backend.src.core.models.portfolio import build_portfolio
+from backend.src.core.models.portfolio import Portfolio, build_portfolio
 from backend.src.core.services.auth.auth_service import get_current_active_user
 from backend.src.core.services.time_service import epoch_now
 from backend.src.database.crud.api_key_crud import get_db_api_key
@@ -51,3 +51,21 @@ def portfolio_get_broker(
         portfolio=new_portfolio,
     )
     return update_db_portfolio(db, db_portfolio, current_user.id)
+
+
+@portfolio_router.get("/total", response_model=PortfolioSchema)
+def portfolio_get_total(
+        current_user: User = Depends(get_current_active_user),
+        db: Session = Depends(get_db)
+):
+    """Get the total value of all portfolio's the user has connected."""
+    db_portfolio_list = get_db_portfolio_by_user_id(db, current_user.id)
+
+    if db_portfolio_list is None:
+        raise HTTPException(status_code=404, detail="User has no Portfolio(s)")
+
+    portfolio = Portfolio.empty()
+    for db_portfolio in db_portfolio_list:
+        portfolio += Portfolio.from_dict(db_portfolio.portfolio)
+
+    return portfolio
