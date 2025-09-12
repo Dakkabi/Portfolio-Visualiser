@@ -6,7 +6,7 @@ from backend.src.database.crud.api_key_crud import get_db_api_key
 from backend.src.database.crud.broker_crud import get_db_broker
 from backend.src.database.crud.portfolio_crud import get_db_portfolio_by_user_id_and_broker_name, create_db_portfolio, \
     update_db_portfolio, get_db_portfolio_by_user_id
-from backend.src.schemas.models.portfolio_schema import PortfolioCreate, PortfolioUpdate
+from backend.src.schemas.models.portfolio_schema import PortfolioCreate, PortfolioUpdate, PortfolioSchema
 
 
 def create_or_update_portfolio(
@@ -55,4 +55,6 @@ def sum_all_portfolios(
     for db_portfolio in db_portfolio_list:
         portfolio += Portfolio.from_dict(db_portfolio.portfolio)
 
-    return portfolio
+    return PortfolioSchema(
+        portfolio=portfolio.to_dict()
+    )
