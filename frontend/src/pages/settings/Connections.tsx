@@ -5,7 +5,7 @@ import BrokerModal from "../../components/settings/BrokerModal.tsx";
 
 function Connections() {
     const [brokers, setBrokers] = useState<{ name: string, type: string[], private_key_required: boolean }[]>([]);
-    const [connections, setConnections] = useState<{api_key: string, private_key: string, brokers_name: string}[]>([]);
+    const [connections, setConnections] = useState<{api_key: string, private_key: string, broker_name: string}[]>([]);
     const [modalProps, setModalProps] = useState<{ brokerName: string, isOpen: boolean }>(
         { brokerName: "", isOpen: false }
     );
@@ -47,11 +47,11 @@ function Connections() {
     /**
      * Return a boolean on whether the user has provided valid keys for a broker.
      *
-     * @param brokersName The broker to check for.
+     * @param brokerName The broker to check for.
      */
-    function isConnected(brokersName: string) {
+    function isConnected(brokerName: string) {
         for (let i = 0; i < connections.length; i++) {
-            if (connections[i].brokers_name === brokersName) {
+            if (connections[i].broker_name === brokerName) {
                 return true;
             }
         }
@@ -69,12 +69,12 @@ function Connections() {
      */
     function removeConnection(brokerName: string) {
         const splicedConnections = connections.filter(
-            (connection) => connection.brokers_name !== brokerName
+            (connection) => connection.broker_name !== brokerName
         );
         setConnections(splicedConnections);
     }
 
-    function addConnection(params: {api_key: string, private_key: string | null, brokers_name: string}) {
+    function addConnection(params: {api_key: string, private_key: string | null, broker_name: string}) {
         setConnections(oldConnections => [...oldConnections, params]);
     }
 

@@ -10,7 +10,7 @@ interface BrokerModalProps {
     isPrivateKeyRequired: boolean;
     connected: boolean;
     onDeleteApiKey: (brokerName: string) => void;
-    onAddApiKey: (params: { api_key: string, private_key: string | null, brokers_name: string }) => void;
+    onAddApiKey: (params: { api_key: string, private_key: string | null, broker_name: string }) => void;
 }
 
 const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose, isPrivateKeyRequired, connected, onDeleteApiKey, onAddApiKey }) => {
@@ -33,7 +33,7 @@ const BrokerModal: React.FC<BrokerModalProps> = ({ brokerName, isOpen, onClose, 
         const params = {
             api_key: apiKey,
             private_key: privateKey,
-            brokers_name: brokerName,
+            broker_name: brokerName,
         };
 
         try {
