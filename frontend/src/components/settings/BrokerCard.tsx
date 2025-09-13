@@ -12,7 +12,9 @@ const BrokerCard: React.FC<BrokerCardProps> = ({ brokerName, cardClickEvent, sho
         <div>
             <a onClick={() => cardClickEvent(brokerName)} className="card w-87 cursor-pointer">
                 {showStatus ?
-                    <div aria-label="status" className="status status-xl status-success absolute top-2 right-2" />
+                    <div className="tooltip tooltip-success absolute top-2 right-2" data-tip="Connected">
+                        <div aria-label="status" className="status status-xl status-success" />
+                    </div>
                     :
                     ""
                 }
