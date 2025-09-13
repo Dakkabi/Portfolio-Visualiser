@@ -21,12 +21,13 @@ def get_db_api_key(db: Session, user_id: int, broker_name: str) -> ApiKey | None
     if db_api_key is None:
         return None
 
-    db_api_key.api_key = decrypt_string(str(db_api_key.api_key))
-
-    if db_api_key.private_key is not None:
-        db_api_key.private_key = decrypt_string(str(db_api_key.private_key))
-
-    return db_api_key
+    # Python's pass by reference will overwrite the api key and private key with the decrypted values
+    return ApiKey(
+        user_id=user_id,
+        broker_name=broker_name,
+        api_key=decrypt_string(str(db_api_key.api_key)),
+        private_key=decrypt_string(str(db_api_key.private_key)),
+    )
 
 def get_db_encrypted_api_key(db: Session, user_id: int, broker_name: str) -> ApiKey | None:
     """Return an api key record by broker name and user id, returns encrypted values."""

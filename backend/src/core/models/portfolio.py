@@ -5,11 +5,32 @@ from backend.src.core.services.brokers import BROKER_REGISTRY
 
 @dataclass
 class Cash:
-    total: float
+    total: float = 0
+
+    def __add__(self, other):
+        if not isinstance(other, Cash):
+            raise NotImplemented
+
+        return Cash(
+            self.total + other.total
+        )
 
 class Portfolio:
     def __init__(self, cash_cls: Cash):
         self.Cash = cash_cls
+
+    def __add__(self, other):
+        if not isinstance(other, Portfolio):
+            raise NotImplemented
+
+        new_portfolio = Portfolio(
+            self.Cash + other.Cash,
+        )
+        return new_portfolio
+
+    @classmethod
+    def empty(cls):
+        return Portfolio(Cash())
 
     def to_dict(self):
         """Return a dict representation of the portfolio."""
@@ -18,6 +39,13 @@ class Portfolio:
                 "total": self.Cash.total,
             }
         }
+
+    @staticmethod
+    def from_dict(data: dict):
+        """Return a Portfolio object from a dict."""
+        cash_cls = Cash(**data["Cash"])
+
+        return Portfolio(cash_cls)
 
 def build_portfolio(broker_name: str, api_key: str, private_key: str = None):
     """Build and populate a portfolio class using the broker's client services.

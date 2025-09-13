@@ -7,6 +7,7 @@ class BrokerBase(BaseModel):
     name: str
     type: list[AssetType]
     private_key_required: bool
+    rate_limit: int
 
 class BrokerCreate(BrokerBase):
     pass

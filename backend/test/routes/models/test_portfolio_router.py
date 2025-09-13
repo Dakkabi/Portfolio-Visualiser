@@ -1,10 +1,9 @@
 from starlette.testclient import TestClient
 
 from backend.src.core.models.portfolio import Portfolio, Cash
-from backend.src.core.models import portfolio
+from backend.src.core.services.models import portfolio_service
 from backend.src.database.models.api_key_model import ApiKey
 from backend.src.main import app
-from backend.src.routes.models import portfolio_router
 
 client = TestClient(app)
 
@@ -38,8 +37,8 @@ def test_portfolio_get_broker_failure(monkeypatch):
     assert response.status_code == 409
 
 def test_portfolio_get_broker_success(monkeypatch):
-    monkeypatch.setattr(portfolio_router, "get_db_api_key", _mock_get_db_api_key)
-    monkeypatch.setattr(portfolio_router, "build_portfolio", _mock_build_portfolio)
+    monkeypatch.setattr(portfolio_service, "get_db_api_key", _mock_get_db_api_key)
+    monkeypatch.setattr(portfolio_service, "build_portfolio", _mock_build_portfolio)
 
     response = client.get("/api/portfolio/Trading212")
     assert response.status_code == 200
@@ -47,7 +46,7 @@ def test_portfolio_get_broker_success(monkeypatch):
     data = response.json()
     assert data["portfolio"]["Cash"]["total"] == 10
 
-    monkeypatch.setattr(portfolio_router, "build_portfolio", _mock_build_portfolio_update)
+    monkeypatch.setattr(portfolio_service, "build_portfolio", _mock_build_portfolio_update)
     response = client.get("/api/portfolio/Trading212")
     assert response.status_code == 200
 
