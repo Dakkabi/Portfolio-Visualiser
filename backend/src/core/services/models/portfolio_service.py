@@ -2,6 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from backend.src.core.models.portfolio import build_portfolio, Portfolio
+from backend.src.core.services.time_service import epoch_now
 from backend.src.database.crud.api_key_crud import get_db_api_key
 from backend.src.database.crud.broker_crud import get_db_broker
 from backend.src.database.crud.portfolio_crud import get_db_portfolio_by_user_id_and_broker_name, create_db_portfolio, \
@@ -29,6 +30,11 @@ def create_or_update_portfolio(
 
     current_portfolio = get_db_portfolio_by_user_id_and_broker_name(db, user_id, broker_name)
     broker_rate_limit = broker.rate_limit
+
+    # Return currently stored portfolio if rate-limited.
+    if current_portfolio is not None:
+        if epoch_now() < (current_portfolio.last_updated + broker_rate_limit):
+            return current_portfolio
 
     new_portfolio = build_portfolio(broker_name, db_api_keys.api_key, db_api_keys.private_key).to_dict()
 
