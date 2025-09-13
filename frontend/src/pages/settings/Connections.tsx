@@ -113,7 +113,7 @@ function Connections() {
 
                 <div className="divider"></div>
 
-                <h1 className="text-4xl font-bold">Brokers</h1>
+                <h1 className="text-4xl font-bold">Stock Brokers</h1>
                 <ul className="menu menu-horizontal">
                     {stockBrokers.map((broker) => (
                         <li key={broker.name}>
