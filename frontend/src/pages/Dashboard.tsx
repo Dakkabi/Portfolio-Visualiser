@@ -2,7 +2,7 @@ import GlobalNavbar from "../components/global/GlobalNavbar.tsx";
 
 function Dashboard() {
     return (
-        <GlobalNavbar />
+        <GlobalNavbar currentPage="Dashboard" />
     )
 }
 

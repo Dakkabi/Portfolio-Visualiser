@@ -107,7 +107,7 @@ function Connections() {
                     onAddApiKey={addConnection}
                 />
             </div>
-            <GlobalNavbar />
+            <GlobalNavbar currentPage="Connections" />
             <div className="text-center">
                 <h1 className="text-5xl font-bold">Connections</h1>
 
