@@ -1,8 +1,8 @@
 import {Link} from "react-router-dom";
 
-const Navbar = () => {
+const GlobalNavbar = () => {
     return (
-        <div className="navbar bg-base-200">
+        <div className="navbar shadow-sm">
             <div className="flex-none">
                 <Link to="/" className="btn btn-ghost text-xl font-bold">Portfolio Visualiser</Link>
             </div>
@@ -18,4 +18,4 @@ const Navbar = () => {
     )
 }
 
-export default Navbar;
+export default GlobalNavbar;

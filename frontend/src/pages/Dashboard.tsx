@@ -1,8 +1,8 @@
-import Navbar from "../components/Navbar.tsx";
+import GlobalNavbar from "../components/GlobalNavbar.tsx";
 
 function Dashboard() {
     return (
-        <Navbar />
+        <GlobalNavbar />
     )
 }
 

@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {api, protectedApi} from "../../config/axios.config.tsx";
 import BrokerCard from "../../components/settings/BrokerCard.tsx";
 import BrokerModal from "../../components/settings/BrokerModal.tsx";
-import Navbar from "../../components/Navbar.tsx";
+import GlobalNavbar from "../../components/GlobalNavbar.tsx";
 
 function Connections() {
     const [brokers, setBrokers] = useState<{ name: string, type: string[], private_key_required: boolean }[]>([]);
@@ -107,7 +107,7 @@ function Connections() {
                     onAddApiKey={addConnection}
                 />
             </div>
-            <Navbar />
+            <GlobalNavbar />
             <div className="text-center">
                 <h1 className="text-5xl font-bold">Connections</h1>
 
