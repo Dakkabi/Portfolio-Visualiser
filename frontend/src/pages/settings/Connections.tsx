@@ -108,7 +108,7 @@ function Connections() {
                 />
             </div>
             <GlobalNavbar currentPage="Connections" />
-            <div className="text-center">
+            <div className="text-center min-h-screen bg-base-200">
                 <h1 className="text-5xl font-bold">Connections</h1>
 
                 <div className="divider"></div>
