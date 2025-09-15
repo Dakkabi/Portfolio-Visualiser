@@ -1,22 +1,58 @@
 import {Link} from "react-router-dom";
+import React from "react";
 
-const GlobalNavbar = () => {
+interface GlobalNavbarProps {
+    currentPage: string;
+}
+
+/**
+ * If `currentPage` matches the dropdown menu page name, highlight it to show that it is currently selected.
+ *
+ * @param currentPage The current page name.
+ * @param dropdownPageName The component list name.
+ * @return TailwindCSS string class names on how to decorate the list name.
+ */
+function highlightCurrentPage(currentPage: string, dropdownPageName: string) {
+    if (currentPage === dropdownPageName) {
+        return "font-bold bg-base-300";
+    }
+    return "";
+}
+
+const GlobalNavbar: React.FC<GlobalNavbarProps> = ({ currentPage }) => {
     return (
         <div className="navbar shadow-sm">
-            <div className="flex-none">
-
-                <Link to="/" className="btn btn-ghost text-xl font-bold">Portfolio Visualiser</Link>
+            <div className="navbar-start">
+                <div className="dropdown">
+                    <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /> </svg>
+                    </div>
+                    <ul tabIndex={0} className="menu menu-sm dropdown-content rounded-box z-1 mt-3 w-52 p-2 shadow">
+                        <li><Link to={"/"} className={`${highlightCurrentPage(currentPage, "Dashboard")}`}>Dashboard</Link></li>
+                    </ul>
+                </div>
             </div>
-            <div className="flex-1">
-
+            <div className="navbar-center">
+                <span className="text-2xl font-bold">Portfolio Visualiser</span>
             </div>
-            <div className="flex-none">
-                <Link to="/me/connections" className="btn btn-square btn-ghost">
-                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m21.32 9.55-1.89-.63.89-1.78A1 1 0 0 0 20.13 6L18 3.87a1 1 0 0 0-1.15-.19l-1.78.89-.63-1.89A1 1 0 0 0 13.5 2h-3a1 1 0 0 0-.95.68l-.63 1.89-1.78-.89A1 1 0 0 0 6 3.87L3.87 6a1 1 0 0 0-.19 1.15l.89 1.78-1.89.63a1 1 0 0 0-.68.94v3a1 1 0 0 0 .68.95l1.89.63-.89 1.78A1 1 0 0 0 3.87 18L6 20.13a1 1 0 0 0 1.15.19l1.78-.89.63 1.89a1 1 0 0 0 .95.68h3a1 1 0 0 0 .95-.68l.63-1.89 1.78.89a1 1 0 0 0 1.13-.19L20.13 18a1 1 0 0 0 .19-1.15l-.89-1.78 1.89-.63a1 1 0 0 0 .68-.94v-3a1 1 0 0 0-.68-.95M20 12.78l-1.2.4A2 2 0 0 0 17.64 16l.57 1.14-1.1 1.1-1.11-.6a2 2 0 0 0-2.79 1.16l-.4 1.2h-1.59l-.4-1.2A2 2 0 0 0 8 17.64l-1.14.57-1.1-1.1.6-1.11a2 2 0 0 0-1.16-2.82l-1.2-.4v-1.56l1.2-.4A2 2 0 0 0 6.36 8l-.57-1.11 1.1-1.1L8 6.36a2 2 0 0 0 2.82-1.16l.4-1.2h1.56l.4 1.2A2 2 0 0 0 16 6.36l1.14-.57 1.1 1.1-.6 1.11a2 2 0 0 0 1.16 2.79l1.2.4ZM12 8a4 4 0 1 0 4 4 4 4 0 0 0-4-4m0 6a2 2 0 1 1 2-2 2 2 0 0 1-2 2"/></svg>
-                </Link>
+            <div className="navbar-end">
+                <div className="dropdown dropdown-end">
+                    <button tabIndex={1} className="btn btn-ghost btn-circle">
+                        <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8M6 8a6 6 0 1 1 12 0A6 6 0 0 1 6 8m2 10a3 3 0 0 0-3 3 1 1 0 1 1-2 0 5 5 0 0 1 5-5h8a5 5 0 0 1 5 5 1 1 0 1 1-2 0 3 3 0 0 0-3-3z" fill="#0D0D0D"/></svg>
+                    </button>
+                    <ul
+                        tabIndex={1}
+                        className="menu menu-sm dropdown-content rounded-box z-1 mt-3 w-52 p-2 shadow">
+                        <li><Link
+                            to={"/me/connections"}
+                            className={`${highlightCurrentPage(currentPage, "Connections")}`}>
+                            Connections
+                        </Link></li>
+                    </ul>
+                </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default GlobalNavbar;
