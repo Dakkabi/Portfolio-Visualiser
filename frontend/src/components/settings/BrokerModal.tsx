@@ -1,7 +1,7 @@
 import getInstructionByBrokerName from "./InstructionFactory.tsx";
 import React, {useState} from "react";
 import {protectedApi} from "../../config/axios.config.tsx";
-import Alert from "../Alert.tsx";
+import Alert from "../global/Alert.tsx";
 
 interface BrokerModalProps {
     brokerName: string;

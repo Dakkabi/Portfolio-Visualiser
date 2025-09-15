@@ -4,6 +4,7 @@ const GlobalNavbar = () => {
     return (
         <div className="navbar shadow-sm">
             <div className="flex-none">
+
                 <Link to="/" className="btn btn-ghost text-xl font-bold">Portfolio Visualiser</Link>
             </div>
             <div className="flex-1">

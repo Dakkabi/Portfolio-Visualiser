@@ -1,4 +1,4 @@
-import GlobalNavbar from "../components/GlobalNavbar.tsx";
+import GlobalNavbar from "../components/global/GlobalNavbar.tsx";
 
 function Dashboard() {
     return (

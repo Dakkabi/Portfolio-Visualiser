@@ -1,5 +1,5 @@
 import React from "react";
-import Accordian from "../Accordian.tsx";
+import Accordian from "../global/Accordian.tsx";
 
 function InstructionTemplateBuilder({ brokerName, children }) {
     return (

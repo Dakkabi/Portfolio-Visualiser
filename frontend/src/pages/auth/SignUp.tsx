@@ -1,6 +1,6 @@
 import AuthForm from "../../components/auth/AuthForm.tsx";
 import {api} from "../../config/axios.config.tsx";
-import Alert from "../../components/Alert.tsx";
+import Alert from "../../components/global/Alert.tsx";
 import {useState} from "react";
 
 function SignUp() {

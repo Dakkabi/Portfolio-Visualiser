@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {api, protectedApi} from "../../config/axios.config.tsx";
 import BrokerCard from "../../components/settings/BrokerCard.tsx";
 import BrokerModal from "../../components/settings/BrokerModal.tsx";
-import GlobalNavbar from "../../components/GlobalNavbar.tsx";
+import GlobalNavbar from "../../components/global/GlobalNavbar.tsx";
 
 function Connections() {
     const [brokers, setBrokers] = useState<{ name: string, type: string[], private_key_required: boolean }[]>([]);
