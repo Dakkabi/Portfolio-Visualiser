@@ -8,9 +8,9 @@ interface GlobalNavbarProps {
 /**
  * If `currentPage` matches the dropdown menu page name, highlight it to show that it is currently selected.
  *
- * @param currentPage The current page name.
- * @param dropdownPageName The component list name.
- * @return TailwindCSS string class names on how to decorate the list name.
+ * @param currentPage - The current page name.
+ * @param dropdownPageName - The name as seen on a list component.
+ * @return string - A tailwindCSS class string else nothing.
  */
 function highlightCurrentPage(currentPage: string, dropdownPageName: string) {
     if (currentPage === dropdownPageName) {
