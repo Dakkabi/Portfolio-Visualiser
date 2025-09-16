@@ -1,14 +1,15 @@
-import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import "./App.css"
 import Login from "./pages/auth/Login.tsx";
 import SignUp from "./pages/auth/SignUp.tsx";
 import Connections from "./pages/settings/Connections.tsx";
+import Dashboard from "./pages/Dashboard.tsx";
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Navigate to="/login" replace />} />
+                <Route path="/" element={<Dashboard />} />
 
                 {/* Auth Routes */}
                 <Route path="/login" element={<Login />} />

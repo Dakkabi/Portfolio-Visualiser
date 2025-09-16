@@ -5,14 +5,20 @@ from backend.src.core.services.brokers import BROKER_REGISTRY
 
 @dataclass
 class Cash:
-    total: float = 0
+    total: float = 0                # Total Portfolio Value after realised gains/losses
+    total_dividends: float = 0      # Total gain from Dividends
+    unrealised_gain_loss: float = 0 # Potential Gain or Loss on assets unsold
+    invested: float = 0             # Total invested before gains/losses
 
     def __add__(self, other):
         if not isinstance(other, Cash):
             raise NotImplemented
 
         return Cash(
-            self.total + other.total
+            self.total + other.total,
+            self.total_dividends + other.total_dividends,
+            self.unrealised_gain_loss + other.unrealised_gain_loss,
+            self.invested + other.invested,
         )
 
 class Portfolio:
@@ -37,6 +43,9 @@ class Portfolio:
         return {
             "Cash": {
                 "total": self.Cash.total,
+                "total_dividends": self.Cash.total_dividends,
+                "unrealised_gain_loss": self.Cash.unrealised_gain_loss,
+                "invested": self.Cash.invested,
             }
         }
 

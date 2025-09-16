@@ -1,5 +1,5 @@
 import AuthForm from "../../components/auth/AuthForm.tsx"
-import Alert from "../../components/Alert.tsx";
+import Alert from "../../components/global/Alert.tsx";
 import {useState} from "react";
 import {api} from "../../config/axios.config.tsx";
 
