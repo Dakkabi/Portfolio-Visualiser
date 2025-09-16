@@ -24,7 +24,7 @@ function Dashboard() {
                             <div className="stat-value text-error">-£20,000.00 (-14.29%)</div>
                         </div>
                         <div className="stat">
-                            <div className="stat-title text-black">Total Dividend Earnings Year To Date</div>
+                            <div className="stat-title text-black">Total Dividend Earnings</div>
                             <div className="stat-value text-info">£728.24</div>
                         </div>
                     </div>
