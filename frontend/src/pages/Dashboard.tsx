@@ -2,12 +2,14 @@ import GlobalNavbar from "../components/global/GlobalNavbar.tsx";
 import {useEffect, useState} from "react";
 import {protectedApi} from "../config/axios.config.tsx";
 import {Link} from "react-router-dom";
+import {percentageChange} from "../utils/mathUtils.ts";
 
 interface PortfolioInterface {
     Cash: {
         total: number;
         total_dividends: number;
         unrealised_gain_loss: number;
+        invested: number;
     }
 }
 
@@ -54,7 +56,9 @@ function Dashboard() {
                                 </div>
                                 <div className="stat">
                                     <div className="stat-title text-black">Unrealised Gain/Loss</div>
-                                    <div className="stat-value text-error">£{portfolio.Cash.unrealised_gain_loss}</div>
+                                    <div className="stat-value text-error">
+                                        £{portfolio.Cash.unrealised_gain_loss} ({percentageChange(portfolio.Cash.invested, (portfolio.Cash.total))}%)
+                                    </div>
                                 </div>
                                 <div className="stat">
                                     <div className="stat-title text-black">Total Dividend Earnings</div>
