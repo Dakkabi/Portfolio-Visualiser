@@ -11,6 +11,7 @@ class Trading212(BrokerClient):
         fetch_account_cash = self.fetch_account_cash()
         data["total"] = fetch_account_cash["total"]
         data["unrealised_gain_loss"] = fetch_account_cash["ppl"]
+        data["invested"] = fetch_account_cash["invested"]
 
         paid_out_dividends = self.paid_out_dividends(0, "", 50)
         paid_out_dividends_items = paid_out_dividends["items"]
