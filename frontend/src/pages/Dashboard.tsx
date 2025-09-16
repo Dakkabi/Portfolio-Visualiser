@@ -6,6 +6,8 @@ import {Link} from "react-router-dom";
 interface PortfolioInterface {
     Cash: {
         total: number;
+        total_dividends: number;
+        unrealised_gain_loss: number;
     }
 }
 
@@ -52,11 +54,11 @@ function Dashboard() {
                                 </div>
                                 <div className="stat">
                                     <div className="stat-title text-black">Unrealised Gain/Loss</div>
-                                    <div className="stat-value text-error">-£20,000.00 (-14.29%)</div>
+                                    <div className="stat-value text-error">£{portfolio.Cash.unrealised_gain_loss}</div>
                                 </div>
                                 <div className="stat">
                                     <div className="stat-title text-black">Total Dividend Earnings</div>
-                                    <div className="stat-value text-info">£728.24</div>
+                                    <div className="stat-value text-info">£{portfolio.Cash.total_dividends}</div>
                                 </div>
                             </div>
                         </div>
