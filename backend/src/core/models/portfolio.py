@@ -1,4 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+from pandas import DataFrame
 
 from backend.src.core.services.brokers import BROKER_REGISTRY
 
@@ -20,6 +22,10 @@ class Cash:
             self.unrealised_gain_loss + other.unrealised_gain_loss,
             self.invested + other.invested,
         )
+
+@dataclass
+class Stock:
+    assets: DataFrame = field(default_factory=lambda: DataFrame(columns=["ticker", "average_price", "quantity"]))
 
 class Portfolio:
     def __init__(self, cash_cls: Cash):
