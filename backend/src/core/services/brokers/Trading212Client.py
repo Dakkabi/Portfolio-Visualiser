@@ -1,3 +1,4 @@
+from pandas import DataFrame
 from starlette.exceptions import HTTPException
 
 from backend.src.core.services.brokers.AbstractBrokerClient import BrokerClient
@@ -21,6 +22,25 @@ class Trading212(BrokerClient):
         data["total_dividends"] = total_dividends
 
         return data
+
+    def build_stock(self) -> DataFrame:
+        data = {}
+
+        ticker = []
+        average_price = []
+        quantity = []
+
+        fetch_all_open_positions = self.fetch_all_open_positions()
+        for position in fetch_all_open_positions:
+            ticker.append(position["ticker"])
+            average_price.append(position["average_price"])
+            quantity.append(position["quantity"])
+
+        data["ticker"] = ticker
+        data["average_price"] = average_price
+        data["quantity"] = quantity
+
+        return DataFrame(data)
 
     @staticmethod
     def validate_api_key(api_key: str, private_key: str) -> HTTPException | bool:
