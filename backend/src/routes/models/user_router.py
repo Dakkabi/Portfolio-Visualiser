@@ -32,3 +32,7 @@ def user_put_email():
 @user_router.put("/password", response_model=UserSchema)
 def user_put_password():
     pass
+
+@user_router.delete("/")
+def user_delete():
+    pass
