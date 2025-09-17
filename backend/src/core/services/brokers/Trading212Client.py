@@ -33,7 +33,7 @@ class Trading212(BrokerClient):
         fetch_all_open_positions = self.fetch_all_open_positions()
         for position in fetch_all_open_positions:
             ticker.append(position["ticker"])
-            average_price.append(position["average_price"])
+            average_price.append(position["averagePrice"])
             quantity.append(position["quantity"])
 
         data["ticker"] = ticker
