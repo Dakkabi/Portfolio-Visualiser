@@ -2,8 +2,10 @@ from sqlalchemy.orm import Session
 
 from backend.src.core.services.auth.cryptography_service import get_password_hash
 from backend.src.database.models.user_model import User
-from backend.src.schemas.models.user_schema import UserCreate
+from backend.src.schemas.models.user_schema import UserCreate, UserUpdate
 
+def get_db_user(db: Session, user_id: int):
+    return db.query(User).filter(User.id == user_id).first()
 
 def get_db_user_by_email(db: Session, email: str) -> User | None:
     """Get user by email
@@ -29,3 +31,28 @@ def create_db_user(db: Session, user: UserCreate) -> User:
     db.commit()
     db.refresh(db_user)
     return db_user
+
+def update_db_user(db: Session, user_id: int, user: UserUpdate):
+    """Update a user entry in the database.
+
+    :param db: The database session.
+    :param user_id: The id of the user to update.
+    :param user: The user attributes to update.
+    :return: The updated user.
+    """
+    db_user = get_db_user(db, user_id)
+    db_user.email = user.email
+    db_user.password = get_password_hash(user.password)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+def delete_db_user(db: Session, user_id: int):
+    """Delete a User entry from the database.
+
+    :param db: The database session.
+    :param user_id: The user ID to delete.
+    """
+    db_user = get_db_user(db, user_id)
+    db.delete(db_user)
+    db.commit()
