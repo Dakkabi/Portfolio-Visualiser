@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 
+import pandas
 from pandas import DataFrame
 
 from backend.src.core.services.brokers import BROKER_REGISTRY
@@ -26,6 +27,13 @@ class Cash:
 @dataclass
 class Stock:
     assets: DataFrame = field(default_factory=lambda: DataFrame(columns=["ticker", "average_price", "quantity"]))
+
+    def __add__(self, other):
+        if not isinstance(other, Stock):
+            raise NotImplemented
+
+        # TODO: Handle collision between duplicated ticker names
+        return Stock(pandas.concat([self.assets, other.assets], ignore_index=True))
 
 class Portfolio:
     def __init__(self, cash_cls: Cash):
