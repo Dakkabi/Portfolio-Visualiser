@@ -24,3 +24,11 @@ def user_post(user: UserCreate, db: Session = Depends(get_db)):
     if get_db_user_by_email(db, user.email):
         raise HTTPException(status_code=400, detail="Email already registered")
     return create_db_user(db, user)
+
+@user_router.put("/email", response_model=UserSchema)
+def user_put_email():
+    pass
+
+@user_router.put("/password", response_model=UserSchema)
+def user_put_password():
+    pass
