@@ -7,5 +7,8 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
 
+class UserUpdate(UserCreate):
+    pass
+
 class UserSchema(UserBase):
     id: int
