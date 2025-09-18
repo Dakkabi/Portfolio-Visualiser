@@ -26,7 +26,7 @@ function Dashboard() {
     const [portfolio, setPortfolio] = useState<PortfolioInterface | null>(null);
 
     /**
-     *
+     * Fetch the user's portfolio data from the database.
      */
     function fetchPortfolio() {
         protectedApi.get("/portfolio/total")
@@ -37,6 +37,21 @@ function Dashboard() {
             .catch((error) => {
                 console.log(error);
             })
+    }
+
+    /**
+     * Return a DaisyUI text-colour string depending on if the value is negative or positive.
+     *
+     * @param value - The stat value.
+     * @return string - A TailwindCSS string.
+     */
+    function colourStatTextOnValue(value: number) {
+        if (value > 0) {
+            return "text-success";
+        } else if (value < 0) {
+            return "text-error";
+        }
+        return "";
     }
 
     useEffect(() => {
@@ -65,7 +80,7 @@ function Dashboard() {
                                 </div>
                                 <div className="stat">
                                     <div className="stat-title text-black">Unrealised Gain/Loss</div>
-                                    <div className="stat-value text-error">
+                                    <div className={`stat-value ${colourStatTextOnValue(portfolio.Cash.unrealised_gain_loss)}`}>
                                         £{portfolio.Cash.unrealised_gain_loss} ({percentageChange(portfolio.Cash.invested, (portfolio.Cash.total))}%)
                                     </div>
                                 </div>
