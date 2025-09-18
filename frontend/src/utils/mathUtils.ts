@@ -8,5 +8,5 @@
 export function percentageChange(old_value: number, new_value: number) {
     const difference = new_value - old_value
     const change = (difference / old_value) * 100
-    return Math.floor(change * 10) / 10;
+    return change.toFixed(2)
 }
