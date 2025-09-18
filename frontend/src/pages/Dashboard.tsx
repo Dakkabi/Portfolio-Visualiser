@@ -10,6 +10,15 @@ interface PortfolioInterface {
         total_dividends: number;
         unrealised_gain_loss: number;
         invested: number;
+    },
+    Stock: {
+        assets: [
+            {
+                ticker: string;
+                average_price: number;
+                quantity: number;
+            }
+        ]
     }
 }
 
