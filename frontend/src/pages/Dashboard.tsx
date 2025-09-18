@@ -90,6 +90,34 @@ function Dashboard() {
                                 </div>
                             </div>
                         </div>
+
+                        <div className="w-full flex gap-x-10 ms-10 mt-5 mr-10">
+                            <div className="card bg-base-100 shadow-sm">
+                                <div className="card-body"></div>
+                            </div>
+                            <div className="card w-full bg-base-100 mr-20 shadow-sm">
+                                <div className="card-body">
+                                    <div className="overflow-x-auto">
+                                        <table className="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Ticker</th>
+                                                    <th>Average Price</th>
+                                                    <th>Quantity</th>
+                                                </tr>
+                                            </thead>
+                                            {portfolio.Stock.assets.map((asset, index) => (
+                                                <tr key={index}>
+                                                    <th>{asset.ticker}</th>
+                                                    <td>£{asset.average_price.toFixed(2)}</td>
+                                                    <td>{asset.quantity}</td>
+                                                </tr>
+                                            ))}
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </>
                 ) : (
                     <div className="hero min-h-screen">
