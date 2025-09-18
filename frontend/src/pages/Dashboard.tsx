@@ -75,8 +75,8 @@ function Dashboard() {
                                     <div className="stat-value">£{portfolio.Cash.total}</div>
                                 </div>
                                 <div className="stat">
-                                    <div className="stat-title text-black">Day Change</div>
-                                    <div className="stat-value text-success">+£2300.00 (1.95%)</div>
+                                    <div className="stat-title text-black">Total Invested</div>
+                                    <div className="stat-value">£{portfolio.Cash.invested}</div>
                                 </div>
                                 <div className="stat">
                                     <div className="stat-title text-black">Unrealised Gain/Loss</div>
