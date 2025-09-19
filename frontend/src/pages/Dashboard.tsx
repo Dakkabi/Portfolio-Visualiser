@@ -4,7 +4,7 @@ import {protectedApi} from "../config/axios.config.tsx";
 import {Link} from "react-router-dom";
 import {percentageChange} from "../utils/mathUtils.ts";
 import {Pie, PieChart, Tooltip} from "recharts";
-import renderActiveShape from "../components/global/DonutChart.tsx";
+import renderActiveShape from "../components/global/ActiveShapePieChart.tsx";
 
 interface PortfolioInterface {
     Cash: {
