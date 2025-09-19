@@ -7,6 +7,7 @@ import {Pie, PieChart, Tooltip} from "recharts";
 
 interface PortfolioInterface {
     Cash: {
+        free: number;
         total: number;
         total_dividends: number;
         unrealised_gain_loss: number;
@@ -53,6 +54,8 @@ function Dashboard() {
           name: asset.ticker,
           value: Math.round(asset.quantity * asset.average_price * 100) / 100,
         }))
+
+        assetChartInfo.push({name: "Cash", value: portfolio?.Cash.free})
 
         setChartData(assetChartInfo);
     }
