@@ -16,14 +16,13 @@ interface PieSectorData {
     paddingAngle?: number;
     dataKey?: string;
     payload?: any;
-};
+}
 
 type PieSectorDataItem = React.SVGProps<SVGPathElement> & Partial<SectorProps> & PieSectorData;
 
 const renderActiveShape = ({
     cx,
     cy,
-    midAngle,
     innerRadius,
     outerRadius,
     startAngle,
@@ -32,10 +31,6 @@ const renderActiveShape = ({
     payload,
     percent,
 }: PieSectorDataItem) => {
-    const RADIAN = Math.PI / 180;
-    const sin = Math.sin(-RADIAN * (midAngle ?? 1));
-    const cos = Math.cos(-RADIAN * (midAngle ?? 1));
-
     return (
         <g>
             <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
