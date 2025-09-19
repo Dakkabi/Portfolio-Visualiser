@@ -12,18 +12,22 @@ interface PortfolioInterface {
         invested: number;
     },
     Stock: {
-        assets: [
-            {
+        assets: {
                 ticker: string;
                 average_price: number;
                 quantity: number;
-            }
-        ]
+        }[]
     }
+}
+
+interface ChartDataInterface {
+    name: string;
+    value: number;
 }
 
 function Dashboard() {
     const [portfolio, setPortfolio] = useState<PortfolioInterface | null>(null);
+    const [chartData, setChartData] = useState<ChartDataInterface[]>([]);
 
     /**
      * Fetch the user's portfolio data from the database.
@@ -37,6 +41,19 @@ function Dashboard() {
             .catch((error) => {
                 console.log(error);
             })
+    }
+
+    function populateChartData() {
+        const assets = portfolio?.Stock?.assets;
+
+        if (!assets || !Array.isArray(assets)) return;
+
+        const assetChartInfo: ChartDataInterface[] = assets.map(asset => ({
+          name: asset.ticker,
+          value: (asset.quantity * asset.average_price).toFixed(2),
+        }))
+
+        setChartData(assetChartInfo);
     }
 
     /**
@@ -57,6 +74,13 @@ function Dashboard() {
     useEffect(() => {
         fetchPortfolio();
     }, []);
+
+    useEffect(() => {
+        if (!portfolio) return;
+
+        populateChartData();
+        console.log(chartData);
+    }, [portfolio]);
 
     return (
         <div>
