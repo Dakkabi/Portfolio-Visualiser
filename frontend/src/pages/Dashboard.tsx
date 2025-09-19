@@ -4,9 +4,11 @@ import {protectedApi} from "../config/axios.config.tsx";
 import {Link} from "react-router-dom";
 import {percentageChange} from "../utils/mathUtils.ts";
 import {Pie, PieChart, Tooltip} from "recharts";
+import renderActiveShape from "../components/global/ActiveShapePieChart.tsx";
 
 interface PortfolioInterface {
     Cash: {
+        free: number;
         total: number;
         total_dividends: number;
         unrealised_gain_loss: number;
@@ -53,6 +55,8 @@ function Dashboard() {
           name: asset.ticker,
           value: Math.round(asset.quantity * asset.average_price * 100) / 100,
         }))
+
+        assetChartInfo.push({name: "Cash", value: portfolio?.Cash.free})
 
         setChartData(assetChartInfo);
     }
@@ -121,12 +125,13 @@ function Dashboard() {
                                 <div className="card-body">
                                     <PieChart width={400} height={400}>
                                         <Pie
+                                            activeShape={renderActiveShape}
                                             dataKey="value"
                                             isAnimationActive={true}
                                             data={chartData}
-                                            innerRadius={80}
+                                            innerRadius={100}
+                                            fill="#242124"
                                         />
-                                        <Tooltip />
                                     </PieChart>
                                 </div>
                             </div>

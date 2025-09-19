@@ -10,6 +10,7 @@ class Trading212(BrokerClient):
         data = {}
 
         fetch_account_cash = self.fetch_account_cash()
+        data["free"] = fetch_account_cash["free"]
         data["total"] = fetch_account_cash["total"]
         data["unrealised_gain_loss"] = fetch_account_cash["ppl"]
         data["invested"] = fetch_account_cash["invested"]

@@ -8,6 +8,7 @@ from backend.src.core.services.brokers import BROKER_REGISTRY
 
 @dataclass
 class Cash:
+    free: float = 0                 # Liquid cash held
     total: float = 0                # Total Portfolio Value after realised gains/losses
     total_dividends: float = 0      # Total gain from Dividends
     unrealised_gain_loss: float = 0 # Potential Gain or Loss on assets unsold
@@ -18,6 +19,7 @@ class Cash:
             raise NotImplemented
 
         return Cash(
+            self.free + other.free,
             self.total + other.total,
             self.total_dividends + other.total_dividends,
             self.unrealised_gain_loss + other.unrealised_gain_loss,
@@ -58,6 +60,7 @@ class Portfolio:
         """Return a dict representation of the portfolio."""
         return {
             "Cash": {
+                "free": self.Cash.free,
                 "total": self.Cash.total,
                 "total_dividends": self.Cash.total_dividends,
                 "unrealised_gain_loss": self.Cash.unrealised_gain_loss,
