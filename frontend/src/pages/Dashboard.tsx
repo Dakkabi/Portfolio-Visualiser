@@ -4,6 +4,7 @@ import {protectedApi} from "../config/axios.config.tsx";
 import {Link} from "react-router-dom";
 import {percentageChange} from "../utils/mathUtils.ts";
 import {Pie, PieChart, Tooltip} from "recharts";
+import renderActiveShape from "../components/global/DonutChart.tsx";
 
 interface PortfolioInterface {
     Cash: {
@@ -124,12 +125,12 @@ function Dashboard() {
                                 <div className="card-body">
                                     <PieChart width={400} height={400}>
                                         <Pie
+                                            activeShape={renderActiveShape}
                                             dataKey="value"
                                             isAnimationActive={true}
                                             data={chartData}
-                                            innerRadius={80}
+                                            innerRadius={100}
                                         />
-                                        <Tooltip />
                                     </PieChart>
                                 </div>
                             </div>
