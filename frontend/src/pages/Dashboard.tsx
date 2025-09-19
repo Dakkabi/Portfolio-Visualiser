@@ -130,6 +130,7 @@ function Dashboard() {
                                             isAnimationActive={true}
                                             data={chartData}
                                             innerRadius={100}
+                                            fill="#242124"
                                         />
                                     </PieChart>
                                 </div>
