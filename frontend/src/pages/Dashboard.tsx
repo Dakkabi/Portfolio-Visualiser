@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {protectedApi} from "../config/axios.config.tsx";
 import {Link} from "react-router-dom";
 import {percentageChange} from "../utils/mathUtils.ts";
+import {Pie, PieChart, Tooltip} from "recharts";
 
 interface PortfolioInterface {
     Cash: {
@@ -10,14 +11,27 @@ interface PortfolioInterface {
         total_dividends: number;
         unrealised_gain_loss: number;
         invested: number;
+    },
+    Stock: {
+        assets: {
+                ticker: string;
+                average_price: number;
+                quantity: number;
+        }[]
     }
+}
+
+interface ChartDataInterface {
+    name: string;
+    value: number;
 }
 
 function Dashboard() {
     const [portfolio, setPortfolio] = useState<PortfolioInterface | null>(null);
+    const [chartData, setChartData] = useState<ChartDataInterface[]>([]);
 
     /**
-     *
+     * Fetch the user's portfolio data from the database.
      */
     function fetchPortfolio() {
         protectedApi.get("/portfolio/total")
@@ -30,9 +44,44 @@ function Dashboard() {
             })
     }
 
+    function populateChartData() {
+        const assets = portfolio?.Stock?.assets;
+
+        if (!assets || !Array.isArray(assets)) return;
+
+        const assetChartInfo: ChartDataInterface[] = assets.map(asset => ({
+          name: asset.ticker,
+          value: Math.round(asset.quantity * asset.average_price * 100) / 100,
+        }))
+
+        setChartData(assetChartInfo);
+    }
+
+    /**
+     * Return a DaisyUI text-colour string depending on if the value is negative or positive.
+     *
+     * @param value - The stat value.
+     * @return string - A TailwindCSS string.
+     */
+    function colourStatTextOnValue(value: number) {
+        if (value > 0) {
+            return "text-success";
+        } else if (value < 0) {
+            return "text-error";
+        }
+        return "";
+    }
+
     useEffect(() => {
         fetchPortfolio();
     }, []);
+
+    useEffect(() => {
+        if (!portfolio) return;
+
+        populateChartData();
+        console.log(chartData);
+    }, [portfolio]);
 
     return (
         <div>
@@ -51,18 +100,58 @@ function Dashboard() {
                                     <div className="stat-value">£{portfolio.Cash.total}</div>
                                 </div>
                                 <div className="stat">
-                                    <div className="stat-title text-black">Day Change</div>
-                                    <div className="stat-value text-success">+£2300.00 (1.95%)</div>
+                                    <div className="stat-title text-black">Total Invested</div>
+                                    <div className="stat-value">£{portfolio.Cash.invested}</div>
                                 </div>
                                 <div className="stat">
                                     <div className="stat-title text-black">Unrealised Gain/Loss</div>
-                                    <div className="stat-value text-error">
+                                    <div className={`stat-value ${colourStatTextOnValue(portfolio.Cash.unrealised_gain_loss)}`}>
                                         £{portfolio.Cash.unrealised_gain_loss} ({percentageChange(portfolio.Cash.invested, (portfolio.Cash.total))}%)
                                     </div>
                                 </div>
                                 <div className="stat">
                                     <div className="stat-title text-black">Total Dividend Earnings</div>
                                     <div className="stat-value text-info">£{portfolio.Cash.total_dividends}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="w-full flex gap-x-10 ms-10 mt-5 mr-10">
+                            <div className="card bg-base-100 shadow-sm">
+                                <div className="card-body">
+                                    <PieChart width={400} height={400}>
+                                        <Pie
+                                            dataKey="value"
+                                            isAnimationActive={true}
+                                            data={chartData}
+                                            innerRadius={80}
+                                        />
+                                        <Tooltip />
+                                    </PieChart>
+                                </div>
+                            </div>
+                            <div className="card w-full bg-base-100 mr-20 shadow-sm">
+                                <div className="card-body">
+                                    <div className="overflow-x-auto">
+                                        <table className="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Ticker</th>
+                                                    <th>Average Price</th>
+                                                    <th>Quantity</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {portfolio.Stock.assets.map((asset, index) => (
+                                                    <tr key={index}>
+                                                        <th>{asset.ticker}</th>
+                                                        <td>£{asset.average_price.toFixed(2)}</td>
+                                                        <td>{asset.quantity}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>

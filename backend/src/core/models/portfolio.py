@@ -64,7 +64,7 @@ class Portfolio:
                 "invested": self.Cash.invested,
             },
             "Stock": {
-                "assets": self.Stock.assets.to_dict()
+                "assets": self.Stock.assets.to_dict(orient="records")
             }
         }
 
