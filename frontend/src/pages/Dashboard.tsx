@@ -106,13 +106,15 @@ function Dashboard() {
                                                     <th>Quantity</th>
                                                 </tr>
                                             </thead>
-                                            {portfolio.Stock.assets.map((asset, index) => (
-                                                <tr key={index}>
-                                                    <th>{asset.ticker}</th>
-                                                    <td>£{asset.average_price.toFixed(2)}</td>
-                                                    <td>{asset.quantity}</td>
-                                                </tr>
-                                            ))}
+                                            <tbody>
+                                                {portfolio.Stock.assets.map((asset, index) => (
+                                                    <tr key={index}>
+                                                        <th>{asset.ticker}</th>
+                                                        <td>£{asset.average_price.toFixed(2)}</td>
+                                                        <td>{asset.quantity}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
                                         </table>
                                     </div>
                                 </div>
