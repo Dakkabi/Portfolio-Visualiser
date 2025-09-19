@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {protectedApi} from "../config/axios.config.tsx";
 import {Link} from "react-router-dom";
 import {percentageChange} from "../utils/mathUtils.ts";
+import {Pie, PieChart, Tooltip} from "recharts";
 
 interface PortfolioInterface {
     Cash: {
@@ -50,7 +51,7 @@ function Dashboard() {
 
         const assetChartInfo: ChartDataInterface[] = assets.map(asset => ({
           name: asset.ticker,
-          value: (asset.quantity * asset.average_price).toFixed(2),
+          value: Math.round(asset.quantity * asset.average_price * 100) / 100,
         }))
 
         setChartData(assetChartInfo);
@@ -117,7 +118,17 @@ function Dashboard() {
 
                         <div className="w-full flex gap-x-10 ms-10 mt-5 mr-10">
                             <div className="card bg-base-100 shadow-sm">
-                                <div className="card-body"></div>
+                                <div className="card-body">
+                                    <PieChart width={400} height={400}>
+                                        <Pie
+                                            dataKey="value"
+                                            isAnimationActive={true}
+                                            data={chartData}
+                                            innerRadius={80}
+                                        />
+                                        <Tooltip />
+                                    </PieChart>
+                                </div>
                             </div>
                             <div className="card w-full bg-base-100 mr-20 shadow-sm">
                                 <div className="card-body">
