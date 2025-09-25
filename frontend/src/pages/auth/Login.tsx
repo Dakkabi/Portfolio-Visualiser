@@ -2,6 +2,7 @@ import AuthForm from "../../components/auth/AuthForm.tsx"
 import Alert from "../../components/global/Alert.tsx";
 import {useState} from "react";
 import {api} from "../../config/axios.config.tsx";
+import handleLoginAuth from "../../utils/auth/loginForAccessToken.ts";
 
 function Login() {
     let [responseAlertProps, setResponseAlertProps] = useState({message: "", type: ""})
@@ -13,25 +14,8 @@ function Login() {
      * @param password The user's password.
      */
     function handleLogin(email: string, password: string) {
-        let params = new URLSearchParams();
-        params.append("username", email);
-        params.append("password", password);
-
-        let headers = {headers: {"Content-Type": "application/x-www-form-urlencoded"}}
-
-        api.post(
-            "/auth/login",
-            params,
-            headers
-        )
-            .then(response => {
-                setResponseAlertProps({message: "Success, you will be redirected shortly.", type: "alert-success"})
-
-                sessionStorage.setItem("accessToken", response.data.access_token);
-            })
-            .catch(error => {
-                setResponseAlertProps({message: `${error.status}: ${error.response.data.detail}`, type: "alert-error"})
-            })
+        const responseMessage = handleLoginAuth(email, password);
+        setResponseAlertProps(responseMessage)
     }
 
     return (

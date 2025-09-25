@@ -2,6 +2,7 @@ import AuthForm from "../../components/auth/AuthForm.tsx";
 import {api} from "../../config/axios.config.tsx";
 import Alert from "../../components/global/Alert.tsx";
 import {useState} from "react";
+import handleLoginAuth from "../../utils/auth/loginForAccessToken.ts";
 
 function SignUp() {
     let [responseAlertProps, setResponseAlertProps] = useState({message: "", type: ""})
@@ -18,7 +19,8 @@ function SignUp() {
             { email: email, password: password }
         )
             .then(() => {
-                setResponseAlertProps({message: "Success, you will be shortly redirected.", type: "alert-success"})
+                const responseMessage = handleLoginAuth(email, password);
+                setResponseAlertProps(responseMessage)
             })
             .catch(error => {
                 setResponseAlertProps({message: `${error.status}: ${error.response.data.detail}`, type: "alert-error"})
