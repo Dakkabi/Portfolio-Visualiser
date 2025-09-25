@@ -25,4 +25,15 @@ protectedApi.interceptors.request.use(
     (error) => Promise.reject(error)
 )
 
+protectedApi.interceptors.response.use(
+    (response) => {
+        return response;
+    },
+    (error) => {
+        if (error.response && error.response.status === 401 && error.response.data.detail === "Not authenticated") {
+            window.location.href = "/login";
+        }
+    }
+)
+
 export { api, protectedApi };
