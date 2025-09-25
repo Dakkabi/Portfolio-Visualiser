@@ -110,7 +110,7 @@ function Dashboard() {
                                 <div className="stat">
                                     <div className="stat-title text-black">Unrealised Gain/Loss</div>
                                     <div className={`stat-value ${colourStatTextOnValue(portfolio.Cash.unrealised_gain_loss)}`}>
-                                        £{portfolio.Cash.unrealised_gain_loss} ({percentageChange(portfolio.Cash.invested, (portfolio.Cash.total))}%)
+                                        £{portfolio.Cash.unrealised_gain_loss} ({percentageChange(portfolio.Cash.invested, portfolio.Cash.total)}%)
                                     </div>
                                 </div>
                                 <div className="stat">
