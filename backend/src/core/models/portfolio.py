@@ -26,9 +26,13 @@ class Cash:
             self.invested + other.invested,
         )
 
+ASSETS_COLUMN_HEADER = ["ticker", "average_price", "quantity"]
+ORDER_HISTORY_COLUMN_HEADER = ["ticker", "execution_date", "quantity", "execution_type"]
+
 @dataclass
 class Stock:
-    assets: DataFrame = field(default_factory=lambda: DataFrame(columns=["ticker", "average_price", "quantity"]))
+    assets: DataFrame = field(default_factory=lambda: DataFrame(columns=ASSETS_COLUMN_HEADER))
+    order_history: DataFrame = field(default_factory=lambda: DataFrame(columns=ORDER_HISTORY_COLUMN_HEADER))
 
     def __add__(self, other):
         if not isinstance(other, Stock):
