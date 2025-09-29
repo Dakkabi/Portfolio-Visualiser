@@ -10,7 +10,6 @@ class Portfolio(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     portfolio: Mapped[dict] = mapped_column(JSON)
-    order_history: Mapped[dict] = mapped_column(JSON)
     last_updated: Mapped[int] = mapped_column(Integer, default=epoch_now(), onupdate=epoch_now())
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
