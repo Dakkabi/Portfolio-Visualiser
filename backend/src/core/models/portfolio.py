@@ -38,8 +38,10 @@ class Stock:
         if not isinstance(other, Stock):
             raise NotImplemented
 
-        # TODO: Handle collision between duplicated ticker names
-        return Stock(pandas.concat([self.assets, other.assets], ignore_index=True))
+        return Stock(
+            pandas.concat([self.assets, other.assets], ignore_index=True),
+            pandas.concat([self.order_history, other.order_history], ignore_index=True),
+        )
 
 class Portfolio:
     def __init__(self, cash_cls: Cash, stock_cls: Stock):
@@ -71,7 +73,8 @@ class Portfolio:
                 "invested": self.Cash.invested,
             },
             "Stock": {
-                "assets": self.Stock.assets.to_dict(orient="records")
+                "assets": self.Stock.assets.to_dict(orient="records"),
+                "order_history": self.Stock.order_history.to_dict(orient="records"),
             }
         }
 
@@ -79,7 +82,10 @@ class Portfolio:
     def from_dict(data: dict):
         """Return a Portfolio object from a dict."""
         cash_cls = Cash(**data["Cash"])
-        stock_cls = Stock(assets=DataFrame.from_dict(data["Stock"]["assets"]))
+        stock_cls = Stock(
+            assets=DataFrame.from_dict(data["Stock"]["assets"]),
+            order_history=DataFrame.from_dict(data["Stock"]["order_history"]),
+        )
 
         return Portfolio(cash_cls, stock_cls)
 
@@ -99,6 +105,6 @@ def build_portfolio(broker_name: str, api_key: str, private_key: str = None):
     cash_cls = Cash(**cash_data)
 
     stock_data = broker_cls.build_stock()
-    stock_cls = Stock(stock_data)
+    stock_cls = Stock(stock_data["assets"], stock_data["order_history"])
 
     return Portfolio(cash_cls, stock_cls)
