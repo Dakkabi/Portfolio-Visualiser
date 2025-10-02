@@ -7,8 +7,18 @@ from backend.src.database.crud.api_key_crud import get_db_api_key
 from backend.src.database.crud.broker_crud import get_db_broker
 from backend.src.database.crud.portfolio_crud import get_db_portfolio_by_user_id_and_broker_name, create_db_portfolio, \
     update_db_portfolio, get_db_portfolio_by_user_id
+from backend.src.database.models.portfolio_model import Portfolio as PortfolioModel
 from backend.src.schemas.models.portfolio_schema import PortfolioCreate, PortfolioUpdate, PortfolioSchema
 
+def is_portfolio_outdated(portfolio: PortfolioModel, broker_rate_limit: int) -> bool:
+    """Check whether the portfolio is ready to be updated, by checking current epoch time against
+    the last time the portfolio was updated.
+
+    :param portfolio: Portfolio instance
+    :param broker_rate_limit: Rate limit for the broker
+    :return: True if the portfolio should be updated, False otherwise
+    """
+    return epoch_now() < (portfolio.last_updated + broker_rate_limit)
 
 def create_or_update_portfolio(
         db: Session,
@@ -31,10 +41,8 @@ def create_or_update_portfolio(
     current_portfolio = get_db_portfolio_by_user_id_and_broker_name(db, user_id, broker_name)
     broker_rate_limit = broker.rate_limit
 
-    # Return currently stored portfolio if rate-limited.
-    if current_portfolio is not None:
-        if epoch_now() < (current_portfolio.last_updated + broker_rate_limit):
-            return current_portfolio
+    if current_portfolio is not None and is_portfolio_outdated(current_portfolio, broker_rate_limit):
+        return current_portfolio
 
     new_portfolio = build_portfolio(broker_name, db_api_keys.api_key, db_api_keys.private_key).to_dict()
 

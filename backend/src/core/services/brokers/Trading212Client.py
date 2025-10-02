@@ -24,8 +24,8 @@ class Trading212(BrokerClient):
 
         return data
 
-    def build_stock(self) -> DataFrame:
-        data = {}
+    def build_stock(self) -> dict:
+        assets_data = {}
 
         ticker = []
         average_price = []
@@ -37,11 +37,34 @@ class Trading212(BrokerClient):
             average_price.append(position["averagePrice"])
             quantity.append(position["quantity"])
 
-        data["ticker"] = ticker
-        data["average_price"] = average_price
-        data["quantity"] = quantity
+        assets_data["ticker"] = ticker
+        assets_data["average_price"] = average_price
+        assets_data["quantity"] = quantity
 
-        return DataFrame(data)
+        order_history_data = {}
+
+        ticker = []
+        execution_date = []
+        quantity = []
+        execution_type = []
+
+        historical_order_data = self.historical_order_data(0)
+        historical_order_data_items = historical_order_data["items"]
+        for record in historical_order_data_items:
+            ticker.append(record["ticker"])
+            execution_date.append(record["dateCreated"])
+            quantity.append(record["filledQuantity"])
+            execution_type.append(record["status"])
+
+        order_history_data["ticker"] = ticker
+        order_history_data["execution_date"] = execution_date
+        order_history_data["quantity"] = quantity
+        order_history_data["execution_type"] = execution_type
+
+        return {
+            "assets": DataFrame(assets_data),
+            "order_history": DataFrame(order_history_data),
+        }
 
     @staticmethod
     def validate_api_key(api_key: str, private_key: str) -> HTTPException | bool:
