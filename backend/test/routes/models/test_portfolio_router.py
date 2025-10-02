@@ -31,6 +31,9 @@ def _mock_get_db_api_key(db, user_id, broker_name):
         private_key="test"
     )
 
+def _is_portfolio_outdated(portfolio, broker_rate_limit):
+    return False
+
 def test_portfolio_get_broker_failure(monkeypatch):
     response = client.get("/api/portfolio/unknown_broker")
     assert response.status_code == 404
@@ -38,10 +41,10 @@ def test_portfolio_get_broker_failure(monkeypatch):
     response = client.get("/api/portfolio/Kraken")
     assert response.status_code == 409
 
-"""
 def test_portfolio_get_broker_success(monkeypatch):
     monkeypatch.setattr(portfolio_service, "get_db_api_key", _mock_get_db_api_key)
     monkeypatch.setattr(portfolio_service, "build_portfolio", _mock_build_portfolio)
+    monkeypatch.setattr(portfolio_service, "is_portfolio_outdated", _is_portfolio_outdated)
 
     response = client.get("/api/portfolio/Trading212")
     assert response.status_code == 200
@@ -55,6 +58,4 @@ def test_portfolio_get_broker_success(monkeypatch):
 
     data = response.json()
     assert data["portfolio"]["Cash"]["total"] == 20
-"""
-
 
