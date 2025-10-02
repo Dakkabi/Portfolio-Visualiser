@@ -1,16 +1,16 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-from backend.src.core.models.portfolio import build_portfolio
+from backend.src.core.models.portfolio import build_portfolio, Portfolio
 from backend.src.core.services.time_service import epoch_now
 from backend.src.database.crud.api_key_crud import get_db_api_key
 from backend.src.database.crud.broker_crud import get_db_broker
 from backend.src.database.crud.portfolio_crud import get_db_portfolio_by_user_id_and_broker_name, create_db_portfolio, \
     update_db_portfolio, get_db_portfolio_by_user_id
-from backend.src.database.models.portfolio_model import Portfolio
+from backend.src.database.models.portfolio_model import Portfolio as PortfolioModel
 from backend.src.schemas.models.portfolio_schema import PortfolioCreate, PortfolioUpdate, PortfolioSchema
 
-def is_portfolio_outdated(portfolio: Portfolio, broker_rate_limit: int) -> bool:
+def is_portfolio_outdated(portfolio: PortfolioModel, broker_rate_limit: int) -> bool:
     """Check whether the portfolio is ready to be updated, by checking current epoch time against
     the last time the portfolio was updated.
 
