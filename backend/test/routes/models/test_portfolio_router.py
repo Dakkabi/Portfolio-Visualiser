@@ -59,3 +59,6 @@ def test_portfolio_get_broker_success(monkeypatch):
     data = response.json()
     assert data["portfolio"]["Cash"]["total"] == 20
 
+def test_portfolio_get_total():
+    response = client.get("/api/portfolio/total")
+    assert response.status_code == 200
