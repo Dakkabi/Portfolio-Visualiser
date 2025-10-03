@@ -3,7 +3,16 @@ import {useEffect, useState} from "react";
 import {protectedApi} from "../config/axios.config.tsx";
 import {Link} from "react-router-dom";
 import {percentageChange} from "../utils/mathUtils.ts";
-import {Pie, PieChart} from "recharts";
+import {
+    CartesianGrid,
+    Line,
+    LineChart,
+    Pie,
+    PieChart,
+    Tooltip,
+    XAxis,
+    YAxis
+} from "recharts";
 import renderActiveShape from "../components/global/ActiveShapePieChart.tsx";
 
 interface PortfolioInterface {
@@ -19,6 +28,12 @@ interface PortfolioInterface {
                 ticker: string;
                 average_price: number;
                 quantity: number;
+        }[],
+        order_history: {
+            ticker: string;
+            execution_date: string;
+            quantity: number;
+            execution_type: string;
         }[]
     }
 }
@@ -30,7 +45,7 @@ interface ChartDataInterface {
 
 function Dashboard() {
     const [portfolio, setPortfolio] = useState<PortfolioInterface | null>(null);
-    const [chartData, setChartData] = useState<ChartDataInterface[]>([]);
+    const [pieChartData, setPieChartData] = useState<ChartDataInterface[]>([]);
 
     /**
      * Fetch the user's portfolio data from the database.
@@ -46,7 +61,10 @@ function Dashboard() {
             })
     }
 
-    function populateChartData() {
+    /**
+     * Populate the Pie Chart with data pairs.
+     */
+    function populatePieChartData() {
         const assets = portfolio?.Stock?.assets;
 
         if (!assets || !Array.isArray(assets)) return;
@@ -58,7 +76,7 @@ function Dashboard() {
 
         assetChartInfo.push({name: "Cash", value: portfolio?.Cash.free})
 
-        setChartData(assetChartInfo);
+        setPieChartData(assetChartInfo);
     }
 
     /**
@@ -83,8 +101,8 @@ function Dashboard() {
     useEffect(() => {
         if (!portfolio) return;
 
-        populateChartData();
-        console.log(chartData);
+        populatePieChartData();
+
     }, [portfolio]);
 
     return (
@@ -129,7 +147,7 @@ function Dashboard() {
                                             activeShape={renderActiveShape}
                                             dataKey="value"
                                             isAnimationActive={true}
-                                            data={chartData}
+                                            data={pieChartData}
                                             innerRadius={100}
                                             fill="#242124"
                                         />
@@ -167,8 +185,20 @@ function Dashboard() {
                         {/* Line Graph */}
                         <div className="w-full flex gap-x-10 ms-10 mt-5 mr-10">
                             <div className="card bg-base-100 shadow-sm w-full mr-20">
-                                <div className="card-body">
-
+                                <div className="card-body ">
+                                        <LineChart
+                                            width={1750}
+                                            height={500}
+                                            data={}
+                                        >
+                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <XAxis dataKey="name" />
+                                            <YAxis />
+                                            <Tooltip />
+                                            <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
+                                            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+                                        </LineChart>
+                                    <h1></h1>
                                 </div>
                             </div>
                         </div>
