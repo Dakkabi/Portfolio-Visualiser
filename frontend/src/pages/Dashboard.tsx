@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {protectedApi} from "../config/axios.config.tsx";
 import {Link} from "react-router-dom";
 import {percentageChange} from "../utils/mathUtils.ts";
-import {Pie, PieChart, Tooltip} from "recharts";
+import {Pie, PieChart} from "recharts";
 import renderActiveShape from "../components/global/ActiveShapePieChart.tsx";
 
 interface PortfolioInterface {
@@ -121,6 +121,7 @@ function Dashboard() {
                         </div>
 
                         <div className="w-full flex gap-x-10 ms-10 mt-5 mr-10">
+                            {/* Pie Chart */}
                             <div className="card bg-base-100 shadow-sm">
                                 <div className="card-body">
                                     <PieChart width={400} height={400}>
@@ -135,6 +136,8 @@ function Dashboard() {
                                     </PieChart>
                                 </div>
                             </div>
+
+                            {/* Asset Table */}
                             <div className="card w-full bg-base-100 mr-20 shadow-sm">
                                 <div className="card-body">
                                     <div className="overflow-x-auto">
@@ -157,6 +160,15 @@ function Dashboard() {
                                             </tbody>
                                         </table>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Line Graph */}
+                        <div className="w-full flex gap-x-10 ms-10 mt-5 mr-10">
+                            <div className="card bg-base-100 shadow-sm w-full mr-20">
+                                <div className="card-body">
+
                                 </div>
                             </div>
                         </div>
