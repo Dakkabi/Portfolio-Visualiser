@@ -19,6 +19,8 @@ class Settings(BaseSettings):
     POSTGRESQL_PORT: int
     POSTGRESQL_DATABASE: str
 
+    JWT_SECRET_KEY: str
+
     @computed_field
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
