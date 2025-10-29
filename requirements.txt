@@ -1,3 +1,5 @@
+starlette
+bcrypt
 uvicorn
 fastapi
 alembic
