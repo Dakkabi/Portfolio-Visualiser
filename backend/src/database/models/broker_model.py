@@ -7,4 +7,4 @@ from backend.src.database.session import Base
 class Broker(Base):
     __tablename__ = "brokers"
 
-    name: Mapped[str] = mapped_column(String, primary_key=True)
+    name: Mapped[str] = mapped_column(String, primary_key=True, unique=True)
