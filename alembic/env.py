@@ -8,6 +8,7 @@ from alembic import context
 from backend.src.core.config_loader import settings
 from backend.src.database.session import Base
 from backend.src.database.models.user_model import User
+from backend.src.database.models.broker_model import Broker
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
