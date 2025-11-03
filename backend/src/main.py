@@ -3,15 +3,19 @@ from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI
 
+from backend.src.database.crud.broker_crud import create_db_broker_from_file
+from backend.src.database.session import get_db
 from backend.src.routes.models.user_router import user_router
 from backend.src.routes.security.authentication_router import auth_router
-from backend.src.services.models.broker_service import bulk_insert_brokers
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Runs before FastAPI startup
-    bulk_insert_brokers()
+
+    # Need to manually create the db at this stage
+    db = next(get_db())
+    create_db_broker_from_file(db)
 
     yield
     # Runs after FastAPI shutdown
