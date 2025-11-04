@@ -69,7 +69,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Se
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = jwt.decode(token, JWT_SECRET_KEY, algorithm=[ALGORITHM])
+        payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[ALGORITHM])
         email = payload.get("sub")
 
         if email is None:
@@ -80,7 +80,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Se
     except InvalidTokenError:
         raise credentials_exception
 
-    user = get_db_user_by_email(db, email)
+    user = get_db_user_by_email(db, token_data.email)
     if user is None:
         raise credentials_exception
     return user
