@@ -1,3 +1,4 @@
+uliweb-alembic
 pyjwt
 starlette
 bcrypt
