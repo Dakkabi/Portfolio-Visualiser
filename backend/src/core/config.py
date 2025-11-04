@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     POSTGRESQL_DATABASE: str
 
     JWT_SECRET_KEY: str
+    AES_SECRET_KEY: str
 
     @computed_field
     @property
