@@ -1,3 +1,4 @@
+cryptography
 uliweb-alembic
 pyjwt
 starlette
