@@ -1,5 +1,6 @@
 import base64
 import os
+from typing import Optional
 
 from bcrypt import hashpw, gensalt, checkpw
 from cryptography.hazmat.primitives.ciphers.aead import ChaCha20Poly1305
@@ -35,9 +36,21 @@ def encrypt_api_key(api_key: str) -> str:
     ciphertext = CHACHA.encrypt(nonce, api_key.encode("utf-8"), b"")
     return f"{encode_to_str(ciphertext)}::{encode_to_str(nonce)}"
 
+def maybe_encrypt_api_key(api_key: Optional[str]) -> str | None:
+    """Check if the input is not a None object before encrypting, good for areas where a None attribute is valid."""
+    if api_key is None:
+        return None
+    return encrypt_api_key(api_key)
+
 def decrypt_api_key(encrypted_api_key: str) -> str:
     ciphertext, nonce = encrypted_api_key.split("::")
-    return CHACHA.decrypt(decode_to_bytes(nonce), decode_to_bytes(nonce), b"").decode("utf-8")
+    return CHACHA.decrypt(decode_to_bytes(nonce), decode_to_bytes(ciphertext), b"").decode("utf-8")
+
+def maybe_decrypt_api_key(api_key: Optional[str]) -> str | None:
+    """Check if the input is not a None object before decrypting, good for areas where a None attribute is valid."""
+    if api_key is None:
+        return None
+    return decrypt_api_key(api_key)
 
 if __name__ == "__main__":
     print(generate_symmetric_key())
