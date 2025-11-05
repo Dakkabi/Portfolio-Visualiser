@@ -18,6 +18,7 @@ class Settings(BaseSettings):
     POSTGRESQL_SERVER: str
     POSTGRESQL_PORT: int
     POSTGRESQL_DATABASE: str
+    POSTGRESQL_TEST_DATABASE: str
 
     JWT_SECRET_KEY: str
     AES_SECRET_KEY: str
