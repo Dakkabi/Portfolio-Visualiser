@@ -11,5 +11,8 @@ class ApiKeyBase(BaseModel):
 class ApiKeyCreate(ApiKeyBase):
     pass
 
+class ApiKeyUpdate(ApiKeyBase):
+    pass
+
 class ApiKeySchema(ApiKeyBase):
     pass
