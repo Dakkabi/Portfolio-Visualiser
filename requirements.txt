@@ -11,3 +11,6 @@ pydantic
 pydantic-settings
 SQLAlchemy
 python-multipart
+httpx
+pytest
+pytest-cov
