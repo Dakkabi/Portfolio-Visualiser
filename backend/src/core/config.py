@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     JWT_SECRET_KEY: str
     AES_SECRET_KEY: str
 
+    TRADING212_API_KEY: str
+    TRADING212_SECRET_KEY: str
+
     @computed_field
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
