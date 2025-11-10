@@ -23,6 +23,8 @@ class Settings(BaseSettings):
     JWT_SECRET_KEY: str
     AES_SECRET_KEY: str
 
+    ENABLE_ENV_KEYS: bool
+
     TRADING212_API_KEY: str
     TRADING212_SECRET_KEY: str
 
