@@ -13,7 +13,7 @@ from backend.src.database.crud.user_crud import get_db_user_by_email
 from backend.src.database.models.user_model import User
 from backend.src.database.session import get_db
 from backend.src.schemas.security.token_schema import TokenData
-from backend.src.services.security.cryptography import verify_password
+from backend.src.core.utils.secrets import verify_password
 
 JWT_SECRET_KEY = settings.JWT_SECRET_KEY
 ALGORITHM = "HS256"
@@ -69,7 +69,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Se
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = jwt.decode(token, JWT_SECRET_KEY, algorithm=[ALGORITHM])
+        payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[ALGORITHM])
         email = payload.get("sub")
 
         if email is None:
@@ -80,7 +80,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Se
     except InvalidTokenError:
         raise credentials_exception
 
-    user = get_db_user_by_email(db, email)
+    user = get_db_user_by_email(db, token_data.email)
     if user is None:
         raise credentials_exception
     return user

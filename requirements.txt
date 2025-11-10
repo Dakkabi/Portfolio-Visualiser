@@ -1,3 +1,6 @@
+cryptography
+uliweb-alembic
+pyjwt
 starlette
 bcrypt
 uvicorn
@@ -7,3 +10,7 @@ psycopg2-binary
 pydantic
 pydantic-settings
 SQLAlchemy
+python-multipart
+httpx
+pytest
+pytest-cov
