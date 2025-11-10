@@ -1,3 +1,4 @@
+requests
 cryptography
 uliweb-alembic
 pyjwt
