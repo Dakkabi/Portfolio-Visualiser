@@ -6,6 +6,7 @@ from backend.src.database.crud.api_key_crud import create_db_api_key, get_db_api
 from backend.src.database.models.user_model import User
 from backend.src.database.session import get_db
 from backend.src.schemas.models.api_key_schema import ApiKeySchema, ApiKeyCreate, ApiKeyUpdate
+from backend.src.services.api import BROKER_REGISTRY
 from backend.src.services.security.authentication import get_current_active_user
 
 api_key_router = APIRouter(
@@ -28,6 +29,7 @@ def create_api_key_endpoint(
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_active_user)
 ):
+    BROKER_REGISTRY[api_key.broker_name].verify_api_keys(api_key.api_key, api_key.secret_key)
     return create_db_api_key(db, api_key, current_user.id)
 
 @api_key_router.put("/", response_model=ApiKeySchema)
@@ -36,6 +38,7 @@ def update_api_key_endpoint(
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_active_user)
 ):
+    BROKER_REGISTRY[api_key.broker_name].verify_api_keys(api_key.api_key, api_key.secret_key)
     return update_db_api_key(db, api_key, current_user.id)
 
 @api_key_router.delete("/{broker_name}")
