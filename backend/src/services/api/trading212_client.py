@@ -5,6 +5,19 @@ class Trading212Client(AbstractBrokerClient):
     """Client class for the Trading212 API Endpoints"""
     BASE_URL = "https://live.trading212.com"
 
+    @staticmethod
+    def verify_api_keys(api_key: str, secret_key: str) -> bool | dict:
+        # TODO:
+        # Check for Response 429 where the API Key is simply rate limited.
+        client = Trading212Client(api_key, secret_key)
+        try:
+            client.get_account_cash_balance()
+            return True
+        except Exception:
+            return False
+
+
+
     # Account Data
     def get_account_cash_balance(self) -> dict:
         """Provides a detailed breakdown of your account's cash and investment metrics, including available funds, invested capital, and total account value.
