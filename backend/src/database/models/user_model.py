@@ -4,6 +4,7 @@ from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from backend.src.database.models.api_key_model import ApiKeys
+from backend.src.database.models.portfolio_model import PortfolioCash
 from backend.src.database.session import Base
 
 
@@ -15,3 +16,4 @@ class User(Base):
     password: Mapped[str] = mapped_column(String, nullable=False)
 
     api_keys: Mapped[List["ApiKeys"]] = relationship()
+    portfolios_cash: Mapped[List["PortfolioCash"]] = relationship()
