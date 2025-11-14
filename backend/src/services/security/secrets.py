@@ -51,6 +51,3 @@ def maybe_decrypt_api_key(api_key: Optional[str]) -> str | None:
     if api_key is None:
         return None
     return decrypt_api_key(api_key)
-
-if __name__ == "__main__":
-    print(generate_symmetric_key())

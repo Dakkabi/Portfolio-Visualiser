@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from backend.src.core.utils.secrets import encrypt_api_key, decrypt_api_key, maybe_decrypt_api_key, \
+from backend.src.services.security.secrets import encrypt_api_key, decrypt_api_key, maybe_decrypt_api_key, \
     maybe_encrypt_api_key
 from backend.src.database.models.api_key_model import ApiKeys
 from backend.src.schemas.models.api_key_schema import ApiKeyCreate, ApiKeyUpdate, ApiKeyBase

@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 
 from backend.src.database.models.user_model import User
 from backend.src.schemas.models.user_schema import UserCreate
-from backend.src.core.utils.secrets import get_password_hash
+from backend.src.services.security.secrets import get_password_hash
 
 
 def get_db_user_by_email(db: Session, email: str) -> type[User] | None:
