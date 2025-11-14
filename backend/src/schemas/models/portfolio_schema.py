@@ -11,5 +11,8 @@ class PortfolioCashBase(BaseModel):
 class PortfolioCashCreate(PortfolioCashBase):
     pass
 
+class PortfolioCashUpdate(PortfolioCashBase):
+    pass
+
 class PortfolioCashSchema(PortfolioCashBase):
     pass
