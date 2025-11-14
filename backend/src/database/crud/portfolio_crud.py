@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
 
 from backend.src.database.models.portfolio_model import PortfolioCash
-from backend.src.schemas.models.portfolio_schema import PortfolioCashCreate
+from backend.src.schemas.models.portfolio_schema import PortfolioCashCreate, PortfolioCashUpdate
+
 
 def get_db_portfolio_cash(db: Session, user_id: int, broker_name: str):
     """Return a row from the PortfolioCash table using the composite keys."""
@@ -22,3 +23,17 @@ def create_db_portfolio_cash(db: Session, portfolio_cash: PortfolioCashCreate, u
     db.commit()
     db.refresh(db_portfolio_cash)
     return db_portfolio_cash
+
+def update_db_portfolio_cash(db: Session, portfolio_cash: PortfolioCashUpdate, user_id: int):
+    """Update a row from the PortfolioCash table."""
+    db_portfolio_cash = get_db_portfolio_cash(db, user_id, portfolio_cash.broker_name)
+    if db_portfolio_cash:
+        db_portfolio_cash.free = portfolio_cash.free
+        db_portfolio_cash.invested = portfolio_cash.invested
+        db_portfolio_cash.profit_and_loss = portfolio_cash.profit_and_loss
+        db_portfolio_cash.result = portfolio_cash.result
+        db_portfolio_cash.total = portfolio_cash.total
+
+    return db_portfolio_cash
+
+
