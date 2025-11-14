@@ -3,6 +3,8 @@ from typing import Optional
 import requests
 from fastapi import HTTPException
 
+from backend.src.schemas.models.portfolio_schema import PortfolioCashBase, PortfolioCashCreate, PortfolioCashUpdate
+
 
 class AbstractBrokerClient(ABC):
     """Abstract class to represent a broker / exchange client."""
@@ -19,7 +21,15 @@ class AbstractBrokerClient(ABC):
     @abstractmethod
     def verify_api_keys(**kwargs): # Allow subclasses to determine the amount of api keys required.
         """Verify that the API key is valid by sending a request to the server and expecting no error status codes."""
-        return NotImplementedError("verify_api_keys method not implemented")
+        raise NotImplementedError("verify_api_keys method not implemented")
+
+    @abstractmethod
+    def request_cash_data(self) -> PortfolioCashCreate | PortfolioCashUpdate:
+        """Request cash information from a broker / exchange client.
+
+        PortfolioCashCreate and PortfolioCashUpdate are both the same pydantic models with the same attributes.
+        """
+        raise NotImplementedError(f"request_cash_data method not implemented for {self.__class__.__name__}")
 
     def send_request(self, method: str, path: str, params: Optional[dict] = None) -> dict:
         """Send a request to the broker's server."""
